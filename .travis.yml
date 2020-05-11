@@ -3,9 +3,9 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.5 PHPUNIT_TEST=1
     - php: 7.2
-      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_COVERAGE_TEST=1
+      env: INSTALLER_VERSION=4.6 PHPUNIT_COVERAGE_TEST=1
     - php: 7.3
       env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
     - php: 7.4
@@ -40,7 +40,7 @@ before_script:
   # Install composer dependencies
   - composer validate
   - echo $INSTALLER_VERSION
-  - composer require --no-update silverstripe/installer:$INSTALLER_VERSION
+  - composer require --no-update silverstripe/recipe-cms:$INSTALLER_VERSION
   - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.x-dev; fi
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
