@@ -5,21 +5,21 @@ dist: xenial
 matrix:
   include:
     - php: 7.1
-      env: INSTALLER_VERSION=4.5 PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.4 PHPUNIT_TEST=1
     - php: 7.2
-      env: INSTALLER_VERSION=4.6 PHPUNIT_COVERAGE_TEST=1
+      env: INSTALLER_VERSION=4.4 PHPUNIT_COVERAGE_TEST=1
     - php: 7.3
-      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.5 PHPUNIT_TEST=1
     - php: 7.4
-      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.6.x-dev PHPUNIT_TEST=1
 
     # Code compliance
     - php: 7.4
-      env: INSTALLER_VERSION=4.4.x-dev PHPCS_TEST=1
+      env: INSTALLER_VERSION=4.5 PHPCS_TEST=1
     - php: 7.4
-      env: INSTALLER_VERSION=4.4.x-dev PHPSTAN_TEST=1
+      env: INSTALLER_VERSION=4.5 PHPSTAN_TEST=1
     - php: 7.4
-      env: INSTALLER_VERSION=4.4.x-dev PSALM_TEST=1
+      env: INSTALLER_VERSION=4.5 PSALM_TEST=1
 
 
 
@@ -36,8 +36,8 @@ before_script:
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml; fi
-  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ *.php; fi
-
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=PSR2 src/ tests/ ; fi
+  - if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c tests/phpstan.neon src/; fi
 
 after_success:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
