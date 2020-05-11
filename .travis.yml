@@ -44,13 +44,16 @@ before_script:
   - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.x-dev; fi
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
-  # Run dev/build
-  - vendor/bin/sake dev/build flush=all
-
   # Dump constants for debug
   - php vendor/silverstripe/framework/tests/dump_constants.php
   - php --ini
   - find vendor/silverstripe
+  - composer info
+  - composer info | grep silverstripe
+
+  # Run dev/build
+  - vendor/bin/sake dev/build flush=all
+
 
 
 
