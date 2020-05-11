@@ -1,0 +1,21 @@
+---
+Name: manticore
+---
+
+#Following config enabled markers to be written to a queue directory, in order that inotify can be used
+Suilven\ManticoreSearch\Service\Client:
+  host: 'manticore'
+  port: 9308
+
+  #This must be writable
+  #Debian
+  config_file: '/etc/manticoresearch/manticore.conf'
+
+  #Compiled docker
+  #config_path: '/usr/local/etc/sphinx.conf'
+
+  #The command to reindex, if empty use inotify to trigger instead
+  cmd_reindex: 'sudo docker-compose exec manticore indexer --verbose --all --rotate'
+
+  #Note that the webserver user needs to be able to do this
+  cmd _restart: 'sudo docker-compose manticore restart'

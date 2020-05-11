@@ -1,0 +1,35 @@
+---
+Name: test-models
+After: freetextindexes
+Only:
+  environment: dev # @todo This needs fixing TO test
+---
+
+# @todo This needs to be different locally and for CI purposes - .env variable perhaps?
+Suilven\SphinxSearch\Service\Client:
+  host: 'manticore'
+
+Suilven\FreeTextSearch\Indexes:
+  indexes:
+    - index:
+        name: members
+        class: SilverStripe\Security\Member
+
+        # Free text searchable
+        fields:
+          - FirstName
+          - Surname
+          - Email
+
+        # Multi valued attribute in Manticore
+      #has_many:
+      #  - FlickrTags
+
+      # Facets or filterable
+ #     tokens:
+  #      - Aperture
+ #       - ShutterSpeed
+#        - ISO
+ ##       - TakenAt
+ #       - FlickrPlaceID
+ #       - FocalLength35mm

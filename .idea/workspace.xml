@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0d9c83ce-faf5-4265-abac-ae9031c0e7a5" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/manticoresoftware/manticoresearch-php" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/config" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/framework" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/vendor-plugin" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/recipe-plugin" />
+      <path value="$PROJECT_DIR$/vendor/intervention/image" />
+      <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-apcu" />
+      <path value="$PROJECT_DIR$/vendor/symfony/cache" />
+      <path value="$PROJECT_DIR$/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/vendor/league/csv" />
+      <path value="$PROJECT_DIR$/vendor/league/flysystem" />
+      <path value="$PROJECT_DIR$/vendor/bramus/monolog-colored-line-formatter" />
+      <path value="$PROJECT_DIR$/vendor/bramus/ansi-php" />
+      <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/vendor/marcj/topsort" />
+      <path value="$PROJECT_DIR$/vendor/embed/embed" />
+      <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/vendor/m1/env" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/fzaninotto/faker" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/vendor/webonyx/graphql-php" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/versioned-admin" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/recipe-cms" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/asset-admin" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/admin" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/cms" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/versioned" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/campaign-admin" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/reports" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/recipe-core" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/assets" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/siteconfig" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/graphql" />
+      <path value="$PROJECT_DIR$/vendor/silverstripe/errorpage" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/vendor/suilven/freetextsearch" />
+      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/vendor/foolz/sphinxql-query-builder" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="1XUSeM3exsg1TqgOl2rrnJPnEVu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ukpostcodes/src/Models" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ukpostcodes/src/Models" />
+      <recent name="$PROJECT_DIR$/ukpostcodes/tests/Models" />
+      <recent name="$PROJECT_DIR$/ukpostcodes/tests/Factory" />
+      <recent name="$PROJECT_DIR$/ukpostcodes/src/Factory" />
+      <recent name="$PROJECT_DIR$/ukpostcodes/src/Exceptions" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0d9c83ce-faf5-4265-abac-ae9031c0e7a5" name="Default Changelist" comment="" />
+      <created>1581099273569</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581099273569</updated>
+      <workItem from="1581099275659" duration="9154000" />
+      <workItem from="1581117417965" duration="2730000" />
+      <workItem from="1584734680774" duration="8241000" />
+      <workItem from="1585160777637" duration="5848000" />
+      <workItem from="1585252746705" duration="34000" />
+      <workItem from="1585252827292" duration="11022000" />
+      <workItem from="1585862810465" duration="1588000" />
+      <workItem from="1585865097937" duration="31099000" />
+      <workItem from="1586382531404" duration="13346000" />
+      <workItem from="1586462365523" duration="13688000" />
+      <workItem from="1586722633724" duration="20055000" />
+      <workItem from="1586983056223" duration="4796000" />
+      <workItem from="1586987901922" duration="23271000" />
+      <workItem from="1587156349095" duration="24047000" />
+      <workItem from="1587497174373" duration="11259000" />
+      <workItem from="1587596860279" duration="1278000" />
+      <workItem from="1587673652687" duration="34468000" />
+      <workItem from="1588019375357" duration="1288000" />
+      <workItem from="1588020700819" duration="7837000" />
+      <workItem from="1588104341663" duration="1008000" />
+      <workItem from="1588283884156" duration="4931000" />
+      <workItem from="1588360343693" duration="17713000" />
+      <workItem from="1588535290244" duration="2000" />
+      <workItem from="1588535905377" duration="63000" />
+      <workItem from="1588536025208" duration="619000" />
+      <workItem from="1588536856924" duration="544000" />
+      <workItem from="1588629299014" duration="60441000" />
+      <workItem from="1589119472737" duration="16650000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2394" y="368" width="964" height="449" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588630355267">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2394" y="368" width="964" height="449" key="#com.intellij.fileTypes.FileTypeChooser/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586038346042" />
+    <state x="2394" y="368" key="#com.intellij.fileTypes.FileTypeChooser/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588630355267" />
+    <state x="2560" y="313" width="632" height="561" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1588283837760">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2560" y="313" width="632" height="585" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1585865023130" />
+    <state x="2560" y="313" width="632" height="561" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588283837760" />
+    <state x="2560" y="313" width="640" height="585" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1920.61.1920.1080/3840.0.1920.1080/0.87.1920.931@1920.61.1920.1080" timestamp="1587497121656" />
+    <state x="2532" y="87" width="672" height="1054" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588029289098">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2532" y="61" width="672" height="1080" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586734079239" />
+    <state x="2532" y="87" width="672" height="1054" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588029289098" />
+    <state x="2543" y="289" width="657" height="607" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1588427877985">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2543" y="289" width="657" height="607" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586818486354" />
+    <state x="2543" y="289" width="657" height="607" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588427877985" />
+    <state x="2543" y="289" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1920.61.1920.1080/3840.0.1920.1080/0.87.1920.931@1920.61.1920.1080" timestamp="1587253909237" />
+    <state x="2586" y="219" width="571" height="746" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1" timestamp="1586207132342">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2586" y="219" width="571" height="746" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586207132342" />
+    <state x="2580" y="300" key="FileChooserDialogImpl" timestamp="1587991354608">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2580" y="300" key="FileChooserDialogImpl/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1587991354608" />
+    <state x="2425" y="273" width="902" height="692" key="NewPhpClassDialog" timestamp="1588886082216">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2425" y="273" width="902" height="692" key="NewPhpClassDialog/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588886082216" />
+    <state x="2455" y="278" key="run.anything.popup" timestamp="1587673788592">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2455" y="278" key="run.anything.popup/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1587673788592" />
+    <state x="2459" y="106" width="895" height="1034" key="search.everywhere.popup" timestamp="1588881822246">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2459" y="106" width="840" height="1034" key="search.everywhere.popup/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586811817687" />
+    <state x="2459" y="106" width="895" height="1034" key="search.everywhere.popup/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1588881822246" />
+    <state x="2459" y="106" width="840" height="1034" key="search.everywhere.popup/1920.61.1920.1080/3840.0.1920.1080/0.87.1920.931@1920.61.1920.1080" timestamp="1587502348580" />
+    <state x="2542" y="399" width="676" height="217" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1589145195675">
+      <screen x="1920" y="61" width="1920" height="1080" />
+    </state>
+    <state x="2542" y="399" width="676" height="413" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.26.1920.992/3840.0.1920.1080/1920.61.1920.1080@1920.61.1920.1080" timestamp="1586817742165" />
+    <state x="2542" y="399" width="676" height="217" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/1920.61.1920.1080/0.87.1920.931/3840.0.1920.1080@1920.61.1920.1080" timestamp="1589145195675" />
+    <state x="2542" y="399" width="676" height="217" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/1920.61.1920.1080/3840.0.1920.1080/0.87.1920.931@1920.61.1920.1080" timestamp="1586985836730" />
+  </component>
+</project>
