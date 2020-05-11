@@ -3,23 +3,21 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
     - php: 7.2
-      env: PHPUNIT_COVERAGE_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_COVERAGE_TEST=1
     - php: 7.3
-      env: PHPUNIT_TEST=1
-
- #  PHP 7.4 and php-vcr seem to have some compatability issues, look at with fresh eyes tomorrow
- #   - php: 7.4
- #     env: PHPUNIT_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
+    - php: 7.4
+      env: INSTALLER_VERSION=4.4.x-dev PHPUNIT_TEST=1
 
     # Code compliance
     - php: 7.4
-      env: PHPCS_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PHPCS_TEST=1
     - php: 7.4
-      env: PHPSTAN_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PHPSTAN_TEST=1
     - php: 7.4
-      env: PSALM_TEST=1
+      env: INSTALLER_VERSION=4.4.x-dev PSALM_TEST=1
 
 env:
   global:
@@ -37,13 +35,14 @@ before_script:
   # Init PHP
   - phpenv rehash
   - phpenv config-rm xdebug.ini
+  - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
   # Install composer dependencies
   - composer validate
   - echo $INSTALLER_VERSION
-  - composer require --prefer-source --no-update silverstripe/recipe-cms:4.4.x-dev
+  - composer require --no-update silverstripe/installer:$INSTALLER_VERSION
   - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.x-dev; fi
-  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+  - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
   # Run dev/build
   - vendor/bin/sake dev/build flush=all
@@ -51,7 +50,7 @@ before_script:
   # Dump constants for debug
   - php vendor/silverstripe/framework/tests/dump_constants.php
 
-  
+
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
   - composer global require hirak/prestissimo
