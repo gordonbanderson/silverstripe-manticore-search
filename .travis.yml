@@ -50,6 +50,8 @@ before_script:
   # Dump constants for debug
   - php vendor/silverstripe/framework/tests/dump_constants.php
   - php --ini
+  - find vendor/silverstripe
+
 
 
 install:
@@ -67,4 +69,3 @@ script:
 
 after_script:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
-  - find vendor/silverstripe
