@@ -49,6 +49,7 @@ before_script:
 
   # Dump constants for debug
   - php vendor/silverstripe/framework/tests/dump_constants.php
+  - php --ini
 
 
 install:
