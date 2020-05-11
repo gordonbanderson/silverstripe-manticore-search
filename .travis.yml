@@ -34,13 +34,29 @@ before_install:
   - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
 
 before_script:
-  - composer validate
-  #- if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan && composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
+  # Init PHP
+  - phpenv rehash
+  - phpenv config-rm xdebug.ini
 
+  # Install composer dependencies
+  - composer validate
+  - echo $INSTALLER_VERSION
+  - composer require --prefer-source --no-update silverstripe/recipe-cms:4.4.x-dev
+  - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.x-dev; fi
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+
+  # Run dev/build
+  - vendor/bin/sake dev/build flush=all
+
+  # Dump constants for debug
+  - php vendor/silverstripe/framework/tests/dump_constants.php
+
+  
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
   - composer global require hirak/prestissimo
   - composer install --prefer-dist
+
 
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit -d memory_limit=4G  tests/; fi
