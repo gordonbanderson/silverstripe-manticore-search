@@ -48,6 +48,7 @@ before_script:
   - php vendor/silverstripe/framework/tests/dump_constants.php
   - php --ini
   - find vendor/silverstripe
+  - find app
   - composer info
   - composer info | grep silverstripe
 
