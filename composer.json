@@ -17,10 +17,12 @@
         }
     ],
     "require": {
-        "php" : "~7",
-        "suilven/freetextsearch": "dev-master",
+        "php": "~7",
         "foolz/sphinxql-query-builder": "^1.2",
-        "silverstripe/framework": "~4"
+        "manticoresoftware/manticoresearch-php": "^1.2",
+        "silverstripe/framework": "~4",
+        "silverstripe/recipe-cms": "4.4.x-dev",
+        "suilven/freetextsearch": "dev-master"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.5",
@@ -46,7 +48,21 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        }
+        },
+        "project-files-installed": [
+            "app/.htaccess",
+            "app/_config.php",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "install-frameworkmissing.html",
+            "install.php",
+            "web.config"
+        ]
     },
     "config": {
         "sort-packages": true
