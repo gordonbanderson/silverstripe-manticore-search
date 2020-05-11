@@ -19,9 +19,8 @@
     "require": {
         "php": "~7",
         "foolz/sphinxql-query-builder": "^1.2",
-        "manticoresoftware/manticoresearch-php": "^1.2",
-        "silverstripe/framework": "~4",
-        "silverstripe/recipe-cms": "4.4.x-dev",
+        "manticoresoftware/manticoresearch-php": "dev-master",
+        "silverstripe/cms": "^4",
         "suilven/freetextsearch": "dev-master"
     },
     "require-dev": {
