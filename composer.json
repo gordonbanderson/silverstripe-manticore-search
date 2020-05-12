@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Suilven\\SphinxSearch\\": "src"
+            "Suilven\\ManticoreSearch\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Suilven\\SphinxSearch\\Tests\\": "tests"
+            "Suilven\\ManticoreSearch\\Tests\\": "tests"
         }
     },
     "scripts": {
