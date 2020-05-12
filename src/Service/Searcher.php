@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use Foolz\SphinxQL\Drivers\Pdo\ResultSet;
 use Foolz\SphinxQL\Facet;
 use Foolz\SphinxQL\Helper;
@@ -88,7 +87,8 @@ class Searcher
     }
 
 
-    public function search($q) {
+    public function search($q)
+    {
         $search = [
             'body' => [
                 'index' => $this->index,
@@ -120,13 +120,12 @@ class Searcher
 
 
         // string int fixes needed here
-        foreach($this->filters as $key => $value) {
+        foreach ($this->filters as $key => $value) {
             if ($key !== 'q') {
                 if (ctype_digit($value)) {
                     if (is_int($value + 0)) {
                         $value = (int) $value;
-                    }
-                    else if (is_float($value + 0)) {
+                    } elseif (is_float($value + 0)) {
                         $value = (float) $value;
                     }
                 }
@@ -135,11 +134,10 @@ class Searcher
             }
         }
 
-        foreach($this->facettedTokens as $tokenToFacet) {
+        foreach ($this->facettedTokens as $tokenToFacet) {
             $query->facet(Facet::create($connection)
-                ->facet(array($tokenToFacet))
+                ->facet(array($tokenToFacet)));
                 // @todo->orderBy('iso', 'ASC')
-            );
         }
 
 
@@ -157,12 +155,11 @@ class Searcher
 
         $ctr = 1;
         $facets = [];
-        foreach($this->facettedTokens as $token)
-        {
+        foreach ($this->facettedTokens as $token) {
             $resultSet = $result[$ctr];
             $rawFacets = $resultSet->fetchAllAssoc();
             $tokenFacets = [];
-            foreach($rawFacets as $singleFacet) {
+            foreach ($rawFacets as $singleFacet) {
                 if (isset($singleFacet[$token])) {
                     $value = $singleFacet[$token];
                     $count = $singleFacet['count(*)'];
@@ -181,7 +178,7 @@ class Searcher
 
                     // @todo - escaping?
                     $urlParams = '';
-                    foreach($filterForFacet as $n => $v) {
+                    foreach ($filterForFacet as $n => $v) {
                         //if (!isset($this->filters[$token])) {
                             $urlParams .= "{$n}={$v}&";
                        // }
@@ -202,7 +199,7 @@ class Searcher
         $metaData = $metaQuery->execute();
 
         $searchInfo = [];
-        foreach($metaData->getStored() as $info) {
+        foreach ($metaData->getStored() as $info) {
             $varname = $info['Variable_name'];
             $value = $info['Value'];
             $searchInfo[$varname] = $value;
@@ -210,7 +207,7 @@ class Searcher
 
         $formattedResults = new ArrayList();
 
-        foreach($ids as $assoc) {
+        foreach ($ids as $assoc) {
             // @todo use array merge to minimize db queries
             // @todo need to get this from the index definition
 
@@ -220,8 +217,7 @@ class Searcher
             $clazz = '';
 
             // @todo fix this, return an associative array from the above
-            foreach($indexes as $indexObj)
-            {
+            foreach ($indexes as $indexObj) {
                 $name = $indexObj->getName();
                 if ($name == $this->index) {
                     $clazz = $indexObj->getClass();
@@ -234,7 +230,7 @@ class Searcher
             // Get highlight snippets, but only if a query parameter was passed in
             if (!empty($q)) {
                 $snippets = Helper::create($connection)->callSnippets(
-                // @todo get from index, need all text fields
+                    // @todo get from index, need all text fields
                     $dataobject->Title . ' ' . $dataobject->Content,
                     //@todo hardwired
                     'sitetree_index',
@@ -278,7 +274,7 @@ class Searcher
             'ResultsFound' => $searchInfo['total_found'],
             'Time' => $elapsed/1000.0,
             'Pagination' => $pagination,
-            'AllFacets' => empty($facets) ? False : new ArrayList($facets)
+            'AllFacets' => empty($facets) ? false : new ArrayList($facets)
         ];
     }
 }

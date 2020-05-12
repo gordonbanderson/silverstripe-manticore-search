@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use SilverStripe\Core\Config\Config;
 
 class Client
@@ -39,7 +38,5 @@ class Client
     public function reindex()
     {
         $reindexCommand = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'cmd_reindex');
-
-
     }
 }

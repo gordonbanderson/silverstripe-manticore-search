@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Environment;
 use SilverStripe\ORM\ArrayList;
@@ -74,8 +73,7 @@ class Indexer
 
 
         /** @var Index $index */
-        foreach($this->indexes as $index)
-        {
+        foreach ($this->indexes as $index) {
             $className = $index->getClass();
 
 
@@ -88,13 +86,11 @@ class Indexer
             $attributes = new ArrayList();
 
             // @todo different field types
-            foreach($index->getFields() as $field)
-            {
+            foreach ($index->getFields() as $field) {
                 $fields[] = $field;
             }
 
-            foreach($index->getTokens() as $token)
-            {
+            foreach ($index->getTokens() as $token) {
                 $fields[] = $token;
             }
 
@@ -135,8 +131,7 @@ class Indexer
 
             // need to know for the stage, dataobjects assumed flat
             $isSiteTree = false;
-            while($classNameInHierarchy != 'SilverStripe\ORM\DataObject')
-            {
+            while ($classNameInHierarchy != 'SilverStripe\ORM\DataObject') {
                 if ($classNameInHierarchy != 'SilverStripe\CMS\Model\SiteTree') {
                     $joinClasses[] = '\'' .  str_replace('\\', '\\\\', $classNameInHierarchy) . '\'';
                 } else {
@@ -161,11 +156,13 @@ class Indexer
 
 
             $commas = str_repeat('?, ', sizeof($joinClasses));
-            $commas = substr( $commas, 0, -2 );
+            $commas = substr($commas, 0, -2);
             $columns = implode(', ', $joinClasses);
-            $sql = str_replace('WHERE (`SiteTree_Live`.`ClassName` IN (' . $commas. '))',
+            $sql = str_replace(
+                'WHERE (`SiteTree_Live`.`ClassName` IN (' . $commas. '))',
                 "WHERE (`SiteTree_Live`.`ClassName` IN ({$columns}))",
-                $sql);
+                $sql
+            );
 
 
             $sqlArray = explode(PHP_EOL, $sql);
@@ -180,21 +177,20 @@ class Indexer
           //  error_log(print_r($specs, 1));
 
             // make modifications to query and or attributes but only if required
-            foreach($allFields as $field)
-            {
+            foreach ($allFields as $field) {
                 error_log('Checking field ' . $field);
                 if (isset($specs[$field])) {
                     $fieldType = $specs[$field];
                     error_log('  - specs set - field type is '. $fieldType);
 
-                    switch($fieldType) {
+                    switch ($fieldType) {
                         case 'DBDatetime':
-                            $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS `$field`" , $sql);
+                            $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS `$field`", $sql);
                             // $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS {$field}" , $sql);
                             $attributes->push(['Name' => $field, 'Type' => 'sql_attr_timestamp']);
                             break;
                         case 'Datetime':
-                            $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS `$field`" , $sql);
+                            $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS `$field`", $sql);
                             // this breaks order by if field is after: $sql = str_replace("`$tableName`.`$field`", "UNIX_TIMESTAMP(`$tableName`.`$field`) AS {$field}" , $sql);
                             $attributes->push(['Name' => $field, 'Type' => 'sql_attr_timestamp']);
                             break;
@@ -216,14 +212,14 @@ class Indexer
                         error_log('FIELD ' . $field . ' IS IN TOKENS, WITH TYPE ' . $fieldType);
 
                         // remove string length from varchar
-                        if (substr( $fieldType, 0, 7 ) === "Varchar") {
+                        if (substr($fieldType, 0, 7) === "Varchar") {
                             $fieldTYpe = 'Varchar';
                         }
 
                         // @todo - float
                         // NOTE, cannot filter on string attributes, see http://sphinxsearch.com/wiki/doku.php?id=fields_and_attributes
                         // OH, it seems to work :)
-                        switch($fieldType) {
+                        switch ($fieldType) {
                             case 'Int':
                                 $attributes->push(['Name' => $field, 'Type' => 'sql_attr_uint']);
                                 break;
@@ -250,7 +246,7 @@ class Indexer
 
             /**
              * to add
-             * 	sql_attr_string		= classname
+             *  sql_attr_string     = classname
              */
 
 
@@ -290,11 +286,11 @@ class Indexer
     public function saveConfig()
     {
         // specific to the runnnig of sphinx
-        $common = file_get_contents( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
+        $common = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'common.conf');
-        $indexer = file_get_contents( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
+        $indexer = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'indexer.conf');
-        $searchd = file_get_contents( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
+        $searchd = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'searchd.conf');
 
 
@@ -304,7 +300,7 @@ class Indexer
 
         $config = $common . $indexer . $searchd;
 
-        foreach(array_keys($sphinxConfigurations) as $filename) {
+        foreach (array_keys($sphinxConfigurations) as $filename) {
             $config .= $sphinxConfigurations[$filename];
         }
 

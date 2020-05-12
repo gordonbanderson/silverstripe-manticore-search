@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-
 use Manticoresearch\Exceptions\ResponseException;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
@@ -39,12 +38,12 @@ class IndexingHelper
 
                 $nPages = 1+(abs($count/$bulkSize));
                 error_log('PAGES: ' . $nPages);
-                for($i=0; $i< $nPages; $i++) {
+                for ($i=0; $i< $nPages; $i++) {
                     error_log('PAGE: ' . $i);
                     $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$i);
 
                     $bulkData = [];
-                    foreach($dataObjects as $dataObject) {
+                    foreach ($dataObjects as $dataObject) {
                         error_log('Data objecct id: ' . $dataObject->ID);
                         $payload = $this->getDocumentPayload($index, $dataObject);
                         $row = [
@@ -77,7 +76,6 @@ class IndexingHelper
                     $connection = $client->getConnection();
                     $connection->bulk(['body'=>$bulkData]);
                 }
-
             }
         }
     }
@@ -91,7 +89,7 @@ class IndexingHelper
         $indexesObj = $indexesService->getIndexes();
 
         /** @var Index $index */
-        foreach($indexesObj as $index) {
+        foreach ($indexesObj as $index) {
             //error_log('Checking index ' . $index->getName());
             //error_log('Index class: ' . $index->getClass());
             //error_log('Object CN: ' . $ssDataObject->ClassName);

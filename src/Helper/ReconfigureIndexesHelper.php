@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-
 use Manticoresearch\Exceptions\ResponseException;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
@@ -104,9 +103,9 @@ class ReconfigureIndexesHelper
             // @todo Question for Manticore: Can one pass the if exists clause?
             try {
                 $connection->indices()->drop($indexData);
-            } catch(ResponseException $ex) {
+            } catch (ResponseException $ex) {
                 $message = $ex->getMessage();
-                if (substr($message,0,18) != '"DROP TABLE failed') {
+                if (substr($message, 0, 18) != '"DROP TABLE failed') {
                     throw $ex;
                 }
             }

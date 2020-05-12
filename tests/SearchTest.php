@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Tests;
 
-
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
@@ -68,5 +67,4 @@ class SearchTest extends SapphireTest
         error_log('RESULTS');
         error_log(print_r($results, 1));
     }
-
 }
