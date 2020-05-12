@@ -22,18 +22,6 @@ class ReconfigureIndexesHelper
     /** @param Indexes $indexes */
     public function reconfigureIndexes($indexes)
     {
-        if (Director::isDev()) {
-            error_log('MODE: DEV');
-        }
-
-        if (Director::isTest()) {
-            error_log('MODE: TEST');
-        }
-
-        if (Director::isLive()) {
-            error_log('MODE: LIVE');
-        }
-
         foreach ($indexes as $index) {
             $className = $index->getClass();
             $name = $index->getName();

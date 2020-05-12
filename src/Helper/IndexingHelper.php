@@ -37,14 +37,11 @@ class IndexingHelper
                 $count = $singleton::get()->count();
 
                 $nPages = 1+(abs($count/$bulkSize));
-                error_log('PAGES: ' . $nPages);
                 for ($i=0; $i< $nPages; $i++) {
-                    error_log('PAGE: ' . $i);
                     $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$i);
 
                     $bulkData = [];
                     foreach ($dataObjects as $dataObject) {
-                        error_log('Data objecct id: ' . $dataObject->ID);
                         $payload = $this->getDocumentPayload($index, $dataObject);
                         $row = [
                             'insert' => [
@@ -90,9 +87,6 @@ class IndexingHelper
 
         /** @var Index $index */
         foreach ($indexesObj as $index) {
-            //error_log('Checking index ' . $index->getName());
-            //error_log('Index class: ' . $index->getClass());
-            //error_log('Object CN: ' . $ssDataObject->ClassName);
             if ($index->getClass() == $ssDataObject->ClassName) {
                 $payload = $this->getDocumentPayload($index, $ssDataObject);
 
@@ -109,26 +103,11 @@ class IndexingHelper
                     'doc' => $payload
                 ];
 
-            //    error_log(print_r($doc, 1));
 
                 $client = new Client();
                 $connection = $client->getConnection();
                 $connection->insert(['body' =>$doc]);
             }
-
-            /*
-             *    $doc = [
-        'index'=>'movies',
-        'id' => 1,
-        'doc' => [
-            'title' => 'Star Trek: Nemesis',
-            'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the Federation once Praetor Shinzon plans to attack Earth.',
-            'year' => 2002,
-            'rating' => 6.4
-        ]
-    ];
-    $client->insert(['body' =>$doc]);
-             */
         }
     }
 
@@ -141,8 +120,6 @@ class IndexingHelper
     {
         $payload = [];
         foreach ($index->getFields() as $field) {
-            //error_log('ADDING PAYLOAD FIELD: ' . $field);
-
             // ParentID breaks bulk indexing.  No idea why :(
             if ($field != 'ParentID') {
                 $payload[$field] = $ssDataObject->$field;

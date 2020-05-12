@@ -46,9 +46,6 @@ class SearchTest extends SapphireTest
         $suggester = new Suggester();
         $suggester->setIndex('sitetree');
         $suggestions = $suggester->suggest('lathong');
-
-        error_log('RESULTS');
-        error_log(print_r($suggestions, 1));
     }
 
     public function test_index_all_documents_sitetree()
@@ -61,10 +58,5 @@ class SearchTest extends SapphireTest
         $searcher = new Searcher();
         $searcher->setIndex('sitetree');
         $results = $searcher->search('sodium');
-
-
-
-        error_log('RESULTS');
-        error_log(print_r($results, 1));
     }
 }
