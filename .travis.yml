@@ -2,6 +2,10 @@ language: php
 
 dist: bionic
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 matrix:
   include:
     - php: 7.1
