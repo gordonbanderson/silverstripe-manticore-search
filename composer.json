@@ -18,9 +18,8 @@
     ],
     "require": {
         "php": "~7",
-        "foolz/sphinxql-query-builder": "^1.2",
         "manticoresoftware/manticoresearch-php": "dev-master",
-        "silverstripe/cms": "^4",
+        "silverstripe/recipe-cms": "4.5",
         "suilven/freetextsearch": "dev-master"
     },
     "require-dev": {

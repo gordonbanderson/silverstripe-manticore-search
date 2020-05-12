@@ -22,8 +22,7 @@ matrix:
       env: INSTALLER_VERSION=4.5 PHPCS_TEST=1
     - php: 7.4
       env: INSTALLER_VERSION=4.5 PHPSTAN_TEST=1
-    - php: 7.4
-      env: INSTALLER_VERSION=4.5 PSALM_TEST=1
+
 
 services:
   - docker
