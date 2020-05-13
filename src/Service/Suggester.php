@@ -33,6 +33,7 @@ class Suggester
 
     public function suggest($q, $limit = 5)
     {
+        error_log('Q=' . $q);
         $params = [
             'index' => $this->index,
             'body' => [
@@ -44,6 +45,7 @@ class Suggester
         ];
 
         $response = $this->client->getConnection()->suggest($params);
+        error_log(print_r($response, 1));
         return $response;
     }
 

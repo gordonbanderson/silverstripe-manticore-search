@@ -53,6 +53,7 @@ class SearchTest extends SapphireTest
         $helper->indexObject($doc);
 
         // search for webmister, a deliberate error (should be webmaster)
+        /** @var Suggester $suggester */
         $suggester = new Suggester();
         $suggester->setIndex('sitetree');
         $suggestions = $suggester->suggest('webmister');
@@ -69,7 +70,7 @@ class SearchTest extends SapphireTest
         $searcher = new Searcher();
         $searcher->setIndex('sitetree');
         $result = $searcher->search('Webmaster disconnections');
-        $result = $result->toArray();
+
 
         error_log(print_r($result, 1));
     }

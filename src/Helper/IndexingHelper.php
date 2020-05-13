@@ -87,6 +87,8 @@ class IndexingHelper
 
         /** @var Index $index */
         foreach ($indexesObj as $index) {
+            error_log('INDEX CLASS=' . $index->getClass());
+            error_log('SS CLASSNAME: ' . $ssDataObject->ClassName);
             if ($index->getClass() == $ssDataObject->ClassName) {
                 $payload = $this->getDocumentPayload($index, $ssDataObject);
 
@@ -106,7 +108,9 @@ class IndexingHelper
 
                 $client = new Client();
                 $connection = $client->getConnection();
-                $connection->insert(['body' =>$doc]);
+                $response = $connection->replace(['body' =>$doc], $ssDataObject->ID);
+                error_log('RESPONSE FOR REPLACE');
+                error_log(print_r($response, 1));
             }
         }
     }
