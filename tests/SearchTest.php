@@ -48,7 +48,7 @@ class SearchTest extends SapphireTest
     }
 
 
-    public function test_index_one_document_and_suggest()
+    public function testIndexOneDocumentAndSuggest()
     {
         $helper = new IndexingHelper();
         $doc = DataObject::get_by_id(\Page::class, self::$pageID);
@@ -63,7 +63,7 @@ class SearchTest extends SapphireTest
     }
 
 
-    public function test_index_one_document_and_search()
+    public function testIndexOneDocumentAndSearch()
     {
         $helper = new IndexingHelper();
         $doc = DataObject::get_by_id(\Page::class, self::$pageID);

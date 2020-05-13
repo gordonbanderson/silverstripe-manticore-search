@@ -190,7 +190,8 @@ class Searcher
                     $count = $singleFacet['count(*)'];
 
                     // do this way to maintain order from Sphinx
-                    $nextFacet = ['Value' => $value, 'Count' => $count, 'Name' => $token, 'ExtraParam' => "$token=$value"];
+                    $nextFacet = ['Value' => $value, 'Count' => $count, 'Name' => $token,
+                        'ExtraParam' => "$token=$value"];
                     $filterForFacet = $this->filters;
 
                     if (isset($this->filters[$token])) {

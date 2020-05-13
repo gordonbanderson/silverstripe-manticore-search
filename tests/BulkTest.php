@@ -31,7 +31,7 @@ class BulkTest extends SapphireTest
         $indexer->reconfigureIndexes();
     }
 
-    public function test_index_all_documents_sitetree()
+    public function testIndexAllDocumentsSiteTree()
     {
         // index all SiteTree objects
         $helper = new IndexingHelper();
@@ -68,6 +68,5 @@ class BulkTest extends SapphireTest
         $suggester->setIndex('sitetree');
         $suggestions = $suggester->suggest('chessbored');
         $this->assertEquals(['chessboard'], $suggestions);
-
     }
 }
