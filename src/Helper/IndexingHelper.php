@@ -19,7 +19,7 @@ class IndexingHelper
 
 
     /**
-     * @param $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree
+     * @param string $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree
      */
     public function bulkIndex($classname)
     {

@@ -49,38 +49,9 @@ class Indexer
     }
 
 
-
     public function reconfigureIndexes()
     {
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($this->indexes);
-    }
-
-    /**
-     * Create a valid sphinx.conf file and save it.  Note that the commandline or web server user must have write
-     * access to the path defined in _config.
-     */
-    public function saveConfig()
-    {
-        // specific to the runnnig of sphinx
-        $common = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'common.conf');
-        $indexer = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'indexer.conf');
-        $searchd = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . 'sphinxconfig' . DIRECTORY_SEPARATOR . 'searchd.conf');
-
-
-        // specific to silverstripe data
-        $sphinxConfigurations = $this->generateConfig();
-        $sphinxSavePath = Config::inst()->get(Client::class, 'config_file');
-
-        $config = $common . $indexer . $searchd;
-
-        foreach (array_keys($sphinxConfigurations) as $filename) {
-            $config .= $sphinxConfigurations[$filename];
-        }
-
-        file_put_contents($sphinxSavePath, $config);
     }
 }

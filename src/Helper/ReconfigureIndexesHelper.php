@@ -16,7 +16,7 @@ use Suilven\ManticoreSearch\Service\Client;
 
 class ReconfigureIndexesHelper
 {
-    /** @param Indexes $indexes */
+    /** @param array $indexes */
     public function reconfigureIndexes($indexes)
     {
         foreach ($indexes as $index) {
@@ -34,7 +34,6 @@ class ReconfigureIndexesHelper
                 $fields[] = $token;
             }
 
-            /** @var DataList $query */
             $singleton = singleton($className);
             $tableName = $singleton->config()->get('table_name');
 
