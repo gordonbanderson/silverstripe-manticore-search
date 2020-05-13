@@ -33,18 +33,41 @@ class BulkTest extends SapphireTest
 
     public function test_index_all_documents_sitetree()
     {
+        // index all SiteTree objects
         $helper = new IndexingHelper();
-        $doc = SiteTree::get()->limit(1)->first();
+        $helper->bulkIndex('SilverStripe\CMS\Model\SiteTree');
 
-        $helper->bulkIndex($doc->ClassName);
 
+        // search against them
         $searcher = new Searcher();
         $searcher->setIndex('sitetree');
         $results = $searcher->search('sodium');
 
+        // assert number of results
+        $this->assertEquals(4, sizeof($results));
+
+        // assert IDs and that sodium is in the result set somewhere
+        $this->assertEquals(34, $results[0]->ID);
+
+        // @todo Why is ->title returning #34 here?
+        $this->assertContains('Sodium', $results[0]->menutitle);
+
+        $this->assertEquals(17, $results[1]->ID);
+        $this->assertContains('sodium', $results[1]->content);
+
+        $this->assertEquals(20, $results[2]->ID);
+        $this->assertContains('sodium', $results[2]->content);
+
+        $this->assertEquals(22, $results[3]->ID);
+        $this->assertContains('sodium', $results[3]->content);
 
 
-        error_log('RESULTS');
-        error_log(print_r($results, 1));
+        // now do a suggest
+        /** @var Suggester $suggester */
+        $suggester = new Suggester();
+        $suggester->setIndex('sitetree');
+        $suggestions = $suggester->suggest('chessbored');
+        $this->assertEquals(['chessboard'], $suggestions);
+
     }
 }

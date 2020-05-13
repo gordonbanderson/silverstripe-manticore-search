@@ -37,6 +37,7 @@ class SearchTest extends SapphireTest
         self::$pageID = $page->ID;
     }
 
+
     public function setUp()
     {
         parent::setUp();
@@ -45,6 +46,7 @@ class SearchTest extends SapphireTest
         $indexer = new Indexer($indexesObj);
         $indexer->reconfigureIndexes();
     }
+
 
     public function test_index_one_document_and_suggest()
     {

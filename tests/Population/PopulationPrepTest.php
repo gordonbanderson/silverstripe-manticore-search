@@ -17,8 +17,6 @@ class PopulationPrepTest extends SapphireTest
 {
     protected static $fixture_file = 'tests/fixtures.yml';
 
-
-
     public function setUp()
     {
         parent::setUp();
@@ -89,9 +87,6 @@ class PopulationPrepTest extends SapphireTest
             $paragraph = $this->getRandomParagraph($words, 10);
             $fixtures .= "    Content: " . $paragraph . "\n";
         }
-
-        error_log('DIR:' . `pwd`);
-
 
            echo ($fixtures);
     }
