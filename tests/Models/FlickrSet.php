@@ -28,8 +28,8 @@ class FlickrSet extends DataObject implements TestOnly
         'Description' => 'HTMLText',
         'FirstPictureTakenAt' => 'Datetime',
         // flag to indicate requiring a flickr API update
-        'IsDirty' => DBBoolean::class,
-        'LockGeo' => DBBoolean::class,
+        'IsDirty' => 'Boolean',
+        'LockGeo' => 'Boolean',
         'BatchTags' => 'Varchar',
         'BatchTitle' => 'Varchar',
         'BatchDescription' => 'HTMLText',
