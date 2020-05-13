@@ -23,6 +23,9 @@ class IndexingHelper
 {
 
 
+    /**
+     * @param $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree
+     */
     public function bulkIndex($classname)
     {
         $indexesService = new Indexes();
@@ -36,15 +39,15 @@ class IndexingHelper
                 $page = 0;
                 $count = $singleton::get()->count();
 
-                $nPages = 1+(abs($count/$bulkSize));
-                for ($i=0; $i< $nPages; $i++) {
-                    $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$i);
+                $nPages = 1+(floor($count/$bulkSize));
+                for ($page=0; $page< $nPages; $page++) {
+                    $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$page);
 
                     $bulkData = [];
                     foreach ($dataObjects as $dataObject) {
                         $payload = $this->getDocumentPayload($index, $dataObject);
                         $row = [
-                            'insert' => [
+                            'replace' => [
                                 'index' => $index->getName(),
                                 'id' => $dataObject->ID,
                                 'doc' => $payload
@@ -56,7 +59,7 @@ class IndexingHelper
 
                     $client = new Client();
                     $connection = $client->getConnection();
-                    $connection->bulk(['body'=>$bulkData]);
+                    $response = $connection->bulk(['body'=>$bulkData]);
                 }
             }
         }
