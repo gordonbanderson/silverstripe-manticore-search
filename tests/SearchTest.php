@@ -9,6 +9,7 @@ use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
 use Suilven\ManticoreSearch\Tests\Models\FlickrAuthor;
+use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 use Suilven\ManticoreSearch\Tests\Models\FlickrSet;
 use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
