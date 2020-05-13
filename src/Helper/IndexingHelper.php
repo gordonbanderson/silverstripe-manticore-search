@@ -37,11 +37,14 @@ class IndexingHelper
                 $count = $singleton::get()->count();
 
                 $nPages = 1+(abs($count/$bulkSize));
+                error_log('PAGES: ' . $nPages);
                 for ($i=0; $i< $nPages; $i++) {
+                    error_log('PAGE: ' . $i);
                     $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$i);
 
                     $bulkData = [];
                     foreach ($dataObjects as $dataObject) {
+                        error_log('Data objecct id: ' . $dataObject->ID);
                         $payload = $this->getDocumentPayload($index, $dataObject);
                         $row = [
                             'insert' => [
@@ -53,21 +56,6 @@ class IndexingHelper
 
                         $bulkData[] = $row;
                     }
-
-
-/*
-    THIS WORKS
-
-                    $docs =[
-                        ['insert'=> ['index'=>'sitetree','id'=>2,'doc'=>['Title'=>'Interstellar','Content'=>'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.']]],
-                        ['insert'=> ['index'=>'sitetree','id'=>3,'doc'=>['Title'=>'Inception','Content'=>'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.']]],
-                        ['insert'=> ['index'=>'sitetree','id'=>4,'doc'=>['Title'=>'1917 ','Content'=>' As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap.']]],
-                        ['insert'=> ['index'=>'sitetree','id'=>5,'doc'=>['Title'=>'Alien','Content'=>' After a space merchant vessel receives an unknown transmission as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon realize that its life cycle has merely begun.']]]
-                    ];
-
-*/
-
-
 
                     $client = new Client();
                     $connection = $client->getConnection();
@@ -87,30 +75,30 @@ class IndexingHelper
 
         /** @var Index $index */
         foreach ($indexesObj as $index) {
-            error_log('INDEX CLASS=' . $index->getClass());
-            error_log('SS CLASSNAME: ' . $ssDataObject->ClassName);
-            if ($index->getClass() == $ssDataObject->ClassName) {
-                $payload = $this->getDocumentPayload($index, $ssDataObject);
+            $ancestry = $ssDataObject->getClassAncestry();
+            array_reverse($ancestry);
+            foreach ($ancestry as $key) {
+                if ($index->getClass() == $key) {
+                    $payload = $this->getDocumentPayload($index, $ssDataObject);
 
-                //  unset($payload['Sort']);
+                    //  unset($payload['Sort']);
 
-                // this seems to break, not sure why - null issues?
-                unset($payload['ParentID']);
-           //     unset($payload['MenuTitle']);
-          //      unset($payload['Content']);
+                    // this seems to break, not sure why - null issues?
+                    unset($payload['ParentID']);
+                    //     unset($payload['MenuTitle']);
+                    //      unset($payload['Content']);
 
-                $doc = [
-                    'index'=>'sitetree',
-                    'id' => $ssDataObject->ID,
-                    'doc' => $payload
-                ];
+                    // @todo Remove hardwire
+                    $doc = [
+                        'index'=>'sitetree',
+                        'id' => $ssDataObject->ID,
+                        'doc' => $payload
+                    ];
 
-
-                $client = new Client();
-                $connection = $client->getConnection();
-                $response = $connection->replace(['body' =>$doc], $ssDataObject->ID);
-                error_log('RESPONSE FOR REPLACE');
-                error_log(print_r($response, 1));
+                    $client = new Client();
+                    $connection = $client->getConnection();
+                    $connection->replace(['body' =>$doc]);
+                }
             }
         }
     }
@@ -125,6 +113,7 @@ class IndexingHelper
         $payload = [];
         foreach ($index->getFields() as $field) {
             // ParentID breaks bulk indexing.  No idea why :(
+            // GBA: It seems to be the wrong type, it is 'indexed stored' instead of bigint
             if ($field != 'ParentID') {
                 $payload[$field] = $ssDataObject->$field;
             }

@@ -80,23 +80,16 @@ class ReconfigureIndexesHelper
                        // 'min_prefix_len' => 3,
                         //'morphology' => 'lemmatize_en',
                        // 'bigram_freq_words' => 'the, a, you, i'
-                    ]
+                    ],
+
+                    'silent' => true
                 ]
             ];
-
 
             $manticoreClient = new Client();
             $connection = $manticoreClient->getConnection();
 
-            // @todo Question for Manticore: Can one pass the if exists clause?
-            try {
-                $connection->indices()->drop($indexData);
-            } catch (ResponseException $ex) {
-                $message = $ex->getMessage();
-                if (substr($message, 0, 18) != '"DROP TABLE failed') {
-                    throw $ex;
-                }
-            }
+            $connection->indices()->drop($indexData);
             $connection->indices()->create($indexData);
 
 

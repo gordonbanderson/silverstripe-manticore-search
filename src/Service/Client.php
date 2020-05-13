@@ -27,6 +27,7 @@ class Client
     }
 
 
+
     /**
      * Execute reindex command.  @todo Can this be done using SphinxQL?
      */

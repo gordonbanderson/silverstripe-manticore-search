@@ -12,6 +12,7 @@ use Foolz\SphinxQL\Drivers\Pdo\ResultSet;
 use Foolz\SphinxQL\Facet;
 use Foolz\SphinxQL\Helper;
 use Foolz\SphinxQL\SphinxQL;
+use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
@@ -27,7 +28,7 @@ class Searcher
 
     private $page = 1;
 
-    private $index = 'sitetree';
+    private $indexName = 'sitetree';
 
     /**
      * @var array tokens that are facetted, e.g. Aperture, BlogID
@@ -56,11 +57,11 @@ class Searcher
     }
 
     /**
-     * @param string $index
+     * @param string $indexName
      */
-    public function setIndex($index)
+    public function setIndex($indexName)
     {
-        $this->index = $index;
+        $this->indexName = $indexName;
     }
 
 
@@ -91,7 +92,7 @@ class Searcher
     {
         $search = [
             'body' => [
-                'index' => $this->index,
+                'index' => $this->indexName,
                 'query' => [
                     'match' => ['*' => $q],
                 ],
@@ -99,9 +100,34 @@ class Searcher
         ];
 
         $client = new Client();
-        $connection = $client->getConnection();
-        $result = $connection->search($search);
-        return $result;
+        $manticoreClient = $client->getConnection();
+
+        $searcher = new Search($manticoreClient);
+        $searcher->setIndex($this->indexName);
+        $manticoreResult = $searcher->search($q)->get();
+
+        $ssResult = new ArrayList();
+        while ($manticoreResult->valid()) {
+            $hit = $manticoreResult->current();
+            $source = $hit->getData();
+            $ssDataObject = new DataObject();
+
+            // @todo map back likes of title to Title
+            error_log(print_r($source, 1));
+            $keys = array_keys($source);
+            foreach ($keys as $key) {
+                $ssDataObject->$key = $source[$key];
+            }
+
+            $ssDataObject->ID = $hit->getId();
+            $ssResult->push($ssDataObject);
+
+            $manticoreResult->next();
+        }
+
+        // we now need to standardize the output returned
+
+        return $ssResult;
     }
 
 
@@ -112,7 +138,7 @@ class Searcher
 
         // @todo make fields configurable?
         $query = SphinxQL::create($connection)->select('id')
-            ->from([$this->index .'_index', $this->index  . '_rt']);
+            ->from([$this->indexName .'_index', $this->indexName  . '_rt']);
 
         if (!empty($q)) {
             $query->match('?', $q);
@@ -219,7 +245,7 @@ class Searcher
             // @todo fix this, return an associative array from the above
             foreach ($indexes as $indexObj) {
                 $name = $indexObj->getName();
-                if ($name == $this->index) {
+                if ($name == $this->indexName) {
                     $clazz = $indexObj->getClass();
                     break;
                 }

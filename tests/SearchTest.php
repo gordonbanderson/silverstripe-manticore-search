@@ -70,8 +70,9 @@ class SearchTest extends SapphireTest
         $searcher = new Searcher();
         $searcher->setIndex('sitetree');
         $result = $searcher->search('Webmaster disconnections');
-
-
-        error_log(print_r($result, 1));
+        $arrayResult = $result->toArray();
+        $this->assertEquals(1, sizeof($arrayResult));
+        $this->assertContains('Webmaster fakes disconnections overdose', $arrayResult[0]->content);
+        $this->assertEquals(self::$pageID, $arrayResult[0]->ID);
     }
 }
