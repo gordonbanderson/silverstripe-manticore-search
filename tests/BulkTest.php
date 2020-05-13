@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Tests;
 
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\IndexingHelper;

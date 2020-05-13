@@ -9,14 +9,6 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Environment;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataList;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\DataObjectSchema;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ArrayData;
-use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 

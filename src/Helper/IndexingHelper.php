@@ -8,13 +8,8 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-use Manticoresearch\Exceptions\ResponseException;
-use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\DataObjectSchema;
 use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Service\Client;

@@ -8,15 +8,8 @@
 
 namespace Suilven\ManticoreSearch\Tests\Models;
 
-use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\DataObject;
-use Suilven\FreeTextSearch\Indexes;
-use Suilven\ManticoreSearch\Helper\IndexingHelper;
-use Suilven\ManticoreSearch\Service\Indexer;
-use Suilven\ManticoreSearch\Service\Searcher;
-use Suilven\ManticoreSearch\Service\Suggester;
 
 class FlickrPhoto extends DataObject implements TestOnly
 {
