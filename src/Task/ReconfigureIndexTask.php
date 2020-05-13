@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Task;
 
-
 use SilverStripe\Dev\BuildTask;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Service\Indexer;

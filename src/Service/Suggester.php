@@ -8,8 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
-
 class Suggester
 {
     /**
@@ -45,11 +43,8 @@ class Suggester
             ]
         ];
 
-        error_log('SUGGEST QUERY: ' . print_r($params, 1));
-
         $response = $this->client->getConnection()->suggest($params);
-
-        return $response;
+        return array_keys($response);
     }
 
 
@@ -68,10 +63,8 @@ class Suggester
            // @todo FIX Can we return multiple results and also can we pass in multiple words
             // result returns a string then a couple of numbers, no idea what the numbers are
             $suggestions = $result[0]['suggest'];
-
         }
 
         return [$suggestions];
-
     }
 }

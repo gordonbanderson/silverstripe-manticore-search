@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Population\Tests;
 
-
 use Faker\Factory;
 use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
@@ -18,8 +17,6 @@ class PopulationPrepTest extends SapphireTest
 {
     protected static $fixture_file = 'tests/fixtures.yml';
 
-
-
     public function setUp()
     {
         parent::setUp();
@@ -27,7 +24,6 @@ class PopulationPrepTest extends SapphireTest
         $indexesObj = $indexesService->getIndexes();
         $indexer = new Indexer($indexesObj);
         $indexer->reconfigureIndexes();
-
     }
 
     public function assfsfdtestStub()
@@ -39,7 +35,7 @@ class PopulationPrepTest extends SapphireTest
     {
         $fixtures = "SilverStripe\Security\Member:\n";
         $faker = Factory::create();
-        for($i=1; $i<=10;$i++) {
+        for ($i=1; $i<=10; $i++) {
             $member = '  member_'.$i . ":\n";
             $fixtures .= $member;
             //FirstName
@@ -48,7 +44,7 @@ class PopulationPrepTest extends SapphireTest
             $firstname = $faker->firstName;
             $surname = $faker->lastName;
             $domain = $faker->freeEmailDomain;
-            $email = strtolower($firstname . '.' . $surname ). '@' . $domain;
+            $email = strtolower($firstname . '.' . $surname). '@' . $domain;
             $fixtures .= "    FirstName: " . $firstname . "\n";
             $fixtures .= "    Surname: " . $surname . "\n";
             $fixtures .= "    Email: " . $email . "\n";
@@ -82,7 +78,7 @@ class PopulationPrepTest extends SapphireTest
         $book = file_get_contents('./dict.txt');
 
         $words = explode(PHP_EOL, $book);
-        for($i=1; $i<=50;$i++) {
+        for ($i=1; $i<=50; $i++) {
             $sitetree = '  sitetree_'.$i . ":\n";
             $fixtures .= $sitetree;
 
@@ -92,11 +88,7 @@ class PopulationPrepTest extends SapphireTest
             $fixtures .= "    Content: " . $paragraph . "\n";
         }
 
-        error_log( 'DIR:' . `pwd`);
-
-
            echo ($fixtures);
-
     }
 
     private function getRandomWord($words, $precaps = false)
@@ -110,9 +102,9 @@ class PopulationPrepTest extends SapphireTest
 
     private function getRandomSentence($words, $maxWords = 20)
     {
-        $nWords = rand(4,$maxWords);
+        $nWords = rand(4, $maxWords);
         $sentence = [];
-        for($i=0; $i<=$nWords;$i++) {
+        for ($i=0; $i<=$nWords; $i++) {
             $sentence[] = $this->getRandomWord($words, $i==0);
         }
 
@@ -126,13 +118,12 @@ class PopulationPrepTest extends SapphireTest
 
     private function getRandomParagraph($words, $maxSentences = 10)
     {
-        $nSentences = rand(1,$maxSentences);
+        $nSentences = rand(1, $maxSentences);
         $sentences = [];
-        for($i=0; $i<$nSentences;$i++) {
+        for ($i=0; $i<$nSentences; $i++) {
             $sentences[] = $this->getRandomSentence($words, $i==0);
         }
 
         return implode('.  ', $sentences) . '.  ';
-
     }
 }

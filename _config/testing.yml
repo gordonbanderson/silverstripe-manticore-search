@@ -2,15 +2,38 @@
 Name: test-models
 After: freetextindexes
 Only:
-  environment: dev # @todo This needs fixing TO test
+  envvarset:
+    - UNIT_TESTING
 ---
 
-# @todo This needs to be different locally and for CI purposes - .env variable perhaps?
 Suilven\SphinxSearch\Service\Client:
   host: 'manticore'
 
 Suilven\FreeTextSearch\Indexes:
   indexes:
+    - index:
+        name: flickrphotos
+        class: Suilven\ManticoreSearch\Tests\Models\FlickrPhoto
+
+        fields:
+          - Title
+          - Description
+
+        tokens:
+          - Aperture
+          - ShutterSpeed
+          - ISO
+
+        has_many_many:
+          - Suilven\ManticoreSearch\Tests\Models\FlickrSet
+
+        has_one:
+          - Suilven\ManticoreSearch\Tests\Models\FlickrAuthor
+
+        # Multi valued attribute
+        has_many:
+          - Suilven\ManticoreSearch\Tests\Models\FlickrTag
+
     - index:
         name: members
         class: SilverStripe\Security\Member

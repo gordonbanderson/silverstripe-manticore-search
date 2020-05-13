@@ -8,11 +8,7 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-
-use Manticoresearch\Exceptions\ResponseException;
-use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObjectSchema;
 use Suilven\FreeTextSearch\Indexes;
@@ -23,18 +19,6 @@ class ReconfigureIndexesHelper
     /** @param Indexes $indexes */
     public function reconfigureIndexes($indexes)
     {
-        if (Director::isDev()) {
-            error_log('MODE: DEV');
-        }
-
-        if (Director::isTest()) {
-            error_log('MODE: TEST');
-        }
-
-        if (Director::isLive()) {
-            error_log('MODE: LIVE');
-        }
-
         foreach ($indexes as $index) {
             $className = $index->getClass();
             $name = $index->getName();
@@ -93,23 +77,16 @@ class ReconfigureIndexesHelper
                        // 'min_prefix_len' => 3,
                         //'morphology' => 'lemmatize_en',
                        // 'bigram_freq_words' => 'the, a, you, i'
-                    ]
+                    ],
+
+                    'silent' => true
                 ]
             ];
-
 
             $manticoreClient = new Client();
             $connection = $manticoreClient->getConnection();
 
-            // @todo Question for Manticore: Can one pass the if exists clause?
-            try {
-                $connection->indices()->drop($indexData);
-            } catch(ResponseException $ex) {
-                $message = $ex->getMessage();
-                if (substr($message,0,18) != '"DROP TABLE failed') {
-                    throw $ex;
-                }
-            }
+            $connection->indices()->drop($indexData);
             $connection->indices()->create($indexData);
 
 

@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use SilverStripe\Core\Config\Config;
 
 class Client
@@ -23,10 +22,6 @@ class Client
         $host = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'host');
         $port = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'port');
 
-        error_log('**** HOST: ' . $host);
-        error_log('**** PORT: ' . $port);
-
-
         $config = ['host'=>$host,'port'=>$port];
         return  new \Manticoresearch\Client($config);
     }
@@ -39,7 +34,5 @@ class Client
     public function reindex()
     {
         $reindexCommand = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'cmd_reindex');
-
-
     }
 }
