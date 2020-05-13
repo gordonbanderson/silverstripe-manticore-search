@@ -76,9 +76,7 @@ class Indexer
         foreach ($this->indexes as $index) {
             $className = $index->getClass();
 
-
             $name = $index->getName();
-            error_log("\n\n\n\nNAME: " . $name);
             $fields = []; // ['ID', 'CreatedAt', 'LastEdited'];
 
 
@@ -100,11 +98,8 @@ class Indexer
             $singleton = singleton($className);
             $tableName = $singleton->config()->get('table_name');
 
-            error_log('TABLE NAME: ' . $tableName);
             $schema = $singleton->getSchema();
-
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
-
 
             // need to override sort, set it to null
             Config::modify()->set($className, 'default_sort', null);
@@ -117,8 +112,6 @@ class Indexer
 
             // this is how to do it with a DataList, it clones and returns a new DataList
             $queryObject = $queryObject->setQueriedColumns($fields);
-
-           // error_log('FIELDS: ' . print_r($fields, 1));
 
 
             // this needs massages for sphinx
@@ -173,15 +166,10 @@ class Indexer
             $allFields[] = 'LastEdited';
             $allFields[] = 'Created';
 
-            error_log("\n\nFIELDS: SPECS=");
-          //  error_log(print_r($specs, 1));
-
             // make modifications to query and or attributes but only if required
             foreach ($allFields as $field) {
-                error_log('Checking field ' . $field);
                 if (isset($specs[$field])) {
                     $fieldType = $specs[$field];
-                    error_log('  - specs set - field type is '. $fieldType);
 
                     switch ($fieldType) {
                         case 'DBDatetime':
@@ -208,8 +196,6 @@ class Indexer
                     // strings and ints may need tokenized, others as above.  See http://sphinxsearch.com/wiki/doku.php?id=fields_and_attributes
                     if (in_array($field, $tokens)) {
                         $fieldType = $specs[$field];
-
-                        error_log('FIELD ' . $field . ' IS IN TOKENS, WITH TYPE ' . $fieldType);
 
                         // remove string length from varchar
                         if (substr($fieldType, 0, 7) === "Varchar") {
@@ -262,9 +248,6 @@ class Indexer
 
 
             $configuraton = $params->renderWith('IndexClassConfig');
-
-
-
             $configuration2 = str_replace('SQL_QUERY_HERE', $sql, $configuraton);
 
             // @todo generic naming
@@ -305,9 +288,5 @@ class Indexer
         }
 
         file_put_contents($sphinxSavePath, $config);
-
-        error_log('---- saved config ----');
-        error_log($sphinxSavePath);
-        error_log($config);
     }
 }

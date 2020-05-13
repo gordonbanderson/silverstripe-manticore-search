@@ -113,7 +113,6 @@ class Searcher
             $ssDataObject = new DataObject();
 
             // @todo map back likes of title to Title
-            error_log(print_r($source, 1));
             $keys = array_keys($source);
             foreach ($keys as $key) {
                 $ssDataObject->$key = $source[$key];

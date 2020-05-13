@@ -37,14 +37,11 @@ class IndexingHelper
                 $count = $singleton::get()->count();
 
                 $nPages = 1+(abs($count/$bulkSize));
-                error_log('PAGES: ' . $nPages);
                 for ($i=0; $i< $nPages; $i++) {
-                    error_log('PAGE: ' . $i);
                     $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$i);
 
                     $bulkData = [];
                     foreach ($dataObjects as $dataObject) {
-                        error_log('Data objecct id: ' . $dataObject->ID);
                         $payload = $this->getDocumentPayload($index, $dataObject);
                         $row = [
                             'insert' => [

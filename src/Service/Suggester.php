@@ -43,10 +43,7 @@ class Suggester
             ]
         ];
 
-        error_log('SUGGEST QUERY: ' . print_r($params, 1));
-
         $response = $this->client->getConnection()->suggest($params);
-
         return array_keys($response);
     }
 
