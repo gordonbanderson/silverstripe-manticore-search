@@ -27,18 +27,18 @@ class FlickrPhoto extends DataObject implements TestOnly
         'FlickrID' => 'Varchar',
         'Description' => 'HTMLText',
         'TakenAt' => 'Datetime',
-        'FlickrLastUpdated' => DBDate::class,
-        'GeoIsPublic' => DBBoolean::class,
+        'FlickrLastUpdated' => 'Date',
+        'GeoIsPublic' => 'Boolean',
 
         // flag to indicate requiring a flickr API update
-        'IsDirty' => DBBoolean::class,
+        'IsDirty' => 'Boolean',
 
         'Orientation' => 'Int',
         'WoeID' => 'Int',
         'Accuracy' => 'Int',
         'FlickrPlaceID' => 'Varchar(255)',
         'Rotation' => 'Int',
-        'IsPublic' => DBBoolean::class,
+        'IsPublic' => 'Boolean',
         'Aperture' => 'Float',
         'ShutterSpeed' => 'Varchar',
         'ImageUniqueID' => 'Varchar',
