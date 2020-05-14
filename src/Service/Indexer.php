@@ -55,5 +55,5 @@ class Indexer
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($this->indexes);
     }
-    
+
 }
