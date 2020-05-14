@@ -13,6 +13,8 @@ matrix:
       env: INSTALLER_VERSION=4.5 PHPCS_TEST=1
     - php: 7.4
       env: INSTALLER_VERSION=4.5 PHPSTAN_TEST=1
+    - php: 7.4
+      env: INSTALLER_VERSION=4.5 PSALM_TEST=1
 
     # Code
     - php: 7.1
@@ -52,6 +54,7 @@ script:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=PSR2 src/ tests/ ; fi
   - if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c tests/phpstan.neon src/; fi
+  - if [[ $PSALM_TEST ]]; then composer remove phpunit/phpunit && vendor/bin/psalm --init && vendor/bin/psalm && ./vendor/bin/psalm --show-info=true --issues=all; fi
 
 after_script:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
