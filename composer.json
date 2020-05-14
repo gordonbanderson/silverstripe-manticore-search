@@ -16,6 +16,12 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/gordonbanderson/psalm.git"
+        }
+    ],
     "require": {
         "php": "~7",
         "manticoresoftware/manticoresearch-php": "dev-master",
