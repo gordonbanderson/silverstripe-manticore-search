@@ -46,5 +46,4 @@ class Suggester
         $response = $this->client->getConnection()->suggest($params);
         return array_keys($response);
     }
-
 }
