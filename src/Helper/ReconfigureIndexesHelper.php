@@ -35,8 +35,6 @@ class ReconfigureIndexesHelper
             }
 
             $singleton = singleton($className);
-            $tableName = $singleton->config()->get('table_name');
-
             $schema = $singleton->getSchema();
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
 
