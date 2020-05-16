@@ -26,6 +26,9 @@ class Indexer
     public function __construct($indexes)
     {
         $this->indexes = $indexes;
+
+        $config = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes') ;
+        eror_log(print_r($config, 1));
     }
 
 
