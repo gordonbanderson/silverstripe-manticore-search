@@ -23,6 +23,10 @@ class IndexingHelper
      */
     public function bulkIndex($classname)
     {
+        // debug
+        $indexesConfig = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes');
+        error_log(print_r($indexesConfig, 1));
+
         $indexesService = new Indexes();
         $indexesObj = $indexesService->getIndexes();
 
