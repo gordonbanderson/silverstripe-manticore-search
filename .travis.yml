@@ -45,15 +45,12 @@ install:
   # This is necessary to enable unit testing specific config
   - export UNIT_TESTING_CONFIG_ENABLED=1
 
-  # Flush needed?
-  # - vendor/bin/sake dev/build flush=all
-
 before_script:
   - phpenv rehash
   - phpenv config-rm xdebug.ini
   - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
-# Locally the flush is crucial to getting the TestOnly objects working correctly
+# Flushing at the PHPUnit stage is necessary to get TestOnly objects working correctly
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '' flush=all; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml '' flush=all; fi
