@@ -6,8 +6,9 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-env:
-  - UNIT_TESTING_CONFIG_ENABLED=1
+# This does not work
+#env:
+   # - UNIT_TESTING_CONFIG_ENABLED=1
 
 
 matrix:
@@ -45,7 +46,7 @@ install:
 
   - composer require --no-update silverstripe/recipe-cms:$INSTALLER_VERSION
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
-  #- export UNIT_TESTING_CONFIG_ENABLED=1
+  - export UNIT_TESTING_CONFIG_ENABLED=1
   - vendor/bin/sake dev/build flush=all
 
 before_script:
