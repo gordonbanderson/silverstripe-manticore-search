@@ -12,6 +12,16 @@ Suilven\SphinxSearch\Service\Client:
 Suilven\FreeTextSearch\Indexes:
   indexes:
     - index:
+        name: members
+        class: SilverStripe\Security\Member
+
+        # Free text searchable
+        fields:
+          - FirstName
+          - Surname
+          - Email
+
+    - index:
         name: flickrphotos
         class: Suilven\ManticoreSearch\Tests\Models\FlickrPhoto
 
@@ -34,15 +44,7 @@ Suilven\FreeTextSearch\Indexes:
         has_many:
           - Suilven\ManticoreSearch\Tests\Models\FlickrTag
 
-    - index:
-        name: members
-        class: SilverStripe\Security\Member
 
-        # Free text searchable
-        fields:
-          - FirstName
-          - Surname
-          - Email
 
         # Multi valued attribute in Manticore
       #has_many:
