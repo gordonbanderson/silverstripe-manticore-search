@@ -48,7 +48,7 @@ install:
   - export UNIT_TESTING_CONFIG_ENABLED=1
 
   - vendor/bin/sake dev/build flush=all
-  - 
+  -
 before_script:
   - phpenv rehash
   - phpenv config-rm xdebug.ini
