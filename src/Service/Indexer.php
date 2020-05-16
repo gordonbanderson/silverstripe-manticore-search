@@ -19,6 +19,7 @@ class Indexer
      */
     private $indexes = null;
 
+
     /**
      * Indexer constructor.
      * @param Indexes $indexes indexes in context
@@ -27,10 +28,7 @@ class Indexer
     {
         $this->indexes = $indexes;
 
-        error_log('-------------------------');
         $config = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes') ;
-        error_log(print_r($config, 1));
-        error_log('-------------------------');
     }
 
 

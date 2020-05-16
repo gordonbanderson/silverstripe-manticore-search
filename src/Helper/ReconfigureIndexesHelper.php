@@ -23,11 +23,9 @@ class ReconfigureIndexesHelper
         foreach ($indexes as $index) {
 
             $className = $index->getClass();
-            error_log('CN:' . $className);
 
             $name = $index->getName();
             $fields = []; // ['ID', 'CreatedAt', 'LastEdited'];
-
 
             // @todo different field types
             foreach ($index->getFields() as $field) {
@@ -39,15 +37,13 @@ class ReconfigureIndexesHelper
             }
 
             $singleton = singleton($className);
+
+            /** @var DataObjectSchema $schema */
             $schema = $singleton->getSchema();
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
 
-            error_log('---- specs ----');
-            error_log(print_r($specs, 1));
-
             $columns = [];
             foreach ($fields as $field) {
-                error_log('FIELD: ' . $field);
                 $fieldType = $specs[$field];
 
                 // fix likes of varchar(255)
