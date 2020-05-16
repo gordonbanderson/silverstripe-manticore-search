@@ -21,7 +21,10 @@ class ReconfigureIndexesHelper
     public function reconfigureIndexes($indexes)
     {
         foreach ($indexes as $index) {
+
             $className = $index->getClass();
+            error_log('CN:' . $className);
+
             $name = $index->getName();
             $fields = []; // ['ID', 'CreatedAt', 'LastEdited'];
 
@@ -39,8 +42,12 @@ class ReconfigureIndexesHelper
             $schema = $singleton->getSchema();
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
 
+            error_log('---- specs ----');
+            error_log(print_r($specs, 1));
+
             $columns = [];
             foreach ($fields as $field) {
+                error_log('FIELD: ' . $field);
                 $fieldType = $specs[$field];
 
                 // fix likes of varchar(255)
