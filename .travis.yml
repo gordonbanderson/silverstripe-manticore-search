@@ -51,6 +51,8 @@ install:
   - composer require --no-update silverstripe/recipe-cms:$INSTALLER_VERSION
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
+  - vendor/bin/sake dev/build flush=all
+
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml; fi
