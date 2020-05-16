@@ -60,7 +60,9 @@ class IndexingHelper
         }
     }
 
+
     /**
+     * @todo Check object exists prior to indexing attempt and throw an appropriate error
      * @param DataObject $ssDataObject
      */
     public function indexObject($ssDataObject)
@@ -83,9 +85,8 @@ class IndexingHelper
                     //     unset($payload['MenuTitle']);
                     //      unset($payload['Content']);
 
-                    // @todo Remove hardwire
                     $doc = [
-                        'index'=>'sitetree',
+                        'index'=>$index->getName(),
                         'id' => $ssDataObject->ID,
                         'doc' => $payload
                     ];
