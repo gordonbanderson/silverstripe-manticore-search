@@ -3,6 +3,7 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Member;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Service\Indexer;
@@ -48,6 +49,31 @@ class SearchTest extends SapphireTest
         $indexer->reconfigureIndexes();
     }
 
+
+    /**
+     * This test will hopefully deal with the hardwired sitetree index name
+     *
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+    public function testIndexOneMemberAndSuggest()
+    {
+        $helper = new IndexingHelper();
+        $member = new Member;
+        $member->FirstName = 'Gordon';
+        $member->Surname = 'Anderson';
+
+        // a fake address!
+        $member->Email = 'gordon.b.anderson@mailinator.com';
+
+        $member->write();
+        $helper->indexObject($member);
+
+        /** @var Suggester $suggester */
+        $suggester = new Suggester();
+        $suggester->setIndex('members');
+        $suggestions = $suggester->suggest('Andersin');
+        $this->assertEquals(['anderson'], $suggestions);
+    }
 
     public function testIndexOneDocumentAndSuggest()
     {
