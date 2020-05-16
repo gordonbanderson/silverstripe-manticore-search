@@ -46,15 +46,12 @@ install:
   - composer require --no-update silverstripe/recipe-cms:$INSTALLER_VERSION
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
   - export UNIT_TESTING_CONFIG_ENABLED=1
-
   - vendor/bin/sake dev/build flush=all
-  -
+
 before_script:
   - phpenv rehash
   - phpenv config-rm xdebug.ini
   - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
-
 
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests; fi
