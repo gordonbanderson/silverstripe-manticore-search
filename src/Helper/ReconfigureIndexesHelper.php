@@ -21,7 +21,6 @@ class ReconfigureIndexesHelper
     public function reconfigureIndexes($indexes)
     {
         foreach ($indexes as $index) {
-            error_log('INDEX: ' . $index->getName());
             $className = $index->getClass();
             $name = $index->getName();
             $fields = []; // ['ID', 'CreatedAt', 'LastEdited'];
@@ -29,22 +28,16 @@ class ReconfigureIndexesHelper
 
             // @todo different field types
             foreach ($index->getFields() as $field) {
-                error_log('FIELD: ' . $field);
                 $fields[] = $field;
             }
 
             foreach ($index->getTokens() as $token) {
-                error_log('TOKEN: ' . $token);
-
                 $fields[] = $token;
             }
 
             $singleton = singleton($className);
-            $tableName = $singleton->config()->get('table_name');
-
             $schema = $singleton->getSchema();
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
-
 
             $columns = [];
             foreach ($fields as $field) {
