@@ -11,19 +11,20 @@ namespace Suilven\ManticoreSearch\Helper;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObjectSchema;
+use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Service\Client;
 
 class ReconfigureIndexesHelper
 {
-    /** @param array $indexes */
+    /** @param array<Index> $indexes */
     public function reconfigureIndexes($indexes)
     {
         foreach ($indexes as $index) {
             $className = $index->getClass();
+
             $name = $index->getName();
             $fields = []; // ['ID', 'CreatedAt', 'LastEdited'];
-
 
             // @todo different field types
             foreach ($index->getFields() as $field) {
@@ -35,11 +36,10 @@ class ReconfigureIndexesHelper
             }
 
             $singleton = singleton($className);
-            $tableName = $singleton->config()->get('table_name');
 
+            /** @var DataObjectSchema $schema */
             $schema = $singleton->getSchema();
             $specs = $schema->fieldSpecs($className, DataObjectSchema::DB_ONLY);
-
 
             $columns = [];
             foreach ($fields as $field) {
@@ -51,6 +51,7 @@ class ReconfigureIndexesHelper
                 // this will be the most common
                 $indexType = 'text';
 
+                // @todo stripe HTML from HTML sourced index fields
                 switch ($fieldType) {
                     case 'Int':
                         $indexType = 'integer';
