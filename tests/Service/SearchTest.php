@@ -31,6 +31,13 @@ class SearchTest extends SapphireTest
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+
+        $flickrPhoto = new FlickrPhoto();
+        $flickrPhoto->Title = 'test';
+        $flickrPhoto->Description = 'test';
+        $flickrPhoto->write();
+
+
         $page = new \Page();
         $page->Title = 'Hometown Sandlot Knitted Saddens Days';
         $page->Content = 'Webmaster fakes disconnections overdose.  Windowing preschooler malfunctions dolts statutes.';

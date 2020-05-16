@@ -21,7 +21,6 @@ class ReconfigureIndexesHelper
     public function reconfigureIndexes($indexes)
     {
         foreach ($indexes as $index) {
-
             $className = $index->getClass();
 
             $name = $index->getName();
