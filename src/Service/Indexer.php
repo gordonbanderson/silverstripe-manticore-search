@@ -27,8 +27,10 @@ class Indexer
     {
         $this->indexes = $indexes;
 
+        error_log('-------------------------');
         $config = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes') ;
-        eror_log(print_r($config, 1));
+        error_log(print_r($config, 1));
+        error_log('-------------------------');
     }
 
 
