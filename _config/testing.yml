@@ -45,11 +45,6 @@ Suilven\FreeTextSearch\Indexes:
           - Suilven\ManticoreSearch\Tests\Models\FlickrTag
 
 
-
-        # Multi valued attribute in Manticore
-      #has_many:
-      #  - FlickrTags
-
       # Facets or filterable
  #     tokens:
   #      - Aperture
