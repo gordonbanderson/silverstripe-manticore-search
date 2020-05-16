@@ -53,9 +53,10 @@ before_script:
   - phpenv config-rm xdebug.ini
   - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
+# Locally the flush is crucial to getting the TestOnly objects working correctly
 script:
-  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests; fi
-  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml; fi
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '' flush=all; fi
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml '' flush=all; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=PSR2 src/ tests/ ; fi
   - if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c tests/phpstan.neon src/; fi
 
