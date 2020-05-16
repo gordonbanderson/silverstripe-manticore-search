@@ -14,10 +14,6 @@ use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 
 class Indexer
 {
-    protected $databaseName;
-
-    protected $databaseHost;
-
     /**
      * @var null|Indexes indexes in current context
      */
@@ -31,23 +27,6 @@ class Indexer
     {
         $this->indexes = $indexes;
     }
-
-    /**
-     * @param mixed $databaseName
-     */
-    public function setDatabaseName($databaseName)
-    {
-        $this->databaseName = $databaseName;
-    }
-
-    /**
-     * @param mixed $databaseHost
-     */
-    public function setDatabaseHost($databaseHost)
-    {
-        $this->databaseHost = $databaseHost;
-    }
-
 
 
     public function reconfigureIndexes()
