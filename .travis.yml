@@ -6,6 +6,10 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+env:
+  - UNIT_TESTING=1
+
+    
 matrix:
   include:
     # Code compliance
