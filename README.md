@@ -2,8 +2,6 @@
 [![Build Status](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search.svg?branch=master)](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/badges/build.png?b=master)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/build-status/master)
-[![CircleCI](https://circleci.com/gh/gordonbanderson/silverstripe-manticore-search.svg?style=svg)](https://circleci.com/gh/gordonbanderson/silverstripe-manticore-search)
-
 [![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/coverage.svg?branch=master)](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search?branch=master)
 
 
