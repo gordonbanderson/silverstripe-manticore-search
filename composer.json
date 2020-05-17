@@ -1,12 +1,14 @@
 {
-    "name": "suilven/sphinxsearch",
+    "name": "suilven/silverstripe-manticore-search",
     "type": "library",
-    "description": "Search SilverStripe using Sphinx",
+    "description": "Search SilverStripe using Manticore",
     "keywords": [
-        "suilven",
-        "sphinxsearch"
+        "freetext",
+        "manticore",
+        "search",
+        "SilverStripe"
     ],
-    "homepage": "https://github.com/suilven/sphinxsearch",
+    "homepage": "https://github.com/suilven/silverstripe-manticore-search",
     "license": "MIT",
     "authors": [
         {

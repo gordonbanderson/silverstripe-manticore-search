@@ -23,6 +23,8 @@
 
 ![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=testing)
 
+# **** WORK IN PROGRESS ****
+
 
 **Note:** Replace ```Gordon Anderson``` ```gordonbanderson``` ```https://github.com/gordonbanderson``` ```gordon.b.anderson@gmail.com``` ```suilven``` ```silverstripe-manticore-search``` ```Search SilverStripe using Sphinx``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
 
