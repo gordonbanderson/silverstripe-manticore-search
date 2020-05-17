@@ -6,7 +6,7 @@
  * Time: 20:36 น.
  */
 
-namespace Suilven\ManticoreSearch\Tests;
+namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
@@ -14,12 +14,11 @@ use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
+use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 
 class BulkTest extends SapphireTest
 {
-    protected static $fixture_file = 'tests/fixtures.yml';
-
-
+    protected static $fixture_file = 'tests/fixtures/sitetree.yml';
 
     public function setUp()
     {

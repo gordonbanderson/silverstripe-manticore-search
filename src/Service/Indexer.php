@@ -14,14 +14,11 @@ use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 
 class Indexer
 {
-    protected $databaseName;
-
-    protected $databaseHost;
-
     /**
      * @var null|Indexes indexes in current context
      */
     private $indexes = null;
+
 
     /**
      * Indexer constructor.
@@ -30,24 +27,9 @@ class Indexer
     public function __construct($indexes)
     {
         $this->indexes = $indexes;
-    }
 
-    /**
-     * @param mixed $databaseName
-     */
-    public function setDatabaseName($databaseName)
-    {
-        $this->databaseName = $databaseName;
+        $config = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes') ;
     }
-
-    /**
-     * @param mixed $databaseHost
-     */
-    public function setDatabaseHost($databaseHost)
-    {
-        $this->databaseHost = $databaseHost;
-    }
-
 
 
     public function reconfigureIndexes()

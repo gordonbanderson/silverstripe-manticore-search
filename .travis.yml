@@ -35,11 +35,6 @@ before_install:
   - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
   - docker ps
 
-before_script:
-  - phpenv rehash
-  - phpenv config-rm xdebug.ini
-  - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
 install:
   - composer validate
   - composer global require hirak/prestissimo
@@ -47,9 +42,18 @@ install:
   - composer require --no-update silverstripe/recipe-cms:$INSTALLER_VERSION
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
+  # This is necessary to enable unit testing specific config
+  - export UNIT_TESTING_CONFIG_ENABLED=1
+
+before_script:
+  - phpenv rehash
+  - phpenv config-rm xdebug.ini
+  - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+# Flushing at the PHPUnit stage is necessary to get TestOnly objects working correctly
 script:
-  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests; fi
-  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml; fi
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '' flush=all; fi
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml '' flush=all; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=PSR2 src/ tests/ ; fi
   - if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c tests/phpstan.neon src/; fi
 

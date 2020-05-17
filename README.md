@@ -23,7 +23,6 @@
 
 ![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=master)
 
-
 # **** WORK IN PROGRESS ****
 SilverStripe client for the Manticore search engine, using the newly published PHP client for Manticore.  
 
