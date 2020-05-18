@@ -15,10 +15,7 @@ use Foolz\SphinxQL\SphinxQL;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\PaginatedList;
-use SilverStripe\View\ArrayData;
 use Suilven\FreeTextSearch\Factory\SearcherInterface;
-use Suilven\FreeTextSearch\Indexes;
 
 class Searcher implements SearcherInterface
 {

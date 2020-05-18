@@ -8,7 +8,6 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;

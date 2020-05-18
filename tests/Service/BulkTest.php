@@ -14,7 +14,6 @@ use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
-use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 
 class BulkTest extends SapphireTest
 {
