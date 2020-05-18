@@ -17,9 +17,10 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\View\ArrayData;
+use Suilven\FreeTextSearch\Factory\SearcherInterface;
 use Suilven\FreeTextSearch\Indexes;
 
-class Searcher
+class Searcher implements SearcherInterface
 {
 
     private $client;
@@ -34,6 +35,11 @@ class Searcher
      * @var array tokens that are facetted, e.g. Aperture, BlogID
      */
     private $facettedTokens = [];
+
+    /**
+     * @var array tokens for has many
+     */
+    private $hasManyTokens = [];
 
     /**
      * @var array associative array of filters against tokens
@@ -71,6 +77,15 @@ class Searcher
     public function setFacettedTokens($facettedTokens)
     {
         $this->facettedTokens = $facettedTokens;
+    }
+
+
+    /**
+     * @param array $hasManyTokens
+     */
+    public function setHasManyTokens($hasManyTokens)
+    {
+        $this->facettedTokens = $hasManyTokens;
     }
 
 
