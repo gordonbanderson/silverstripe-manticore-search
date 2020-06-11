@@ -15,9 +15,9 @@ use Foolz\SphinxQL\SphinxQL;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use Suilven\FreeTextSearch\Factory\SearcherInterface;
+use Suilven\FreeTextSearch\Factory\Searcher;
 
-class Searcher implements SearcherInterface
+class Searcher implements Searcher
 {
 
     private $client;

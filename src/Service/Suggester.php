@@ -8,9 +8,9 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use Suilven\FreeTextSearch\Factory\SuggesterInterface;
+use Suilven\FreeTextSearch\Factory\Suggester;
 
-class Suggester implements SuggesterInterface
+class Suggester implements Suggester
 {
     /**
      * @var Client
