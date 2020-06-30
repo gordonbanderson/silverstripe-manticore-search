@@ -8,6 +8,8 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
+use Suilven\FreeTextSearch\Container\SuggesterResults;
+
 class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilven\FreeTextSearch\Interfaces\Suggester
 {
     /**
@@ -20,7 +22,7 @@ class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilv
         $this->client = new Client();
     }
 
-    public function suggest($q, $limit = 5)
+    public function suggest($q, $limit = 5): SuggesterResults
     {
         $params = [
             'index' => $this->index,

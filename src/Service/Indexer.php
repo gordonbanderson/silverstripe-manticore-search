@@ -12,29 +12,10 @@ use SilverStripe\Core\Config\Config;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 
-class Indexer
+class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
-    /**
-     * @var null|Indexes indexes in current context
-     */
-    private $indexes = null;
-
-
-    /**
-     * Indexer constructor.
-     * @param Indexes $indexes indexes in context
-     */
-    public function __construct($indexes)
+    public function index($dataObject)
     {
-        $this->indexes = $indexes;
-
-        $config = Config::inst()->get('Suilven\FreeTextSearch\Indexes', 'indexes') ;
-    }
-
-
-    public function reconfigureIndexes()
-    {
-        $helper = new ReconfigureIndexesHelper();
-        $helper->reconfigureIndexes($this->indexes);
+        error_log('INDEXING DO');
     }
 }
