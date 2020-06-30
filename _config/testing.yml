@@ -1,5 +1,5 @@
 ---
-Name: test-models
+Name: silverstripe-manticore-search-test-models
 After: freetextindexes
 Only:
   envvarset:
