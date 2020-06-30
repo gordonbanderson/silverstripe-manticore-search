@@ -14,7 +14,7 @@ use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
-    public function index($dataObject)
+    public function addDataObjectToIndex($dataObject, $index)
     {
         error_log('INDEXING DO');
     }
