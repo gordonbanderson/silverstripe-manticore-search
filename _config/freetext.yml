@@ -7,3 +7,5 @@ SilverStripe\Core\Injector\Injector:
     class: Suilven\ManticoreSearch\Service\Searcher
   FreeTextSuggesterImplementation:
     class: Suilven\ManticoreSearch\Service\Suggester
+  FreeTextIndexerImplementation:
+    class: Suilven\ManticoreSearch\Service\Indexer
