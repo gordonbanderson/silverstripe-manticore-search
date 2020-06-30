@@ -17,70 +17,14 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\View\ArrayData;
+use Suilven\FreeTextSearch\Base\SearcherBase;
+use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Indexes;
 
-class Searcher
+class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
 
     private $client;
-
-    private $pageSize = 10;
-
-    private $page = 1;
-
-    private $indexName = 'sitetree';
-
-    /**
-     * @var array tokens that are facetted, e.g. Aperture, BlogID
-     */
-    private $facettedTokens = [];
-
-    /**
-     * @var array associative array of filters against tokens
-     */
-    private $filters = [];
-
-    /**
-     * @param array $filters
-     */
-    public function setFilters($filters)
-    {
-        $this->filters = $filters;
-    }
-
-    /**
-     * @param int $pageSize
-     */
-    public function setPageSize($pageSize)
-    {
-        $this->pageSize = $pageSize;
-    }
-
-    /**
-     * @param string $indexName
-     */
-    public function setIndex($indexName)
-    {
-        $this->indexName = $indexName;
-    }
-
-
-    /**
-     * @param array $facettedTokens
-     */
-    public function setFacettedTokens($facettedTokens)
-    {
-        $this->facettedTokens = $facettedTokens;
-    }
-
-
-    /**
-     * @param int $page
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-    }
 
     public function __construct()
     {
@@ -88,7 +32,7 @@ class Searcher
     }
 
 
-    public function search($q)
+    public function search($q): SearchResults
     {
         $search = [
             'body' => [

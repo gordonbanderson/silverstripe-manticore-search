@@ -8,23 +8,12 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-class Suggester
+class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilven\FreeTextSearch\Interfaces\Suggester
 {
     /**
      * @var Client
      */
     private $client;
-
-    private $index = 'sitetree';
-
-    /**
-     * @param string $index
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-    }
-
 
     public function __construct()
     {
