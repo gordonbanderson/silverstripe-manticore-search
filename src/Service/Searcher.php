@@ -32,7 +32,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
     }
 
 
-    public function search($q): SearchResults
+    public function search(string $q): SearchResults
     {
         $search = [
             'body' => [
@@ -70,6 +70,11 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
 
         // we now need to standardize the output returned
 
-        return $ssResult;
+        $searchResults = new SearchResults();
+        $searchResults->setResults($ssResult);
+        $searchResults->setPage($this->page);
+        $searchResults->setPageSize($this->pageSize);
+        $searchResults->setQuery($q);
+        return $searchResults;
     }
 }

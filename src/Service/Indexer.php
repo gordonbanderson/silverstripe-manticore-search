@@ -14,8 +14,22 @@ use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
-    public function addDataObjectToIndex($dataObject, $index)
+    public function index($dataObject)
     {
-        error_log('INDEXING DO');
+        error_log('>>>>>> INDEXING DO');
+        $payload = $this->getFieldsToIndex($dataObject);
+        error_log('---- payload returned ----');
+        error_log(print_r($payload, 1));
+        $coreClient = new Client();
+        $client = $coreClient->getConnection();
+
+        $indexNames = array_keys($payload);
+        foreach($indexNames as $indexName) {
+            $indexPayload = $payload[$indexName];
+            $manticoreIndex = new \Manticoresearch\Index($client, $indexName);
+            $manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
+        }
+
+
     }
 }
