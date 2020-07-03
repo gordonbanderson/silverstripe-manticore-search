@@ -1,5 +1,5 @@
 {
-    "name": "suilven/silverstripe-manticore-search",
+    "name": "suilven\/silverstripe-manticore-search",
     "type": "silverstripe-vendormodule",
     "description": "Search SilverStripe using Manticore",
     "keywords": [
@@ -8,27 +8,31 @@
         "ManticoreSearch",
         "search"
     ],
-    "homepage": "https://github.com/suilven/silverstripe-manticore-search",
+    "homepage": "https:\/\/github.com\/suilven\/silverstripe-manticore-search",
     "license": "MIT",
     "authors": [
         {
             "name": "Gordon Anderson",
             "email": "gordon.b.anderson@gmail.com",
-            "homepage": "https://github.com/gordonbanderson",
+            "homepage": "https:\/\/github.com\/gordonbanderson",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "~7",
-        "manticoresoftware/manticoresearch-php": "dev-master",
-        "silverstripe/cms": "^4",
-        "suilven/freetextsearch": "dev-master"
+        "manticoresoftware\/manticoresearch-php": "dev-master",
+        "silverstripe\/cms": "^4",
+        "suilven\/freetextsearch": "dev-master"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.5",
-        "phpstan/phpstan": "^0.12.25",
-        "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^2.3"
+        "ergebnis\/composer-normalize": "^2.5",
+        "php-parallel-lint\/php-console-highlighter": "^0.5.0",
+        "php-parallel-lint\/php-parallel-lint": "^1.2",
+        "phpstan\/extension-installer": "^1.0",
+        "phpstan\/phpstan": "^0.12.25",
+        "phpstan\/phpstan-strict-rules": "^0.12.2",
+        "phpunit\/phpunit": "^5.7",
+        "slevomat\/coding-standard": "^6.3"
     },
     "autoload": {
         "psr-4": {
@@ -41,9 +45,11 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
-        "checkpsr2": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
-        "fixpsr2": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+        "checkcs": "vendor\/bin\/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "fixcs": "vendor\/bin\/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "checkCode": "composer checkcs && composer lint && composer phpstan",
+        "lint": "vendor\/bin\/parallel-lint src\/ tests\/",
+        "phpstan": "vendor\/bin\/phpstan analyse --level=6 -c tests\/phpstan.neon src\/"
     },
     "config": {
         "sort-packages": true
