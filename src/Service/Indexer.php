@@ -11,7 +11,7 @@ namespace Suilven\ManticoreSearch\Service;
 
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
-    public function index($dataObject): void
+    public function index(\SilverStripe\ORM\DataObject $dataObject): void
     {
         $payload = $this->getFieldsToIndex($dataObject);
         $coreClient = new Client();

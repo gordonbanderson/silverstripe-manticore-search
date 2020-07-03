@@ -14,18 +14,11 @@ use Suilven\FreeTextSearch\Indexes;
 
 class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
 {
-    public function createIndex($indexName): void
+    public function createIndex(string $indexName): void
     {
         $indexes = new Indexes();
 
         $index = $indexes->getIndex($indexName);
-
-        /** @var \Suilven\FreeTextSearch\Index $index */
-
-
-        \error_log(\print_r($index->getFields(), 1));
-        \error_log(\print_r($index, 1));
-
 
         $singleton = \singleton($index->getClass());
 

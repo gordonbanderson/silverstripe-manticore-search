@@ -22,7 +22,7 @@ class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilv
     }
 
 
-    public function suggest($q, $limit = 5): SuggesterResults
+    public function suggest(string $q, int $limit = 5): SuggesterResults
     {
         $params = [
             'index' => $this->index,

@@ -34,6 +34,6 @@ class Client
      */
     public function reindex(): void
     {
-        $reindexCommand = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'cmd_reindex');
+        // @todo
     }
 }

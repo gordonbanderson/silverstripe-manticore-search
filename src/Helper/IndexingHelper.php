@@ -56,13 +56,16 @@ class IndexingHelper
 
                 $client = new Client();
                 $connection = $client->getConnection();
-                $response = $connection->bulk(['body'=>$bulkData]);
+
+                // @todo Check for error in response and throw an exception
+                $connection->bulk(['body'=>$bulkData]);
             }
         }
     }
 
 
-    /** @todo Check object exists prior to indexing attempt and throw an appropriate error */
+    // @todo Check object exists prior to indexing attempt and throw an appropriate error
+
     public function indexObject(DataObject $ssDataObject): void
     {
         $indexesService = new Indexes();
@@ -100,7 +103,7 @@ class IndexingHelper
     }
 
 
-    /** @return array<array> */
+    /** @return array<string,string|float|int|bool> */
     public function getDocumentPayload(Index $index, DataObject $ssDataObject): array
     {
         $payload = [];

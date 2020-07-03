@@ -29,15 +29,6 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
 
     public function search(string $q): SearchResults
     {
-        $search = [
-            'body' => [
-                'index' => $this->indexName,
-                'query' => [
-                    'match' => ['*' => $q],
-                ],
-            ],
-        ];
-
         $client = new Client();
         $manticoreClient = $client->getConnection();
 
