@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -19,12 +20,12 @@ class ReconfigureIndexTask extends BuildTask
 
     protected $description = 'Regenerate sphinx configuration from models';
 
-    private static $segment = 'sphinxconfig';
-
     protected $enabled = true;
 
+    private static $segment = 'sphinxconfig';
 
-    public function run($request)
+
+    public function run($request): void
     {
         $indexesService = new Indexes();
         $indexesObj = $indexesService->getIndexes();

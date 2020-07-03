@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -12,15 +13,14 @@ use Suilven\FreeTextSearch\Container\SuggesterResults;
 
 class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilven\FreeTextSearch\Interfaces\Suggester
 {
-    /**
-     * @var Client
-     */
+    /** @var \Suilven\ManticoreSearch\Service\Client */
     private $client;
 
     public function __construct()
     {
         $this->client = new Client();
     }
+
 
     public function suggest($q, $limit = 5): SuggesterResults
     {
@@ -29,12 +29,13 @@ class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilv
             'body' => [
                 'query'=>$q,
                 'options' => [
-                    'limit' => $limit
-                ]
-            ]
+                    'limit' => $limit,
+                ],
+            ],
         ];
 
         $response = $this->client->getConnection()->suggest($params);
-        return array_keys($response);
+
+        return \array_keys($response);
     }
 }

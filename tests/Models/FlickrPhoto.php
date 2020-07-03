@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -42,7 +43,7 @@ class FlickrPhoto extends DataObject implements TestOnly
 
         // geo
         'Lat' => 'Decimal(18,15)',
-        'Lon' => 'Decimal(18,15)'
+        'Lon' => 'Decimal(18,15)',
     ];
 
     private static $belongs_many_many = array(

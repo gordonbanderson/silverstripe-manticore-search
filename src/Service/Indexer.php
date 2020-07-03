@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -8,25 +9,19 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use SilverStripe\Core\Config\Config;
-use Suilven\FreeTextSearch\Indexes;
-use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
-
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
-    public function index($dataObject)
+    public function index($dataObject): void
     {
         $payload = $this->getFieldsToIndex($dataObject);
         $coreClient = new Client();
         $client = $coreClient->getConnection();
 
-        $indexNames = array_keys($payload);
-        foreach($indexNames as $indexName) {
+        $indexNames = \array_keys($payload);
+        foreach ($indexNames as $indexName) {
             $indexPayload = $payload[$indexName];
             $manticoreIndex = new \Manticoresearch\Index($client, $indexName);
             $manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
         }
-
-
     }
 }

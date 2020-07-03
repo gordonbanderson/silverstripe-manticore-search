@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -28,7 +29,7 @@ class FlickrSet extends DataObject implements TestOnly
         'BatchDescription' => 'HTMLText',
         'ImageFooter' => 'Text',
         'SpriteCSS' => 'Text',
-        'SortOrder' => "Enum('TakenAt,UploadUnixTimeStamp', 'UploadUnixTimeStamp')"
+        'SortOrder' => "Enum('TakenAt,UploadUnixTimeStamp', 'UploadUnixTimeStamp')",
     ];
 
     private static $belongs_many_many = array(

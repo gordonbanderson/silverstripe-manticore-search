@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -8,18 +9,11 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use Foolz\SphinxQL\Drivers\Pdo\ResultSet;
-use Foolz\SphinxQL\Facet;
-use Foolz\SphinxQL\Helper;
-use Foolz\SphinxQL\SphinxQL;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\PaginatedList;
-use SilverStripe\View\ArrayData;
 use Suilven\FreeTextSearch\Base\SearcherBase;
 use Suilven\FreeTextSearch\Container\SearchResults;
-use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
 
 class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
@@ -33,9 +27,6 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
     }
 
 
-
-
-
     public function search(string $q): SearchResults
     {
         $search = [
@@ -44,7 +35,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
                 'query' => [
                     'match' => ['*' => $q],
                 ],
-            ]
+            ],
         ];
 
         $client = new Client();
@@ -54,7 +45,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
         $searcher->setIndex($this->indexName);
         $manticoreResult = $searcher->search($q)->highlight(
             [],
-            ['pre_tags' => '<b>','post_tags'=>'</b>']
+            ['pre_tags' => '<b>', 'post_tags'=>'</b>'],
         )->get();
 
         $indexes = new Indexes();
@@ -68,19 +59,19 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
             $ssDataObject = new DataObject();
 
             // @todo map back likes of title to Title
-            $keys = array_keys($source);
+            $keys = \array_keys($source);
             foreach ($keys as $key) {
                 $keyname = $key;
-                foreach($fields as $field)
-                {
-                    if (strtolower($field) == $key) {
+                foreach ($fields as $field) {
+                    if (\strtolower($field) === $key) {
                         $keyname = $field;
+
                         break;
                     }
                 }
 
                 // @todo This is a hack as $Title is rendering the ID in the template
-                if ($keyname == 'Title') {
+                if ($keyname === 'Title') {
                     $keyname = 'ResultTitle';
                 }
 
@@ -101,6 +92,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
         $searchResults->setPage($this->page);
         $searchResults->setPageSize($this->pageSize);
         $searchResults->setQuery($q);
+
         return $searchResults;
     }
 }

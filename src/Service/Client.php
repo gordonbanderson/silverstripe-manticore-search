@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -17,21 +18,21 @@ class Client
      *
      * @return \Manticoresearch\Client Client object for accessing Manticore
      */
-    public function getConnection()
+    public function getConnection(): \Manticoresearch\Client
     {
         $host = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'host');
         $port = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'port');
 
-        $config = ['host'=>$host,'port'=>$port];
-        return  new \Manticoresearch\Client($config);
+        $config = ['host'=>$host, 'port'=>$port];
+
+        return new \Manticoresearch\Client($config);
     }
 
 
-
     /**
-     * Execute reindex command.  @todo Can this be done using SphinxQL?
+     * Execute reindex command. @todo Can this be done using SphinxQL?
      */
-    public function reindex()
+    public function reindex(): void
     {
         $reindexCommand = Config::inst()->get('Suilven\ManticoreSearch\Service\Client', 'cmd_reindex');
     }

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -15,11 +16,11 @@ class FlickrTag extends DataObject implements TestOnly
 {
     private static $table_name = 'FlickrTag';
 
-    private static $db = array(
+    private static $db = [
         'Value' => 'Varchar',
         'FlickrID' => 'Varchar',
-        'RawValue' => 'HTMLText'
-    );
+        'RawValue' => 'HTMLText',
+    ];
 
     private static $belongs_many_many = array(
         'FlickrPhotos' => FlickrPhoto::class

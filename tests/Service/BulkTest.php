@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -14,22 +15,23 @@ use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
-use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 
 class BulkTest extends SapphireTest
 {
     protected static $fixture_file = 'tests/fixtures/sitetree.yml';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $indexesService = new Indexes();
         $indexesObj = $indexesService->getIndexes();
         $indexer = new Indexer($indexesObj);
         $indexer->reconfigureIndexes();
     }
 
-    public function testIndexAllDocumentsSiteTree()
+
+    public function testIndexAllDocumentsSiteTree(): void
     {
         // index all SiteTree objects
         $helper = new IndexingHelper();
@@ -42,7 +44,7 @@ class BulkTest extends SapphireTest
         $results = $searcher->search('sodium');
 
         // assert number of results
-        $this->assertEquals(4, sizeof($results));
+        $this->assertEquals(4, \sizeof($results));
 
         // assert IDs and that sodium is in the result set somewhere
         $this->assertEquals(34, $results[0]->ID);
@@ -61,7 +63,7 @@ class BulkTest extends SapphireTest
 
 
         // now do a suggest
-        /** @var Suggester $suggester */
+        /** @var \Suilven\ManticoreSearch\Service\Suggester $suggester */
         $suggester = new Suggester();
         $suggester->setIndex('sitetree');
         $suggestions = $suggester->suggest('chessbored');

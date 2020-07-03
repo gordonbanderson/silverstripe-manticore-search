@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -17,21 +18,24 @@ class PopulationPrepTest extends SapphireTest
 {
     protected static $fixture_file = 'tests/fixtures.yml';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+
         $indexesService = new Indexes();
         $indexesObj = $indexesService->getIndexes();
         $indexer = new Indexer($indexesObj);
         $indexer->reconfigureIndexes();
     }
 
-    public function assfsfdtestStub()
+
+    public function assfsfdtestStub(): void
     {
         $this->assertTrue();
     }
 
-    public function skiptestPopulate()
+
+    public function skiptestPopulate(): void
     {
         $fixtures = "SilverStripe\Security\Member:\n";
         $faker = Factory::create();
@@ -44,7 +48,7 @@ class PopulationPrepTest extends SapphireTest
             $firstname = $faker->firstName;
             $surname = $faker->lastName;
             $domain = $faker->freeEmailDomain;
-            $email = strtolower($firstname . '.' . $surname). '@' . $domain;
+            $email = \strtolower($firstname . '.' . $surname). '@' . $domain;
             $fixtures .= "    FirstName: " . $firstname . "\n";
             $fixtures .= "    Surname: " . $surname . "\n";
             $fixtures .= "    Email: " . $email . "\n";
@@ -75,9 +79,9 @@ class PopulationPrepTest extends SapphireTest
 
         $fixtures .= "\n\nSilverStripe\CMS\Model:\n";
         // https://dev.gutenberg.org/files/28657/28657-8.txt
-        $book = file_get_contents('./dict.txt');
+        $book = \file_get_contents('./dict.txt');
 
-        $words = explode(PHP_EOL, $book);
+        $words = \explode(\PHP_EOL, $book);
         for ($i=1; $i<=50; $i++) {
             $sitetree = '  sitetree_'.$i . ":\n";
             $fixtures .= $sitetree;
@@ -88,42 +92,47 @@ class PopulationPrepTest extends SapphireTest
             $fixtures .= "    Content: " . $paragraph . "\n";
         }
 
-           echo ($fixtures);
+           echo $fixtures;
     }
+
 
     private function getRandomWord($words, $precaps = false)
     {
-        $randIndex = array_rand($words);
+        $randIndex = \array_rand($words);
         if ($precaps) {
-            return ucwords($words[$randIndex]);
+            return \ucwords($words[$randIndex]);
         }
+
         return $words[$randIndex];
     }
 
+
     private function getRandomSentence($words, $maxWords = 20)
     {
-        $nWords = rand(4, $maxWords);
+        $nWords = \rand(4, $maxWords);
         $sentence = [];
         for ($i=0; $i<=$nWords; $i++) {
-            $sentence[] = $this->getRandomWord($words, $i==0);
+            $sentence[] = $this->getRandomWord($words, $i===0);
         }
 
-        return implode(' ', $sentence);
+        return \implode(' ', $sentence);
     }
+
 
     private function getRandomTitle($words)
     {
-        return ucwords($this->getRandomSentence($words, 10));
+        return \ucwords($this->getRandomSentence($words, 10));
     }
+
 
     private function getRandomParagraph($words, $maxSentences = 10)
     {
-        $nSentences = rand(1, $maxSentences);
+        $nSentences = \rand(1, $maxSentences);
         $sentences = [];
         for ($i=0; $i<$nSentences; $i++) {
-            $sentences[] = $this->getRandomSentence($words, $i==0);
+            $sentences[] = $this->getRandomSentence($words, $i===0);
         }
 
-        return implode('.  ', $sentences) . '.  ';
+        return \implode('.  ', $sentences) . '.  ';
     }
 }
