@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -8,79 +9,17 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use Foolz\SphinxQL\Drivers\Pdo\ResultSet;
-use Foolz\SphinxQL\Facet;
-use Foolz\SphinxQL\Helper;
-use Foolz\SphinxQL\SphinxQL;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\PaginatedList;
-use SilverStripe\View\ArrayData;
+use Suilven\FreeTextSearch\Base\SearcherBase;
+use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Indexes;
 
-class Searcher
+class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
 
     private $client;
-
-    private $pageSize = 10;
-
-    private $page = 1;
-
-    private $indexName = 'sitetree';
-
-    /**
-     * @var array tokens that are facetted, e.g. Aperture, BlogID
-     */
-    private $facettedTokens = [];
-
-    /**
-     * @var array associative array of filters against tokens
-     */
-    private $filters = [];
-
-    /**
-     * @param array $filters
-     */
-    public function setFilters($filters)
-    {
-        $this->filters = $filters;
-    }
-
-    /**
-     * @param int $pageSize
-     */
-    public function setPageSize($pageSize)
-    {
-        $this->pageSize = $pageSize;
-    }
-
-    /**
-     * @param string $indexName
-     */
-    public function setIndex($indexName)
-    {
-        $this->indexName = $indexName;
-    }
-
-
-    /**
-     * @param array $facettedTokens
-     */
-    public function setFacettedTokens($facettedTokens)
-    {
-        $this->facettedTokens = $facettedTokens;
-    }
-
-
-    /**
-     * @param int $page
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-    }
 
     public function __construct()
     {
@@ -88,23 +27,21 @@ class Searcher
     }
 
 
-    public function search($q)
+    public function search(string $q): SearchResults
     {
-        $search = [
-            'body' => [
-                'index' => $this->indexName,
-                'query' => [
-                    'match' => ['*' => $q],
-                ],
-            ]
-        ];
-
         $client = new Client();
         $manticoreClient = $client->getConnection();
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
-        $manticoreResult = $searcher->search($q)->get();
+        $manticoreResult = $searcher->search($q)->highlight(
+            [],
+            ['pre_tags' => '<b>', 'post_tags'=>'</b>'],
+        )->get();
+
+        $indexes = new Indexes();
+        $index = $indexes->getIndex($this->indexName);
+        $fields = $index->getFields();
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -113,9 +50,24 @@ class Searcher
             $ssDataObject = new DataObject();
 
             // @todo map back likes of title to Title
-            $keys = array_keys($source);
+            $keys = \array_keys($source);
             foreach ($keys as $key) {
-                $ssDataObject->$key = $source[$key];
+                $keyname = $key;
+                foreach ($fields as $field) {
+                    if (\strtolower($field) === $key) {
+                        $keyname = $field;
+
+                        break;
+                    }
+                }
+
+                // @todo This is a hack as $Title is rendering the ID in the template
+                if ($keyname === 'Title') {
+                    $keyname = 'ResultTitle';
+                }
+
+                $ssDataObject->Highlights = $hit->getHighlight();
+                $ssDataObject->$keyname = $source[$key];
             }
 
             $ssDataObject->ID = $hit->getId();
@@ -126,6 +78,12 @@ class Searcher
 
         // we now need to standardize the output returned
 
-        return $ssResult;
+        $searchResults = new SearchResults();
+        $searchResults->setRecords($ssResult);
+        $searchResults->setPage($this->page);
+        $searchResults->setPageSize($this->pageSize);
+        $searchResults->setQuery($q);
+
+        return $searchResults;
     }
 }

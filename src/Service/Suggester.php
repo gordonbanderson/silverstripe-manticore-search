@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -8,42 +9,33 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-class Suggester
+use Suilven\FreeTextSearch\Container\SuggesterResults;
+
+class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilven\FreeTextSearch\Interfaces\Suggester
 {
-    /**
-     * @var Client
-     */
+    /** @var \Suilven\ManticoreSearch\Service\Client */
     private $client;
-
-    private $index = 'sitetree';
-
-    /**
-     * @param string $index
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-    }
-
 
     public function __construct()
     {
         $this->client = new Client();
     }
 
-    public function suggest($q, $limit = 5)
+
+    public function suggest(string $q, int $limit = 5): SuggesterResults
     {
         $params = [
             'index' => $this->index,
             'body' => [
                 'query'=>$q,
                 'options' => [
-                    'limit' => $limit
-                ]
-            ]
+                    'limit' => $limit,
+                ],
+            ],
         ];
 
         $response = $this->client->getConnection()->suggest($params);
-        return array_keys($response);
+
+        return \array_keys($response);
     }
 }

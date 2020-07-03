@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * Created by PhpStorm.
  * User: gordon
@@ -8,7 +9,6 @@
 
 namespace Suilven\ManticoreSearch\Helper;
 
-use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
@@ -18,101 +18,103 @@ class IndexingHelper
 {
 
 
-    /**
-     * @param string $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree
-     */
-    public function bulkIndex($classname)
+    /** @param string $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree */
+    public function bulkIndex(string $classname): void
     {
         $indexesService = new Indexes();
         $indexesObj = $indexesService->getIndexes();
 
-        /** @var Index $index */
+        /** @var \Suilven\FreeTextSearch\Index $index */
         foreach ($indexesObj as $index) {
-            if ($index->getClass() == $classname) {
-                $bulkSize = 100; // @todo Make this configurable
-                $singleton = singleton($classname);
-                $page = 0;
-                $count = $singleton::get()->count();
-
-                $nPages = 1+(floor($count/$bulkSize));
-                for ($page=0; $page< $nPages; $page++) {
-                    $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$page);
-
-                    $bulkData = [];
-                    foreach ($dataObjects as $dataObject) {
-                        $payload = $this->getDocumentPayload($index, $dataObject);
-                        $row = [
-                            'replace' => [
-                                'index' => $index->getName(),
-                                'id' => $dataObject->ID,
-                                'doc' => $payload
-                            ]
-                        ];
-
-                        $bulkData[] = $row;
-                    }
-
-                    $client = new Client();
-                    $connection = $client->getConnection();
-                    $response = $connection->bulk(['body'=>$bulkData]);
-                }
+            if ($index->getClass() !== $classname) {
+                continue;
             }
-        }
-    }
 
+            // @todo Make this configurable
+            $bulkSize = 100;
+            $singleton = \singleton($classname);
+            $page = 0;
+            $count = $singleton::get()->count();
 
-    /**
-     * @todo Check object exists prior to indexing attempt and throw an appropriate error
-     * @param DataObject $ssDataObject
-     */
-    public function indexObject($ssDataObject)
-    {
-        $indexesService = new Indexes();
-        $indexesObj = $indexesService->getIndexes();
+            $nPages = 1+(\floor($count/$bulkSize));
+            for ($page=0; $page< $nPages; $page++) {
+                $dataObjects = $singleton::get()->limit($bulkSize, $bulkSize*$page);
 
-        /** @var Index $index */
-        foreach ($indexesObj as $index) {
-            $ancestry = $ssDataObject->getClassAncestry();
-            array_reverse($ancestry);
-            foreach ($ancestry as $key) {
-                if ($index->getClass() == $key) {
-                    $payload = $this->getDocumentPayload($index, $ssDataObject);
-
-                    //  unset($payload['Sort']);
-
-                    // this seems to break, not sure why - null issues?
-                    unset($payload['ParentID']);
-                    //     unset($payload['MenuTitle']);
-                    //      unset($payload['Content']);
-
-                    $doc = [
-                        'index'=>$index->getName(),
-                        'id' => $ssDataObject->ID,
-                        'doc' => $payload
+                $bulkData = [];
+                foreach ($dataObjects as $dataObject) {
+                    $payload = $this->getDocumentPayload($index, $dataObject);
+                    $row = [
+                        'replace' => [
+                            'index' => $index->getName(),
+                            'id' => $dataObject->ID,
+                            'doc' => $payload,
+                        ],
                     ];
 
-                    $client = new Client();
-                    $connection = $client->getConnection();
-                    $connection->replace(['body' =>$doc]);
+                    $bulkData[] = $row;
                 }
+
+                $client = new Client();
+                $connection = $client->getConnection();
+
+                // @todo Check for error in response and throw an exception
+                $connection->bulk(['body'=>$bulkData]);
             }
         }
     }
 
-    /**
-     * @param Index $index
-     * @param DataObject $ssDataObject
-     * @return array[]
-     */
+
+    // @todo Check object exists prior to indexing attempt and throw an appropriate error
+
+    public function indexObject(DataObject $ssDataObject): void
+    {
+        $indexesService = new Indexes();
+        $indexesObj = $indexesService->getIndexes();
+
+        /** @var \Suilven\FreeTextSearch\Index $index */
+        foreach ($indexesObj as $index) {
+            $ancestry = $ssDataObject->getClassAncestry();
+            \array_reverse($ancestry);
+            foreach ($ancestry as $key) {
+                if ($index->getClass() !== $key) {
+                    continue;
+                }
+
+                $payload = $this->getDocumentPayload($index, $ssDataObject);
+
+                //  unset($payload['Sort']);
+
+                // this seems to break, not sure why - null issues?
+                unset($payload['ParentID']);
+                //     unset($payload['MenuTitle']);
+                //      unset($payload['Content']);
+
+                $doc = [
+                    'index'=>$index->getName(),
+                    'id' => $ssDataObject->ID,
+                    'doc' => $payload,
+                ];
+
+                $client = new Client();
+                $connection = $client->getConnection();
+                $connection->replace(['body' =>$doc]);
+            }
+        }
+    }
+
+
+    /** @return array<string,string|float|int|bool> */
     public function getDocumentPayload(Index $index, DataObject $ssDataObject): array
     {
         $payload = [];
         foreach ($index->getFields() as $field) {
             // ParentID breaks bulk indexing.  No idea why :(
             // GBA: It seems to be the wrong type, it is 'indexed stored' instead of bigint
-            if ($field != 'ParentID') {
-                $payload[$field] = $ssDataObject->$field;
+            if ($field === 'ParentID') {
+                continue;
             }
+
+            $payload[$field] = $ssDataObject->$field;
         }
 
         return $payload;
