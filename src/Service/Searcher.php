@@ -19,6 +19,7 @@ use SilverStripe\ORM\PaginatedList;
 use SilverStripe\View\ArrayData;
 use Suilven\FreeTextSearch\Base\SearcherBase;
 use Suilven\FreeTextSearch\Container\SearchResults;
+use Suilven\FreeTextSearch\Index;
 use Suilven\FreeTextSearch\Indexes;
 
 class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
@@ -30,6 +31,9 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
     {
         $this->client = new Client();
     }
+
+
+
 
 
     public function search(string $q): SearchResults
@@ -48,7 +52,14 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
-        $manticoreResult = $searcher->search($q)->get();
+        $manticoreResult = $searcher->search($q)->highlight(
+            [],
+            ['pre_tags' => '<b>','post_tags'=>'</b>']
+        )->get();
+
+        $indexes = new Indexes();
+        $index = $indexes->getIndex($this->indexName);
+        $fields = $index->getFields();
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -59,7 +70,22 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
             // @todo map back likes of title to Title
             $keys = array_keys($source);
             foreach ($keys as $key) {
-                $ssDataObject->$key = $source[$key];
+                $keyname = $key;
+                foreach($fields as $field)
+                {
+                    if (strtolower($field) == $key) {
+                        $keyname = $field;
+                        break;
+                    }
+                }
+
+                // @todo This is a hack as $Title is rendering the ID in the template
+                if ($keyname == 'Title') {
+                    $keyname = 'ResultTitle';
+                }
+
+                $ssDataObject->Highlights = $hit->getHighlight();
+                $ssDataObject->$keyname = $source[$key];
             }
 
             $ssDataObject->ID = $hit->getId();
@@ -71,7 +97,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
         // we now need to standardize the output returned
 
         $searchResults = new SearchResults();
-        $searchResults->setResults($ssResult);
+        $searchResults->setRecords($ssResult);
         $searchResults->setPage($this->page);
         $searchResults->setPageSize($this->pageSize);
         $searchResults->setQuery($q);
