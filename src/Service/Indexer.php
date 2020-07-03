@@ -16,10 +16,7 @@ class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
     public function index($dataObject)
     {
-        error_log('>>>>>> INDEXING DO');
         $payload = $this->getFieldsToIndex($dataObject);
-        error_log('---- payload returned ----');
-        error_log(print_r($payload, 1));
         $coreClient = new Client();
         $client = $coreClient->getConnection();
 
