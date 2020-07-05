@@ -18,6 +18,8 @@ class IndexingHelper
 {
 
 
+    // @todo Remove this
+
     /** @param string $classname The class to index, e.g. SilverStripe\CMS\Model\SiteTree */
     public function bulkIndex(string $classname): void
     {
