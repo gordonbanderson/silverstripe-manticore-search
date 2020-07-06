@@ -27,7 +27,7 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
     }
 
 
-    public function search(string $q): SearchResults
+    public function search(?string $q): SearchResults
     {
         $client = new Client();
         $manticoreClient = $client->getConnection();
