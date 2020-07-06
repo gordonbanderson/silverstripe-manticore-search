@@ -10,7 +10,7 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use SilverStripe\ORM\DataObject;
-use Suilven\ManticoreSearch\Helper\IndexingHelper;
+use Suilven\FreeTextSearch\Helper\IndexingHelper;
 
 /**
  * Class BulkIndexer
@@ -47,22 +47,21 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     {
         $helper = new IndexingHelper();
         $payload = $helper->getFieldsToIndex($dataObject);
-        $this->bulkIndexData[$dataObject->ID] = $payload;
+        $this->bulkIndexData[$dataObject->ID] = $payload[$this->index];
     }
 
 
     public function indexDataObjects()
     {
         $body = [];
+
         foreach(array_keys($this->bulkIndexData) as $dataObjectID)
         {
             $docPayload = [
                 'replace' => [
                     'index' => $this->index,
                     'id' => $dataObjectID,
-                    'doc' => [
-                        $this->bulkIndexData[$dataObjectID]
-                    ]
+                    'doc' => $this->bulkIndexData[$dataObjectID]
                 ]
             ];
             $body[] = $docPayload;
@@ -70,7 +69,8 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 
         $coreClient = new Client();
         $client = $coreClient->getConnection();
-        $client->bulk(['body' => $body]);
+        $payload = ['body' => $body];
+        $client->bulk($payload);
         $this->resetBulkIndexData();
     }
 
@@ -81,33 +81,4 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 
     }
 
-
-    /**
-     * $doc = [
-    'body' => [
-    ['insert' => [
-    'index' => 'testrt',
-    'id' => 34,
-    'doc' => [
-    'gid' => 1,
-    'title' => 'a new added document',
-    ]
-    ]],
-    ['update' => [
-    'index' => 'testrt',
-    'id' => 56,
-    'doc' => [
-    'gid' => 4,
-    ]
-    ]],
-    ['delete' => [
-    'index' => 'testrt',
-    'id' => 100
-    ]]
-    ]
-    ];
-
-    $response = $client->bulk($doc);
-
-     */
 }
