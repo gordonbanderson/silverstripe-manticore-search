@@ -9,7 +9,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use Suilven\FreeTextSearch\Helper\IndexingHelper;
 
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer

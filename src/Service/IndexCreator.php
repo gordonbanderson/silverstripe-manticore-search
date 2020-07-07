@@ -18,7 +18,6 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
      * Create an index
      *
      * @todo Refactor into Indexer base
-     *
      * @param string $indexName the name of the index
      */
     public function createIndex(string $indexName): void
@@ -60,12 +59,11 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
             // this will be the most common
             $indexType = 'text';
 
-            error_log('FIELD TYPE: ' . $fieldType);
+            \error_log('FIELD TYPE: ' . $fieldType);
 
             // @todo configure index to strip HTML
             switch ($fieldType) {
                 case 'SilverStripe\CMS\Model\SiteTree.ForeignKey':
-
                     // @todo this perhaps needs to be a token
                     // See https://docs.manticoresearch.com/3.4.0/html/indexing/data_types.html
 
@@ -83,9 +81,12 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
                     break;
                 case 'SilverStripe\CMS\Model\SiteTree.DBDatetime':
                     $indexType = 'timestamp';
+
                     break;
                 case 'SilverStripe\CMS\Model\SiteTree.Boolean':
-                    $indexType = 'integer'; // @todo is there a better type?
+                    // @todo is there a better type?
+                    $indexType = 'integer';
+
                     break;
             }
 
@@ -112,7 +113,7 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
 
 
         // drop index, and updating an existing one does not effect change
-        $manticoreClient->indices()->drop(['index' => $indexName,'body'=>['silent'=>true]]);
+        $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
 
 
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);

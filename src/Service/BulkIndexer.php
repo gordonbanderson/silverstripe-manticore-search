@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 /**
  * Created by PhpStorm.
@@ -14,11 +14,11 @@ use Suilven\FreeTextSearch\Helper\IndexingHelper;
 
 /**
  * Class BulkIndexer
- * @package Suilven\ManticoreSearch\Service
  *
+ * @package Suilven\ManticoreSearch\Service
  * @todo Move some of this into a base indexer
  */
-class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
+class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 {
     protected $bulkIndexData;
 
@@ -31,6 +31,7 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
         $this->resetBulkIndexData();
     }
 
+
     /** @param string $newIndex the new index name */
     public function setIndex(string $newIndex): void
     {
@@ -40,8 +41,6 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 
     /**
      * Note this makes the assumption of unique IDs, along with one index
-     *
-     * @param DataObject $dataObject
      */
     public function addDataObject(DataObject $dataObject): void
     {
@@ -51,18 +50,17 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     }
 
 
-    public function indexDataObjects()
+    public function indexDataObjects(): void
     {
         $body = [];
 
-        foreach(array_keys($this->bulkIndexData) as $dataObjectID)
-        {
+        foreach (\array_keys($this->bulkIndexData) as $dataObjectID) {
             $docPayload = [
                 'replace' => [
                     'index' => $this->index,
                     'id' => $dataObjectID,
-                    'doc' => $this->bulkIndexData[$dataObjectID]
-                ]
+                    'doc' => $this->bulkIndexData[$dataObjectID],
+                ],
             ];
             $body[] = $docPayload;
         }
@@ -78,7 +76,5 @@ class BulkIndexer  implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     private function resetBulkIndexData(): void
     {
         $this->bulkIndexData = [];
-
     }
-
 }
