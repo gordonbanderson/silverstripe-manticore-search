@@ -34,28 +34,9 @@
         "phpunit/phpunit": "^5.7",
         "slevomat/coding-standard": "^6.3"
     },
-    "autoload": {
-        "psr-4": {
-            "Suilven\\ManticoreSearch\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Suilven\\ManticoreSearch\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "checkcs": "vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
-        "fixcs": "vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
-        "checkCode": "composer checkcs && composer lint && composer phpstan",
-        "lint": "vendor/bin/parallel-lint src/ tests/",
-        "phpstan": "vendor/bin/phpstan analyse --level=6 -c tests/phpstan.neon src/"
-    },
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "extra": {
         "project-files-installed": [
             "app/.htaccess",
@@ -70,5 +51,24 @@
             "index.php",
             "web.config"
         ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Suilven\\ManticoreSearch\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Suilven\\ManticoreSearch\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "checkCode": "composer checkcs && composer lint && composer phpstan",
+        "checkcs": "vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "fixcs": "vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "lint": "vendor/bin/parallel-lint src/ tests/",
+        "phpstan": "vendor/bin/phpstan analyse --level=6 -c tests/phpstan.neon src/"
     }
 }
