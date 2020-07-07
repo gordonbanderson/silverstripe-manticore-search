@@ -68,6 +68,12 @@ class IndexingHelper
 
     // @todo Check object exists prior to indexing attempt and throw an appropriate error
 
+    /**
+     * Index a data object in all of the indexes it belongs to
+     *
+     * @param \SilverStripe\ORM\DataObject $ssDataObject the data object to be indexed
+     * @phpstan-ignore-next-line
+     */
     public function indexObject(DataObject $ssDataObject): void
     {
         $indexesService = new Indexes();
@@ -76,7 +82,7 @@ class IndexingHelper
         /** @var \Suilven\FreeTextSearch\Index $index */
         foreach ($indexesObj as $index) {
             $ancestry = $ssDataObject->getClassAncestry();
-            \array_reverse($ancestry);
+            $ancestry = \array_reverse($ancestry);
             foreach ($ancestry as $key) {
                 if ($index->getClass() !== $key) {
                     continue;
