@@ -51,8 +51,6 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
         foreach ($fields as $field) {
             $fieldType = $specs[$field];
 
-           // @todo Check for all field types, in particular
-
             // fix likes of varchar(255)
             $fieldType = \explode('(', $fieldType)[0];
 

@@ -53,6 +53,7 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     public function indexDataObjects(): void
     {
         $body = [];
+        $nDataObjects = 0;
 
         foreach (\array_keys($this->bulkIndexData) as $dataObjectID) {
             $docPayload = [
@@ -63,13 +64,17 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
                 ],
             ];
             $body[] = $docPayload;
+            $nDataObjects++;
         }
 
-        $coreClient = new Client();
-        $client = $coreClient->getConnection();
-        $payload = ['body' => $body];
-        $client->bulk($payload);
-        $this->resetBulkIndexData();
+        if ($nDataObjects > 0) {
+            $coreClient = new Client();
+            $client = $coreClient->getConnection();
+            $payload = ['body' => $body];
+            $client->bulk($payload);
+            $this->resetBulkIndexData();
+        }
+
     }
 
 
