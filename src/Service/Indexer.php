@@ -9,15 +9,13 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-
 use Suilven\FreeTextSearch\Helper\IndexingHelper;
 
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
     public function index(\SilverStripe\ORM\DataObject $dataObject): void
     {
-        $helper = new IndexingHelper();
-        $payload = $helper->getFieldsToIndex($dataObject);
+        $payload = $this->getIndexablePayload($dataObject);
         $coreClient = new Client();
         $client = $coreClient->getConnection();
 
@@ -28,4 +26,6 @@ class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
             $manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
         }
     }
+
+
 }

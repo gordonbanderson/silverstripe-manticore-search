@@ -36,6 +36,12 @@ class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilv
 
         $response = $this->client->getConnection()->suggest($params);
 
-        return \array_keys($response);
+        $results = new SuggesterResults();
+        $results->setResults(\array_keys($response));
+        $results->setIndex($this->index);
+        $results->setQuery($q);
+        $results->setLimit($limit);
+        return $results;
+
     }
 }
