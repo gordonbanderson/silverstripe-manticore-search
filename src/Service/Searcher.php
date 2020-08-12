@@ -12,11 +12,10 @@ namespace Suilven\ManticoreSearch\Service;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use Suilven\FreeTextSearch\Base\SearcherBase;
 use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Indexes;
 
-class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
+class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
 
     private $client;
