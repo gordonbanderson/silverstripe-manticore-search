@@ -7,7 +7,7 @@ Only:
 ---
 
 Suilven\SphinxSearch\Service\Client:
-  host: 'manticore'
+  host: 'manticoresearch-manticore'
 
 Suilven\FreeTextSearch\Indexes:
   indexes:
