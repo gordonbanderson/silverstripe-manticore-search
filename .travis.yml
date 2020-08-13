@@ -35,6 +35,9 @@ matrix:
         -
             php: 7.4
             env: PHPSTAN_TEST=1
+        -
+            php: 7.4
+            env: TODO_CHECK=1
 services:
     - docker
     - mysql
@@ -54,14 +57,17 @@ before_script:
     - 'phpenv config-rm xdebug.ini'
     - 'echo ''memory_limit = 2G'' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini'
     - 'if [[ $DUPLICATE_CODE_CHECK ]]; then sudo apt remove -y nodejs && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && sudo bash nodesource_setup.sh && sudo apt install -y build-essential nodejs && which npm && npm install jscpd@3.2.1  ;fi'
+    - 'if [[ $TODO_CHECK ]]; then sudo apt remove -y nodejs && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && sudo bash nodesource_setup.sh && sudo apt install -y build-essential nodejs && npm install leasot  ;fi'
 script:
     - 'if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '''' flush=all; fi'
     - 'if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml '''' flush=all; fi'
-    - 'if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=PSR2 src/ tests/ ; fi'
-    - 'if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c tests/phpstan.neon src/; fi'
     - 'if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests ; fi'
     - 'if [[ $DUPLICATE_CODE_CHECK ]]; then node_modules/jscpd/bin/jscpd src && node_modules/jscpd/bin/jscpd tests ; fi'
     - 'if [[ $LINT_CHECK ]]; then vendor/bin/parallel-lint src/ tests/ ; fi'
     - 'if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=6 -c tests/phpstan.neon src/ ; fi'
+
+    # Remove the -x flag if you wish existing TODOs to break the build
+    - 'if [[ $TODO_CHECK ]]; then node_modules/leasot/bin/leasot -x tests --ignore **/*.neon ; fi'
+
 after_script:
     - 'if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi'
