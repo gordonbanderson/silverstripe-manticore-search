@@ -37,21 +37,6 @@
     "config": {
         "sort-packages": true
     },
-    "extra": {
-        "project-files-installed": [
-            "app/.htaccess",
-            "app/_config.php",
-            "app/_config/mimevalidator.yml",
-            "app/_config/mysite.yml",
-            "app/src/Page.php",
-            "app/src/PageController.php"
-        ],
-        "public-files-installed": [
-            ".htaccess",
-            "index.php",
-            "web.config"
-        ]
-    },
     "autoload": {
         "psr-4": {
             "Suilven\\ManticoreSearch\\": "src"
