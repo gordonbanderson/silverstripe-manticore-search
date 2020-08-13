@@ -6,7 +6,7 @@ Only:
     - UNIT_TESTING_CONFIG_ENABLED
 ---
 
-Suilven\SphinxSearch\Service\Client:
+Suilven\ManticoreSearch\Service\Client:
   host: 'manticoresearch-manticore'
 
 Suilven\FreeTextSearch\Indexes:
