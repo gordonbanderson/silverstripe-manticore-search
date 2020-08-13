@@ -13,7 +13,6 @@ use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
-use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
 

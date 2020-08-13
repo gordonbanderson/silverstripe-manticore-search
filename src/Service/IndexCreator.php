@@ -119,7 +119,7 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
         $manticoreIndex->create(
             $columns,
             $settings,
-            true
+            true,
         );
     }
 }

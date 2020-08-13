@@ -67,14 +67,15 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
             $nDataObjects++;
         }
 
-        if ($nDataObjects > 0) {
-            $coreClient = new Client();
-            $client = $coreClient->getConnection();
-            $payload = ['body' => $body];
-            $client->bulk($payload);
-            $this->resetBulkIndexData();
+        if ($nDataObjects <= 0) {
+            return;
         }
 
+        $coreClient = new Client();
+        $client = $coreClient->getConnection();
+        $payload = ['body' => $body];
+        $client->bulk($payload);
+        $this->resetBulkIndexData();
     }
 
 
