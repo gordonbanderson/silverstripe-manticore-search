@@ -12,6 +12,7 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 use SilverStripe\Dev\SapphireTest;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\IndexingHelper;
+use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Indexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
@@ -25,9 +26,9 @@ class BulkTest extends SapphireTest
         parent::setUp();
 
         $indexesService = new Indexes();
-        $indexesObj = $indexesService->getIndexes();
-        $indexer = new Indexer($indexesObj);
-        $indexer->reconfigureIndexes();
+        $indexesArray = $indexesService->getIndexes();
+        $helper = new ReconfigureIndexesHelper();
+        $helper->reconfigureIndexes($indexesArray);
     }
 
 
