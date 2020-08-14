@@ -35,7 +35,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searcher->setIndex($this->indexName);
         $manticoreResult = $searcher->search($q)->highlight(
             [],
-            ['pre_tags' => '<b>', 'post_tags'=>'</b>'],
+            ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         )->get();
 
         $indexes = new Indexes();
