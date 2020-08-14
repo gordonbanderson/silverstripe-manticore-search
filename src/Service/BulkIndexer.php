@@ -20,6 +20,7 @@ use Suilven\FreeTextSearch\Helper\IndexingHelper;
  */
 class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 {
+    /** @var array<int,array<string,string|float|bool|int>> */
     protected $bulkIndexData;
 
     /** @var string */

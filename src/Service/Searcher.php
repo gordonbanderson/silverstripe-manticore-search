@@ -17,7 +17,7 @@ use Suilven\FreeTextSearch\Indexes;
 
 class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
-
+    /** @var Client */
     private $client;
 
     public function __construct()
@@ -65,6 +65,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                     $keyname = 'ResultTitle';
                 }
 
+                /** @phpstan-ignore-next-line */
                 $ssDataObject->Highlights = $hit->getHighlight();
                 $ssDataObject->$keyname = $source[$key];
             }
