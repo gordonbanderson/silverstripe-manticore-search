@@ -28,6 +28,8 @@ Suilven\FreeTextSearch\Indexes:
         fields:
           - Title
           - Description
+          - IsPublic # boolean
+          - AspectRatio # float
 
         tokens:
           - Aperture
