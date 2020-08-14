@@ -67,6 +67,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->Highlights = $hit->getHighlight();
+
+                /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
             }
 
