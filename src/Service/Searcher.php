@@ -17,7 +17,7 @@ use Suilven\FreeTextSearch\Indexes;
 
 class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
-    /** @var Client */
+    /** @var \Suilven\ManticoreSearch\Service\Client */
     private $client;
 
     public function __construct()

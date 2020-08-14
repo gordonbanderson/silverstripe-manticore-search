@@ -30,8 +30,6 @@ class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
             unset($indexPayload['ParentID']);
 
             $manticoreIndex = new \Manticoresearch\Index($client, $indexName);
-            $desc = $manticoreIndex->describe();
-            //$manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
             $manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
         }
     }
