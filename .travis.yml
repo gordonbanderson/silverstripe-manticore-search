@@ -36,6 +36,7 @@ services:
     - docker
     - mysql
 before_install:
+    - 'sudo apt-get -y install iputils-ping'
     - 'docker pull manticoresearch/manticore'
     - 'docker network create manticore'
     - 'docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore'
@@ -47,6 +48,7 @@ install:
     - 'composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile'
     - 'export UNIT_TESTING_CONFIG_ENABLED=1'
 before_script:
+    - 'ping manticoresearch-manticore -c 8'
     - 'phpenv rehash'
     - 'phpenv config-rm xdebug.ini'
     - 'echo ''memory_limit = 2G'' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini'
