@@ -10,15 +10,22 @@
 namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Dev\TestOnly;
+use Suilven\FreeTextSearch\Factory\BulkIndexerFactory;
+use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
 
-class BulkTest extends SapphireTest
+class BulkTest extends SapphireTest implements TestOnly
 {
-    protected static $fixture_file = 'tests/fixtures/sitetree.yml';
+    protected static $fixture_file = ['tests/fixtures/sitetree.yml', 'tests/fixtures/flickrphotos.yml'];
+
+    protected static $extra_dataobjects = [
+        'Suilven\ManticoreSearch\Tests\Models\FlickrPhoto',
+    ];
 
     public function setUp(): void
     {
@@ -33,40 +40,39 @@ class BulkTest extends SapphireTest
 
     public function testIndexAllDocumentsSiteTree(): void
     {
-        // index all SiteTree objects
-        $helper = new IndexingHelper();
-        $helper->bulkIndex('SilverStripe\CMS\Model\SiteTree');
-
+        $helper = new BulkIndexingHelper();
+        $helper->bulkIndex('sitetree');
 
         // search against them
         $searcher = new Searcher();
-        $searcher->setIndex('sitetree');
+        $searcher->setIndexName('sitetree');
         $results = $searcher->search('sodium');
 
         // assert number of results
-        $this->assertEquals(4, \sizeof($results));
+        $this->assertEquals(4, $results->getNumberOfResults());
+        $recordsArray = $results->getRecords()->toArray();
 
         // assert IDs and that sodium is in the result set somewhere
-        $this->assertEquals(34, $results[0]->ID);
+        $this->assertEquals(34, $recordsArray[0]->ID);
 
         // @todo Why is ->title returning #34 here?
-        $this->assertContains('Sodium', $results[0]->menutitle);
+        $this->assertContains('Sodium', $recordsArray[0]->MenuTitle);
 
-        $this->assertEquals(17, $results[1]->ID);
-        $this->assertContains('sodium', $results[1]->content);
+        $this->assertEquals(17, $recordsArray[1]->ID);
+        $this->assertContains('sodium', $recordsArray[1]->Content);
 
-        $this->assertEquals(20, $results[2]->ID);
-        $this->assertContains('sodium', $results[2]->content);
+        $this->assertEquals(20, $recordsArray[2]->ID);
+        $this->assertContains('sodium', $recordsArray[2]->Content);
 
-        $this->assertEquals(22, $results[3]->ID);
-        $this->assertContains('sodium', $results[3]->content);
+        $this->assertEquals(22, $recordsArray[3]->ID);
+        $this->assertContains('sodium', $recordsArray[3]->Content);
 
 
         // now do a suggest
         /** @var \Suilven\ManticoreSearch\Service\Suggester $suggester */
         $suggester = new Suggester();
         $suggester->setIndex('sitetree');
-        $suggestions = $suggester->suggest('chessbored');
-        $this->assertEquals(['chessboard'], $suggestions);
+        $result = $suggester->suggest('chessbored');
+        $this->assertEquals(['chessboard'], $result->getResults());
     }
 }

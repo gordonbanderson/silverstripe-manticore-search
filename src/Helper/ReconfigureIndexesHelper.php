@@ -18,8 +18,12 @@ class ReconfigureIndexesHelper
     /** @param array<\Suilven\FreeTextSearch\Index> $indexes */
     public function reconfigureIndexes(array $indexes): void
     {
+        error_log(print_r($indexes, true));
         foreach ($indexes as $index) {
             $className = $index->getClass();
+
+            \error_log('-------------------');
+            \error_log('CLASS NAME: ' . $className);
 
             $name = $index->getName();
             // ['ID', 'CreatedAt', 'LastEdited'];

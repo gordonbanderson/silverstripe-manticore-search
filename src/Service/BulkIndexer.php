@@ -46,7 +46,9 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     {
         $helper = new IndexingHelper();
         $payload = $helper->getFieldsToIndex($dataObject);
-        $this->bulkIndexData[$dataObject->ID] = $payload[$this->index];
+        $toIndex = $payload[$this->index];
+        unset($toIndex['ParentID']); // @todo Fix indexing of parent id
+        $this->bulkIndexData[$dataObject->ID] = $toIndex;
     }
 
 
