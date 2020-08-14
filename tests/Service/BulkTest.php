@@ -11,9 +11,11 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DB;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
+use Suilven\ManticoreSearch\Service\BulkIndexer;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
 
@@ -39,7 +41,8 @@ class BulkTest extends SapphireTest implements TestOnly
     public function testIndexAllDocumentsSiteTree(): void
     {
         $helper = new BulkIndexingHelper();
-        $helper->bulkIndex('sitetree');
+        $nDocs = $helper->bulkIndex('sitetree');
+        $this->assertEquals(50, $nDocs);
 
         // search against them
         $searcher = new Searcher();
@@ -72,5 +75,27 @@ class BulkTest extends SapphireTest implements TestOnly
         $suggester->setIndex('sitetree');
         $result = $suggester->suggest('chessbored');
         $this->assertEquals(['chessboard'], $result->getResults());
+    }
+
+
+    public function testAlreadyIndexed(): void
+    {
+        // mark all SiteTree documents as clean, ie indexed
+        DB::query("UPDATE \"SiteTree_Live\" SET \"IsDirtyFreeTextSearch\" = 0");
+        DB::query("UPDATE \"SiteTree\" SET \"IsDirtyFreeTextSearch\" = 0");
+
+        // assert that no new documents are indexed
+        $helper = new BulkIndexingHelper();
+        $nDocs = $helper->bulkIndex('sitetree', true);
+        $this->assertEquals(0, $nDocs);
+
+    }
+
+
+    public function testAddNoDocumentsInBulk(): void
+    {
+        $indexer = new BulkIndexer();
+        $nDocs = $indexer->indexDataObjects();
+        $this->assertEquals(0, $nDocs);
     }
 }
