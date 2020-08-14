@@ -5,9 +5,7 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
-use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Factory\IndexerFactory;
-use Suilven\FreeTextSearch\Helper\IndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
@@ -101,7 +99,7 @@ class SearchTest extends SapphireTest
         $searcher = new Searcher();
         $searcher->setIndexName('sitetree');
 
-        /** @var SearchResults $result */
+        /** @var \Suilven\FreeTextSearch\Container\SearchResults $result */
         $result = $searcher->search('Webmaster disconnections');
 
         $this->assertInstanceOf('Suilven\FreeTextSearch\Container\SearchResults', $result);
@@ -110,7 +108,6 @@ class SearchTest extends SapphireTest
         $first = $records->first();
         $this->assertContains('Webmaster fakes disconnections overdose', $first->Content);
         $this->assertEquals(self::$pageID, $first->ID);
-
     }
 
 

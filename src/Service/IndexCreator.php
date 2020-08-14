@@ -52,14 +52,14 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
         foreach ($fields as $field) {
             $fieldType = $specs[$field];
 
-            error_log('T1 FT=' . $fieldType);
+            \error_log('T1 FT=' . $fieldType);
 
             // fix likes of varchar(255)
             $fieldType = \explode('(', $fieldType)[0];
-            error_log('T2 FT=' . $fieldType);
+            \error_log('T2 FT=' . $fieldType);
 
             // remove the class name
-            $fieldType = explode('.', $fieldType)[1];
+            $fieldType = \explode('.', $fieldType)[1];
 
             // this will be the most common
             $indexType = 'text';
@@ -126,7 +126,7 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
         $manticoreIndex->create(
             $columns,
             $settings,
-            true
+            true,
         );
     }
 }

@@ -11,10 +11,8 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Dev\TestOnly;
-use Suilven\FreeTextSearch\Factory\BulkIndexerFactory;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
-use Suilven\ManticoreSearch\Helper\IndexingHelper;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
