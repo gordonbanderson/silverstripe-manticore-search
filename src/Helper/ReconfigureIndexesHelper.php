@@ -16,13 +16,11 @@ class ReconfigureIndexesHelper
     /** @param array<\Suilven\FreeTextSearch\Index> $indexes */
     public function reconfigureIndexes(array $indexes): void
     {
-        \error_log(\print_r($indexes, true));
         $factory = new IndexCreatorFactory();
         $indexCreator = $factory->getIndexCreator();
 
         /** @var \Suilven\FreeTextSearch\Index $indexObj */
         foreach ($indexes as $indexObj) {
-            \error_log(\print_r($indexObj, true));
             $indexCreator->createIndex($indexObj->getName());
 
 
