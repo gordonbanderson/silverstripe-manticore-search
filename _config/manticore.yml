@@ -2,7 +2,6 @@
 Name: manticore
 ---
 
-#Following config enabled markers to be written to a queue directory, in order that inotify can be used
 Suilven\ManticoreSearch\Service\Client:
   host: '127.0.0.1'
   port: 9308
