@@ -88,7 +88,6 @@ class BulkTest extends SapphireTest implements TestOnly
         $helper = new BulkIndexingHelper();
         $nDocs = $helper->bulkIndex('sitetree', true);
         $this->assertEquals(0, $nDocs);
-
     }
 
 
