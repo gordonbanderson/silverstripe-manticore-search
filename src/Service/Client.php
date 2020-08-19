@@ -25,8 +25,6 @@ class Client
 
         $config = ['host'=>$host, 'port'=>$port];
 
-        \error_log('CLIENT CONFIG: ' . \print_r($config, true));
-
         return new \Manticoresearch\Client($config);
     }
 
