@@ -6,9 +6,13 @@ Only:
     - UNIT_TESTING_CONFIG_ENABLED
 ---
 
-# Travis uses Docker with port 9308 forwarded to localhost
 Suilven\ManticoreSearch\Service\Client:
   host: '127.0.0.1'
+
+# When the tests complete (successfully), if this is not set, the shutdown function is called.  Unfortunately, there
+# is no longer a test database....
+Symbiote\QueuedJobs\Services\QueuedJobService:
+  use_shutdown_function: false
 
 Suilven\FreeTextSearch\Indexes:
   indexes:
