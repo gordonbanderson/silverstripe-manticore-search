@@ -20,6 +20,7 @@ use Suilven\FreeTextSearch\Helper\IndexingHelper;
  */
 class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 {
+    /** @var array<int,array<string,string|float|bool|int>> */
     protected $bulkIndexData;
 
     /** @var string */
@@ -46,7 +47,10 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     {
         $helper = new IndexingHelper();
         $payload = $helper->getFieldsToIndex($dataObject);
-        $this->bulkIndexData[$dataObject->ID] = $payload[$this->index];
+        $toIndex = $payload[$this->index];
+        // @todo Fix indexing of parent id
+        unset($toIndex['ParentID']);
+        $this->bulkIndexData[$dataObject->ID] = $toIndex;
     }
 
 
@@ -67,14 +71,15 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
             $nDataObjects++;
         }
 
-        if ($nDataObjects > 0) {
-            $coreClient = new Client();
-            $client = $coreClient->getConnection();
-            $payload = ['body' => $body];
-            $client->bulk($payload);
-            $this->resetBulkIndexData();
+        if ($nDataObjects <= 0) {
+            return;
         }
 
+        $coreClient = new Client();
+        $client = $coreClient->getConnection();
+        $payload = ['body' => $body];
+        $client->bulk($payload);
+        $this->resetBulkIndexData();
     }
 
 

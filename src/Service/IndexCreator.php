@@ -11,6 +11,7 @@ namespace Suilven\ManticoreSearch\Service;
 
 use SilverStripe\ORM\DataObjectSchema;
 use Suilven\FreeTextSearch\Indexes;
+use Suilven\FreeTextSearch\Types\FieldTypes;
 
 class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
 {
@@ -54,14 +55,15 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
             // fix likes of varchar(255)
             $fieldType = \explode('(', $fieldType)[0];
 
+            // remove the class name
+            $fieldType = \explode('.', $fieldType)[1];
+
             // this will be the most common
             $indexType = 'text';
 
-            \error_log('FIELD TYPE: ' . $fieldType);
-
             // @todo configure index to strip HTML
             switch ($fieldType) {
-                case 'SilverStripe\CMS\Model\SiteTree.ForeignKey':
+                case FieldTypes::FOREIGN_KEY:
                     // @todo this perhaps needs to be a token
                     // See https://docs.manticoresearch.com/3.4.0/html/indexing/data_types.html
 
@@ -69,19 +71,19 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
                     $indexType = 'bigint';
 
                     break;
-                case 'SilverStripe\CMS\Model\SiteTree.Int':
+                case FieldTypes::INTEGER:
                     $indexType = 'integer';
 
                     break;
-                case 'SilverStripe\CMS\Model\SiteTree.Int.Float':
+                case FieldTypes::FLOAT:
                     $indexType = 'float';
 
                     break;
-                case 'SilverStripe\CMS\Model\SiteTree.DBDatetime':
+                case FieldTypes::TIME:
                     $indexType = 'timestamp';
 
                     break;
-                case 'SilverStripe\CMS\Model\SiteTree.Boolean':
+                case FieldTypes::BOOLEAN:
                     // @todo is there a better type?
                     $indexType = 'integer';
 

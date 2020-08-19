@@ -19,9 +19,9 @@
         }
     ],
     "require": {
-        "php": "~7",
+        "php": "~7.1",
         "manticoresoftware/manticoresearch-php": "dev-master",
-        "silverstripe/cms": "^4",
+        "silverstripe/recipe-cms": "4.x-dev",
         "suilven/freetextsearch": "dev-master"
     },
     "require-dev": {
@@ -36,21 +36,6 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "project-files-installed": [
-            "app/.htaccess",
-            "app/_config.php",
-            "app/_config/mimevalidator.yml",
-            "app/_config/mysite.yml",
-            "app/src/Page.php",
-            "app/src/PageController.php"
-        ],
-        "public-files-installed": [
-            ".htaccess",
-            "index.php",
-            "web.config"
-        ]
     },
     "autoload": {
         "psr-4": {

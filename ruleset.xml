@@ -89,7 +89,10 @@
 	<rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
+	<!--
+	PHP 7.3
 	<rule ref="SlevomatCodingStandard.Functions.TrailingCommaInCall"/>
+	-->
 	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>

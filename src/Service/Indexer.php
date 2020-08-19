@@ -9,8 +9,6 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use Suilven\FreeTextSearch\Helper\IndexingHelper;
-
 class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
 {
     public function index(\SilverStripe\ORM\DataObject $dataObject): void
@@ -22,10 +20,17 @@ class Indexer extends \Suilven\FreeTextSearch\Base\Indexer
         $indexNames = \array_keys($payload);
         foreach ($indexNames as $indexName) {
             $indexPayload = $payload[$indexName];
+
+            // skip empty payloads
+            if ($indexPayload === []) {
+                continue;
+            }
+
+            // @todo fix parent id indexing
+            unset($indexPayload['ParentID']);
+
             $manticoreIndex = new \Manticoresearch\Index($client, $indexName);
             $manticoreIndex->replaceDocument($indexPayload, $dataObject->ID);
         }
     }
-
-
 }

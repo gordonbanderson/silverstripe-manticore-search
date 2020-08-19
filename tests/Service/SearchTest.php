@@ -5,9 +5,9 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
+use Suilven\FreeTextSearch\Factory\IndexerFactory;
 use Suilven\FreeTextSearch\Indexes;
-use Suilven\ManticoreSearch\Helper\IndexingHelper;
-use Suilven\ManticoreSearch\Service\Indexer;
+use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
 use Suilven\ManticoreSearch\Tests\Models\FlickrAuthor;
@@ -33,9 +33,9 @@ class SearchTest extends SapphireTest
 
         /** @var \Suilven\FreeTextSearch\Indexes $indexesService */
         $indexesService = new Indexes();
-        $indexesObj = $indexesService->getIndexes();
-        $indexer = new Indexer($indexesObj);
-        $indexer->reconfigureIndexes();
+        $indexesArray = $indexesService->getIndexes();
+        $helper = new ReconfigureIndexesHelper();
+        $helper->reconfigureIndexes($indexesArray);
     }
 
 
@@ -46,7 +46,6 @@ class SearchTest extends SapphireTest
      */
     public function testIndexOneMemberAndSuggest(): void
     {
-        $helper = new IndexingHelper();
         $member = new Member();
         $member->FirstName = 'Gordon';
         $member->Surname = 'Anderson';
@@ -55,44 +54,60 @@ class SearchTest extends SapphireTest
         $member->Email = 'gordon.b.anderson@mailinator.com';
 
         $member->write();
-        $helper->indexObject($member);
+
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndex('members');
+        $indexer->index($member);
 
         /** @var \Suilven\ManticoreSearch\Service\Suggester $suggester */
         $suggester = new Suggester();
         $suggester->setIndex('members');
-        $suggestions = $suggester->suggest('Andersin');
-        $this->assertEquals(['anderson'], $suggestions);
+        $result = $suggester->suggest('Andersin');
+        $this->assertEquals(['anderson'], $result->getResults());
     }
 
 
     public function testIndexOneDocumentAndSuggest(): void
     {
-        $helper = new IndexingHelper();
         $doc = DataObject::get_by_id(\Page::class, self::$pageID);
-        $helper->indexObject($doc);
+
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndex('sitetree');
+        $indexer->index($doc);
 
         // search for webmister, a deliberate error (should be webmaster)
         /** @var \Suilven\ManticoreSearch\Service\Suggester $suggester */
         $suggester = new Suggester();
         $suggester->setIndex('sitetree');
-        $suggestions = $suggester->suggest('webmister');
-        $this->assertEquals(['webmaster'], $suggestions);
+        $result = $suggester->suggest('webmister');
+        $this->assertEquals(['webmaster'], $result->getResults());
     }
 
 
     public function testIndexOneDocumentAndSearch(): void
     {
-        $helper = new IndexingHelper();
+
         $doc = DataObject::get_by_id(\Page::class, self::$pageID);
-        $helper->indexObject($doc);
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndex('sitetree');
+        $indexer->index($doc);
+
 
         $searcher = new Searcher();
-        $searcher->setIndex('sitetree');
+        $searcher->setIndexName('sitetree');
+
+        /** @var \Suilven\FreeTextSearch\Container\SearchResults $result */
         $result = $searcher->search('Webmaster disconnections');
-        $arrayResult = $result->toArray();
-        $this->assertEquals(1, \sizeof($arrayResult));
-        $this->assertContains('Webmaster fakes disconnections overdose', $arrayResult[0]->content);
-        $this->assertEquals(self::$pageID, $arrayResult[0]->ID);
+
+        $this->assertInstanceOf('Suilven\FreeTextSearch\Container\SearchResults', $result);
+        $this->assertEquals(1, $result->getNumberOfResults());
+        $records = $result->getRecords();
+        $first = $records->first();
+        $this->assertContains('Webmaster fakes disconnections overdose', $first->Content);
+        $this->assertEquals(self::$pageID, $first->ID);
     }
 
 

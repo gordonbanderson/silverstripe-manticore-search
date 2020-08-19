@@ -41,7 +41,7 @@ class Suggester extends \Suilven\FreeTextSearch\Base\Suggester implements \Suilv
         $results->setIndex($this->index);
         $results->setQuery($q);
         $results->setLimit($limit);
-        return $results;
 
+        return $results;
     }
 }

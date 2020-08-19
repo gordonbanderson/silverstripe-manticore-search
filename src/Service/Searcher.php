@@ -12,13 +12,12 @@ namespace Suilven\ManticoreSearch\Service;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use Suilven\FreeTextSearch\Base\SearcherBase;
 use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Indexes;
 
-class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interfaces\Searcher
+class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
-
+    /** @var \Suilven\ManticoreSearch\Service\Client */
     private $client;
 
     public function __construct()
@@ -66,7 +65,10 @@ class Searcher extends SearcherBase implements \Suilven\FreeTextSearch\Interface
                     $keyname = 'ResultTitle';
                 }
 
+                /** @phpstan-ignore-next-line */
                 $ssDataObject->Highlights = $hit->getHighlight();
+
+                /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
             }
 

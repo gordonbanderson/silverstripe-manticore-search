@@ -6,8 +6,13 @@ Only:
     - UNIT_TESTING_CONFIG_ENABLED
 ---
 
-Suilven\SphinxSearch\Service\Client:
-  host: 'manticore'
+Suilven\ManticoreSearch\Service\Client:
+  host: '127.0.0.1'
+
+# When the tests complete (successfully), if this is not set, the shutdown function is called.  Unfortunately, there
+# is no longer a test database....
+Symbiote\QueuedJobs\Services\QueuedJobService:
+  use_shutdown_function: false
 
 Suilven\FreeTextSearch\Indexes:
   indexes:
@@ -28,6 +33,8 @@ Suilven\FreeTextSearch\Indexes:
         fields:
           - Title
           - Description
+          - IsPublic # boolean
+          - AspectRatio # float
 
         tokens:
           - Aperture
