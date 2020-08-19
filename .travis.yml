@@ -49,11 +49,11 @@ install:
 before_script:
     - 'phpenv rehash'
     - 'phpenv config-rm xdebug.ini'
-    - 'echo ''memory_limit = 2G'' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini'
+    - 'echo ''memory_limit = 4G'' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini'
     - 'if [[ $DUPLICATE_CODE_CHECK ]]; then sudo apt remove -y nodejs && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && sudo bash nodesource_setup.sh && sudo apt install -y build-essential nodejs && which npm && npm install jscpd@3.2.1  ;fi'
     - 'if [[ $TODO_CHECK ]]; then sudo apt remove -y nodejs && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && sudo bash nodesource_setup.sh && sudo apt install -y build-essential nodejs && npm install leasot  ;fi'
 script:
-    - 'if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '''' flush=all; fi'
+    - 'if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests '''' flush=1; fi'
     - 'if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml '''' flush=all; fi'
     - 'if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests ; fi'
     - 'if [[ $DUPLICATE_CODE_CHECK ]]; then node_modules/jscpd/bin/jscpd src && node_modules/jscpd/bin/jscpd tests ; fi'
