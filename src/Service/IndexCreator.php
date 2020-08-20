@@ -13,7 +13,7 @@ use SilverStripe\ORM\DataObjectSchema;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\FieldTypes;
 
-class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
+class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
 {
     /**
      * Create an index
@@ -23,40 +23,12 @@ class IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
      */
     public function createIndex(string $indexName): void
     {
-        $indexes = new Indexes();
-
-        $index = $indexes->getIndex($indexName);
-
-        $fields = [];
-
-        $singleton = \singleton($index->getClass());
-
-
-        // @todo different field types
-        foreach ($index->getFields() as $field) {
-            $fields[] = $field;
-        }
-
-        foreach ($index->getTokens() as $token) {
-            $fields[] = $token;
-        }
-
-        /** @var \SilverStripe\ORM\DataObjectSchema $schema */
-        $schema = $singleton->getSchema();
-        $specs = $schema->fieldSpecs($index->getClass(), DataObjectSchema::INCLUDE_CLASS);
-
-
-
+        $fields = $this->getFields($indexName);
+        $specs = $this->getFieldSpecs($indexName);
 
         $columns = [];
         foreach ($fields as $field) {
             $fieldType = $specs[$field];
-
-            // fix likes of varchar(255)
-            $fieldType = \explode('(', $fieldType)[0];
-
-            // remove the class name
-            $fieldType = \explode('.', $fieldType)[1];
 
             // this will be the most common
             $indexType = 'text';
