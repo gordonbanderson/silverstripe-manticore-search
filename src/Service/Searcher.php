@@ -28,6 +28,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     public function search(?string $q): SearchResults
     {
+        $startTime = microtime(true);
         $client = new Client();
         $manticoreClient = $client->getConnection();
 
@@ -85,6 +86,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setPage($this->page);
         $searchResults->setPageSize($this->pageSize);
         $searchResults->setQuery($q);
+        $searchResults->setTotalNumberOfResults($manticoreResult->getTotal());
+
+        $endTime = microtime(true);
+        $delta = $endTime - $startTime;
+        $delta = round(1000*$delta)/1000;
+        $searchResults->setTime($delta);
 
         return $searchResults;
     }
