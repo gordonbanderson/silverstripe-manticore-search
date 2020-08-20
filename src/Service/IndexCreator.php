@@ -9,10 +9,10 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
-use SilverStripe\ORM\DataObjectSchema;
-use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\FieldTypes;
 
+// @phpcs:disable Generic.Files.LineLength.TooLong
+// @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
 class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements \Suilven\FreeTextSearch\Interfaces\IndexCreator
 {
     /**
