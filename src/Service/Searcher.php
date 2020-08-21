@@ -34,6 +34,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
+        $searcher->limit($this->pageSize);
+        $offset=$this->pageSize * ($this->page-1);
+        $searcher->offset($offset);
+
         $manticoreResult = $searcher->search($q)->highlight(
             [],
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
