@@ -47,16 +47,15 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         while ($manticoreResult->valid()) {
             $hit = $manticoreResult->current();
             $source = $hit->getData();
+            //print_r($source);
             $ssDataObject = new DataObject();
 
-            // @todo map back likes of title to Title
             $keys = \array_keys($source);
             foreach ($keys as $key) {
                 $keyname = $key;
                 foreach ($fields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
-
                         break;
                     }
                 }
@@ -64,18 +63,44 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 // @todo This is a hack as $Title is rendering the ID in the template
                 if ($keyname === 'Title') {
                     $keyname = 'ResultTitle';
-                }
-
-                /** @phpstan-ignore-next-line */
-                $ssDataObject->Highlights = $hit->getHighlight();
+                } elseif ($keyname === 'link') {
+                    $keyname = 'Link';
+                };
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
             }
 
+
+            // manticore lowercases fields, so as above normalize them back to the SS fieldnames
+            $highlights = $hit->getHighlight();
+            $highlightsSS = [];
+
+            $keys = \array_keys($highlights);
+            foreach ($keys as $key) {
+                if (!isset($highlights[$key])) {
+                    continue;
+                }
+                $keyname = $key;
+                foreach ($fields as $field) {
+                    if (\strtolower($field) === $key) {
+                        $keyname = $field;
+                        continue;
+                    }
+                }
+
+                if ($key == 'link') {
+                    $keyname = 'Link';
+                }
+
+                $highlightsSS[$keyname] = $highlights[$key];
+            }
+
+            /** @phpstan-ignore-next-line */
+            $ssDataObject->Highlights = $highlightsSS;
+
             $ssDataObject->ID = $hit->getId();
             $ssResult->push($ssDataObject);
-
             $manticoreResult->next();
         }
 
