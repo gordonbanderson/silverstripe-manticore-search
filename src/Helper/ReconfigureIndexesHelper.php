@@ -22,10 +22,6 @@ class ReconfigureIndexesHelper
         /** @var \Suilven\FreeTextSearch\Index $indexObj */
         foreach ($indexes as $indexObj) {
             $indexCreator->createIndex($indexObj->getName());
-
-
-            // need to override sort, set it to null
-            //Config::modify()->set($className, 'default_sort', null);
         }
     }
 }
