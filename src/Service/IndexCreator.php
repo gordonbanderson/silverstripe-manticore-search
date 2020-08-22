@@ -69,7 +69,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
             // override for Link, do not index it.  The storing of the Link URL is to save on database hierarchy
             // traversal when rendering search results
-            if ($field == 'Link') {
+            if ($field === 'Link') {
                 $options = ['stored'];
             }
             $columns[$field] = ['type' => $indexType, 'options' => $options];

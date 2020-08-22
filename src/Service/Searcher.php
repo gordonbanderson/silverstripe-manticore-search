@@ -28,7 +28,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     public function search(?string $q): SearchResults
     {
-        $startTime = microtime(true);
+        $startTime = \microtime(true);
         $client = new Client();
         $manticoreClient = $client->getConnection();
 
@@ -60,6 +60,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 foreach ($fields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
+
                         break;
                     }
                 }
@@ -89,11 +90,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 foreach ($fields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
+
                         continue;
                     }
                 }
 
-                if ($key == 'link') {
+                if ($key === 'link') {
                     $keyname = 'Link';
                 }
 
@@ -117,9 +119,9 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setQuery($q);
         $searchResults->setTotalNumberOfResults($manticoreResult->getTotal());
 
-        $endTime = microtime(true);
+        $endTime = \microtime(true);
         $delta = $endTime - $startTime;
-        $delta = round(1000*$delta)/1000;
+        $delta = \round(1000*$delta)/1000;
         $searchResults->setTime($delta);
 
         return $searchResults;
