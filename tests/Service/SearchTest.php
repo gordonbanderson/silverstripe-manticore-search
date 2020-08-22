@@ -103,7 +103,7 @@ class SearchTest extends SapphireTest
         $result = $searcher->search('Webmaster disconnections');
 
         $this->assertInstanceOf('Suilven\FreeTextSearch\Container\SearchResults', $result);
-        $this->assertEquals(1, $result->getNumberOfResults());
+        $this->assertEquals(1, $result->getTotaNumberOfResults());
         $records = $result->getRecords();
         $first = $records->first();
         $this->assertContains('Webmaster fakes disconnections overdose', $first->Content);

@@ -50,7 +50,7 @@ class BulkTest extends SapphireTest implements TestOnly
         $results = $searcher->search('sodium');
 
         // assert number of results
-        $this->assertEquals(4, $results->getNumberOfResults());
+        $this->assertEquals(4, $results->getTotaNumberOfResults());
         $recordsArray = $results->getRecords()->toArray();
 
         // assert IDs and that sodium is in the result set somewhere
