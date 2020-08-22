@@ -28,11 +28,16 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     public function search(?string $q): SearchResults
     {
+        $startTime = \microtime(true);
         $client = new Client();
         $manticoreClient = $client->getConnection();
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
+        $searcher->limit($this->pageSize);
+        $offset=$this->pageSize * ($this->page-1);
+        $searcher->offset($offset);
+
         $manticoreResult = $searcher->search($q)->highlight(
             [],
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
@@ -46,9 +51,9 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         while ($manticoreResult->valid()) {
             $hit = $manticoreResult->current();
             $source = $hit->getData();
+            //print_r($source);
             $ssDataObject = new DataObject();
 
-            // @todo map back likes of title to Title
             $keys = \array_keys($source);
             foreach ($keys as $key) {
                 $keyname = $key;
@@ -63,18 +68,45 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 // @todo This is a hack as $Title is rendering the ID in the template
                 if ($keyname === 'Title') {
                     $keyname = 'ResultTitle';
-                }
-
-                /** @phpstan-ignore-next-line */
-                $ssDataObject->Highlights = $hit->getHighlight();
+                } elseif ($keyname === 'link') {
+                    $keyname = 'Link';
+                };
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
             }
 
+
+            // manticore lowercases fields, so as above normalize them back to the SS fieldnames
+            $highlights = $hit->getHighlight();
+            $highlightsSS = [];
+
+            $keys = \array_keys($highlights);
+            foreach ($keys as $key) {
+                if (!isset($highlights[$key])) {
+                    continue;
+                }
+                $keyname = $key;
+                foreach ($fields as $field) {
+                    if (\strtolower($field) === $key) {
+                        $keyname = $field;
+
+                        continue;
+                    }
+                }
+
+                if ($key === 'link') {
+                    $keyname = 'Link';
+                }
+
+                $highlightsSS[$keyname] = $highlights[$key];
+            }
+
+            /** @phpstan-ignore-next-line */
+            $ssDataObject->Highlights = $highlightsSS;
+
             $ssDataObject->ID = $hit->getId();
             $ssResult->push($ssDataObject);
-
             $manticoreResult->next();
         }
 
@@ -85,6 +117,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setPage($this->page);
         $searchResults->setPageSize($this->pageSize);
         $searchResults->setQuery($q);
+        $searchResults->setTotalNumberOfResults($manticoreResult->getTotal());
+
+        $endTime = \microtime(true);
+        $delta = $endTime - $startTime;
+        $delta = \round(1000*$delta)/1000;
+        $searchResults->setTime($delta);
 
         return $searchResults;
     }
