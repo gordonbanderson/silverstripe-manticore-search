@@ -45,7 +45,14 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
-        $fields = $index->getFields();
+
+
+        $allFields = array_merge(
+            $index->getFields(),
+            $index->getTokens(),
+            $index->getHasManyFields(),
+            $index->getHasOneFields()
+        );
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -55,9 +62,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $ssDataObject = new DataObject();
 
             $keys = \array_keys($source);
+
             foreach ($keys as $key) {
                 $keyname = $key;
-                foreach ($fields as $field) {
+                foreach ($allFields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
 
@@ -74,6 +82,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
+
             }
 
 
@@ -87,7 +96,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                     continue;
                 }
                 $keyname = $key;
-                foreach ($fields as $field) {
+                foreach ($allFields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
 
