@@ -51,7 +51,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $index->getFields(),
             $index->getTokens(),
             $index->getHasManyFields(),
-            $index->getHasOneFields()
+            $index->getHasOneFields(),
+            $index->getStoredFields()
         );
 
         $ssResult = new ArrayList();
@@ -89,6 +90,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             // manticore lowercases fields, so as above normalize them back to the SS fieldnames
             $highlights = $hit->getHighlight();
             $highlightsSS = [];
+
+            $fieldsToHighlight = $index->getHighlightedFields();
 
             $keys = \array_keys($highlights);
             foreach ($keys as $key) {
