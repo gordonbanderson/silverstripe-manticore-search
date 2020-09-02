@@ -27,8 +27,8 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $storedFields = $this->getStoredFields($indexName);
         $specs = $this->getFieldSpecs($indexName);
 
-        error_log('SPECS');
-        print_r($specs);
+        \error_log('SPECS');
+        \print_r($specs);
 
         $columns = [];
         foreach ($fields as $field) {
@@ -73,7 +73,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
             // override for Link, do not index it.  The storing of the Link URL is to save on database hierarchy
             // traversal when rendering search results
-            if ($field === 'Link' || in_array($field, $storedFields)) {
+            if ($field === 'Link' || \in_array($field, $storedFields, true)) {
                 $options = ['stored'];
             }
             $columns[$field] = ['type' => $indexType, 'options' => $options];

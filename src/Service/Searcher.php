@@ -47,7 +47,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $index = $indexes->getIndex($this->indexName);
 
 
-        $allFields = array_merge(
+        $allFields = \array_merge(
             $index->getFields(),
             $index->getTokens(),
             $index->getHasManyFields(),
@@ -83,7 +83,6 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
-
             }
 
 
@@ -95,7 +94,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
             $keys = \array_keys($highlights);
             foreach ($keys as $key) {
-                if (!isset($highlights[$key])) {
+                if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
                     continue;
                 }
                 $keyname = $key;
