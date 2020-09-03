@@ -43,6 +43,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         )->get();
 
+        print_r($manticoreResult);
+
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
 
