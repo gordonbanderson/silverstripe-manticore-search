@@ -54,11 +54,13 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
         $payload = $indexer->getIndexablePayload($dataObject);
         $toIndex = $payload[$this->index];
 
-        $keys = array_keys($toIndex);
-        foreach($keys as $key) {
-            if (is_null($toIndex[$key])) {
-                $toIndex[$key] = '';
+        $keys = \array_keys($toIndex);
+        foreach ($keys as $key) {
+            if (!\is_null($toIndex[$key])) {
+                continue;
             }
+
+            $toIndex[$key] = '';
         }
 
         // @todo Fix indexing of parent id
