@@ -34,28 +34,34 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
+
         $searcher->limit($this->pageSize);
         $offset=$this->pageSize * ($this->page-1);
         $searcher->offset($offset);
 
-        $manticoreResult = $searcher->search($q)->highlight(
-            [],
-            ['pre_tags' => '<b>', 'post_tags'=>'</b>']
-        )->get();
-
-        print_r($manticoreResult);
-
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
 
+        $searcher->highlight(
+            [],
+            ['pre_tags' => '<b>', 'post_tags'=>'</b>']
+        );
+
+        $manticoreResult = $searcher->search($q)->get();
 
         $allFields = \array_merge(
             $index->getFields(),
             $index->getTokens(),
-            $index->getHasManyFields(),
+            //$index->getHasManyFields(),
             $index->getHasOneFields(),
             $index->getStoredFields()
         );
+
+
+        $hasManyFields = $index->getHasManyFields();
+        foreach(array_keys($hasManyFields) as $key) {
+            $allFields[] = $key;
+        }
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
