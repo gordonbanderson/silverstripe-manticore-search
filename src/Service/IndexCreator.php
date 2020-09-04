@@ -100,6 +100,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             'dict' => 'keywords',
             'min_infix_len' => 2,
             'html_strip' => 1,
+            'bigram_index' => 'both_freq'
         ];
 
 
