@@ -10,6 +10,7 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use SilverStripe\ORM\DataObject;
+use Suilven\FreeTextSearch\Factory\IndexerFactory;
 use Suilven\FreeTextSearch\Helper\IndexingHelper;
 
 /**
@@ -46,11 +47,26 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     public function addDataObject(DataObject $dataObject): void
     {
         $helper = new IndexingHelper();
-        $payload = $helper->getFieldsToIndex($dataObject);
+
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndexName($this->index);
+        $payload = $indexer->getIndexablePayload($dataObject);
         $toIndex = $payload[$this->index];
+
+        $keys = \array_keys($toIndex);
+        foreach ($keys as $key) {
+            if (!\is_null($toIndex[$key])) {
+                continue;
+            }
+
+            $toIndex[$key] = '';
+        }
+
         // @todo Fix indexing of parent id
         unset($toIndex['ParentID']);
         $this->bulkIndexData[$dataObject->ID] = $toIndex;
+
     }
 
 

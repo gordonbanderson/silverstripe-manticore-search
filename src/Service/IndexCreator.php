@@ -9,6 +9,7 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
+use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\FieldTypes;
 
 // @phpcs:disable Generic.Files.LineLength.TooLong
@@ -24,7 +25,11 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
     public function createIndex(string $indexName): void
     {
         $fields = $this->getFields($indexName);
+        $storedFields = $this->getStoredFields($indexName);
         $specs = $this->getFieldSpecs($indexName);
+
+        \error_log('SPECS');
+        \print_r($specs);
 
         $columns = [];
         foreach ($fields as $field) {
@@ -69,25 +74,34 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
             // override for Link, do not index it.  The storing of the Link URL is to save on database hierarchy
             // traversal when rendering search results
-            if ($field === 'Link') {
+            if ($field === 'Link' || \in_array($field, $storedFields, true)) {
                 $options = ['stored'];
             }
             $columns[$field] = ['type' => $indexType, 'options' => $options];
         }
 
 
+        // @todo Add has one
+
+        $indexes = new Indexes();
+        $index = $indexes->getIndex($indexName);
+        $mvaFields = $index->getHasManyFields();
+        error_log(print_r($mvaFields, true));
+
+        foreach(array_keys($mvaFields) as $mvaColumnName) {
+            $columns[$mvaColumnName] = ['type' => 'multi'];
+        }
 
         $client = new Client();
         $manticoreClient = $client->getConnection();
-
 
         $settings = [
             'rt_mem_limit' => '256M',
             'dict' => 'keywords',
             'min_infix_len' => 2,
             'html_strip' => 1,
+            'bigram_index' => 'both_freq'
         ];
-
 
 
         // drop index, and updating an existing one does not effect change

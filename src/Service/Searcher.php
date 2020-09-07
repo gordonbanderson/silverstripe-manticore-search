@@ -34,18 +34,34 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $searcher = new Search($manticoreClient);
         $searcher->setIndex($this->indexName);
+
         $searcher->limit($this->pageSize);
         $offset=$this->pageSize * ($this->page-1);
         $searcher->offset($offset);
 
-        $manticoreResult = $searcher->search($q)->highlight(
-            [],
-            ['pre_tags' => '<b>', 'post_tags'=>'</b>']
-        )->get();
-
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
-        $fields = $index->getFields();
+
+        $searcher->highlight(
+            [],
+            ['pre_tags' => '<b>', 'post_tags'=>'</b>']
+        );
+
+        $manticoreResult = $searcher->search($q)->get();
+
+        $allFields = \array_merge(
+            $index->getFields(),
+            $index->getTokens(),
+            //$index->getHasManyFields(),
+            $index->getHasOneFields(),
+            $index->getStoredFields()
+        );
+
+
+        $hasManyFields = $index->getHasManyFields();
+        foreach(array_keys($hasManyFields) as $key) {
+            $allFields[] = $key;
+        }
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -55,9 +71,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $ssDataObject = new DataObject();
 
             $keys = \array_keys($source);
+
             foreach ($keys as $key) {
                 $keyname = $key;
-                foreach ($fields as $field) {
+                foreach ($allFields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
 
@@ -81,13 +98,15 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $highlights = $hit->getHighlight();
             $highlightsSS = [];
 
+            $fieldsToHighlight = $index->getHighlightedFields();
+
             $keys = \array_keys($highlights);
             foreach ($keys as $key) {
-                if (!isset($highlights[$key])) {
+                if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
                     continue;
                 }
                 $keyname = $key;
-                foreach ($fields as $field) {
+                foreach ($allFields as $field) {
                     if (\strtolower($field) === $key) {
                         $keyname = $field;
 
