@@ -54,6 +54,6 @@
         "checkcs": "vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
         "fixcs": "vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
         "lint": "vendor/bin/parallel-lint src/ tests/",
-        "phpstan": "vendor/bin/phpstan analyse --level=6 -c tests/phpstan.neon src/"
+        "phpstan": "vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/"
     }
 }
