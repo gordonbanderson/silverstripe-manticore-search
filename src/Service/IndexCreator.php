@@ -33,6 +33,10 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
         $columns = [];
         foreach ($fields as $field) {
+            if ($field === 'Link') {
+                continue;
+            }
+
             $fieldType = $specs[$field];
 
             // this will be the most common
@@ -86,9 +90,9 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $indexes = new Indexes();
         $index = $indexes->getIndex($indexName);
         $mvaFields = $index->getHasManyFields();
-        error_log(print_r($mvaFields, true));
+        \error_log(\print_r($mvaFields, true));
 
-        foreach(array_keys($mvaFields) as $mvaColumnName) {
+        foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];
         }
 
@@ -100,7 +104,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             'dict' => 'keywords',
             'min_infix_len' => 2,
             'html_strip' => 1,
-            'bigram_index' => 'both_freq'
+            'bigram_index' => 'all',
         ];
 
 

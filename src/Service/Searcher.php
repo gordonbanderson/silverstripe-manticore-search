@@ -59,7 +59,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
 
         $hasManyFields = $index->getHasManyFields();
-        foreach(array_keys($hasManyFields) as $key) {
+        foreach (\array_keys($hasManyFields) as $key) {
             $allFields[] = $key;
         }
 
