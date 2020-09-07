@@ -92,9 +92,8 @@ class SearchTest extends SapphireTest
         $doc = DataObject::get_by_id(\Page::class, self::$pageID);
         $factory = new IndexerFactory();
         $indexer = $factory->getIndexer();
-        $indexer->setIndex('sitetree');
+        $indexer->setIndexName('sitetree');
         $indexer->index($doc);
-
 
         $searcher = new Searcher();
         $searcher->setIndexName('sitetree');
