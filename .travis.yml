@@ -58,7 +58,7 @@ script:
     - 'if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests ; fi'
     - 'if [[ $DUPLICATE_CODE_CHECK ]]; then node_modules/jscpd/bin/jscpd src && node_modules/jscpd/bin/jscpd tests ; fi'
     - 'if [[ $LINT_CHECK ]]; then vendor/bin/parallel-lint src/ tests/ ; fi'
-    - 'if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=6 -c tests/phpstan.neon src/ ; fi'
+    - 'if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/ ; fi'
 
     # Remove the -x flag if you wish existing TODOs to break the build
     - 'if [[ $TODO_CHECK ]]; then node_modules/leasot/bin/leasot -x tests --ignore **/*.neon ; fi'
