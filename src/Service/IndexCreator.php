@@ -91,9 +91,9 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $index = $indexes->getIndex($indexName);
         $mvaFields = $index->getHasManyFields();
 
-        error_log(print_r($mvaFields, true));
+        \error_log(\print_r($mvaFields, true));
 
-        foreach(array_keys($mvaFields) as $mvaColumnName) {
+        foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];
         }
 
