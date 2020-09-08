@@ -53,19 +53,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $manticoreResult = $searcher->search($q)->get();
 
-        $allFields = \array_merge(
-            $index->getFields(),
-            $index->getTokens(),
-            //$index->getHasManyFields(),
-            $index->getHasOneFields(),
-            $index->getStoredFields()
-        );
+        $allFields = $this->getAllFields($index);
 
 
-        $hasManyFields = $index->getHasManyFields();
-        foreach (\array_keys($hasManyFields) as $key) {
-            $allFields[] = $key;
-        }
+
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -77,21 +68,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $keys = \array_keys($source);
 
             foreach ($keys as $key) {
-                $keyname = $key;
-                foreach ($allFields as $field) {
-                    if (\strtolower($field) === $key) {
-                        $keyname = $field;
+                /** @var string $keyname */
+                $keyname = $this->matchKey($key, $allFields);
 
-                        break;
-                    }
-                }
-
-                // @todo This is a hack as $Title is rendering the ID in the template
-                if ($keyname === 'Title') {
-                    $keyname = 'ResultTitle';
-                } elseif ($keyname === 'link') {
-                    $keyname = 'Link';
-                };
+                $keyname = $this->refactorKeyName($keyname);
 
                 /** @phpstan-ignore-next-line */
                 $ssDataObject->$keyname = $source[$key];
@@ -148,5 +128,54 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setTime($delta);
 
         return $searchResults;
+    }
+
+
+    /** @return array<string> */
+    public function getAllFields(\Suilven\FreeTextSearch\Index $index): array
+    {
+        $allFields = \array_merge(
+            $index->getFields(),
+            $index->getTokens(),
+            //$index->getHasManyFields(),
+            $index->getHasOneFields(),
+            $index->getStoredFields()
+        );
+
+        $hasManyFields = $index->getHasManyFields();
+        foreach (\array_keys($hasManyFields) as $key) {
+            $allFields[] = $key;
+        }
+
+        return $allFields;
+    }
+
+
+    public function refactorKeyName(string $keyname): string
+    {
+        // @todo This is a hack as $Title is rendering the ID in the template
+        if ($keyname === 'Title') {
+            $keyname = 'ResultTitle';
+        } elseif ($keyname === 'link') {
+            $keyname = 'Link';
+        };
+
+        return $keyname;
+    }
+
+
+    /** @param array<string> $allFields */
+    public function matchKey(string $key, array $allFields): string
+    {
+        $keyname = $key;
+        foreach ($allFields as $field) {
+            if (\strtolower($field) === $key) {
+                $keyname = $field;
+
+                break;
+            }
+        }
+
+        return $keyname;
     }
 }
