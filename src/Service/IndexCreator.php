@@ -127,8 +127,8 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
 
-        error_log('----- payload -----');
-        error_log(print_r($columns, true));
+        \error_log('----- payload -----');
+        \error_log(\print_r($columns, true));
 
         $manticoreIndex->create(
             $columns,
