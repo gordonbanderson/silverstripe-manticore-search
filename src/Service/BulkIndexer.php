@@ -20,7 +20,7 @@ use Suilven\FreeTextSearch\Factory\IndexerFactory;
  */
 class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
 {
-    /** @var array<int,array<string,string|float|bool|int>> */
+    /** @var array<int,array<string,string|float|bool|int|null>> */
     protected $bulkIndexData;
 
     /** @var string */
@@ -56,6 +56,7 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
             if (!\is_null($toIndex[$key])) {
                 continue;
             }
+
 
             $toIndex[$key] = '';
         }

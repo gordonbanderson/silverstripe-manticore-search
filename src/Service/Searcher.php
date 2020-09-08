@@ -47,6 +47,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
+        $q = \is_null($q)
+            ? ''
+            : $q;
+
         $manticoreResult = $searcher->search($q)->get();
 
         $allFields = \array_merge(
