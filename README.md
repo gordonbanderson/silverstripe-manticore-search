@@ -21,22 +21,49 @@
 
 ![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=master)
 
-# **** WORK IN PROGRESS ****
-SilverStripe client for the Manticore search engine, using the newly published PHP client for Manticore.  
+Search content in SilverStripe using manticoresearch as the free text search engine. 
 
 ## Install
-
+### PHP
 Via Composer
 
 ``` bash
 $ composer require suilven/silverstripe-manticore-search
 ```
 
+### Manticore Search
+Packages are available for multiple platforms, see https://manticoresearch.com/downloads/ - version 3.5 is required
+for compatibility with the ManticoreSearch PHP client.
+
+Alternatively one can start an instance using docker:
+
+```
+docker run --name manticore -p 9306:9306 -p 9308:9308 -d manticoresearch/manticore
+```
+
+Note that does not include volume mapping in order to backup the indexed data.
+
+## Configuration
+### Indexing
+See https://github.com/gordonbanderson/freetextsearch#configuration
+### Manticoresearch Specific
+By default, manticore is expected to be found on `127.0.0.1` on port `9308`.  To override this, add a config file
+simiar to the following:
+
+```yml
+---
+Name: manticore-my-host
+After: manticore
+---
+
+Suilven\ManticoreSearch\Service\Client:
+  host: 'manticoresearch-manticore'
+  port: 19308
+```
+
 ## Usage
 
-``` php
-// @todo
-```
+See https://github.com/gordonbanderson/freetextsearch#usage
 
 ## Change log
 
@@ -45,7 +72,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## Testing
 
 ``` bash
-$ composer test
+$ vendor/bin/phpunit tests '' flush=1
 ```
 
 ## Contributing
