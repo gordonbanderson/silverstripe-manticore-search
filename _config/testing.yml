@@ -49,7 +49,11 @@ Suilven\FreeTextSearch\Indexes:
 
         # Multi valued attribute
         has_many:
-          - Suilven\ManticoreSearch\Tests\Models\FlickrTag
+          -
+            name: tags
+            relationship: FlickrTags
+            field: RawValue
+
 
 
       # Facets or filterable
