@@ -57,7 +57,7 @@ class SearchTest extends SapphireTest
 
         $factory = new IndexerFactory();
         $indexer = $factory->getIndexer();
-        $indexer->setIndex('members');
+        $indexer->setIndexName('members');
         $indexer->index($member);
 
         /** @var \Suilven\ManticoreSearch\Service\Suggester $suggester */
@@ -74,7 +74,7 @@ class SearchTest extends SapphireTest
 
         $factory = new IndexerFactory();
         $indexer = $factory->getIndexer();
-        $indexer->setIndex('sitetree');
+        $indexer->setIndexName('sitetree');
         $indexer->index($doc);
 
         // search for webmister, a deliberate error (should be webmaster)

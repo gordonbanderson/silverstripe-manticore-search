@@ -33,52 +33,64 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
         $columns = [];
         foreach ($fields as $field) {
+            /*
             if ($field === 'Link') {
-                continue;
+                error_log('Skipping link field');
+               continue;
+            }
+            */
+
+            if (isset($specs[$field])) {
+                $fieldType = $specs[$field];
+
+                // this will be the most common
+                $indexType = 'text';
+
+                // @todo configure index to strip HTML
+                switch ($fieldType) {
+                    case FieldTypes::FOREIGN_KEY:
+                        // @todo this perhaps needs to be a token
+                        // See https://docs.manticoresearch.com/3.4.0/html/indexing/data_types.html
+
+                        // @todo also how to mark strings for tokenizing?
+                        $indexType = 'bigint';
+
+                        break;
+                    case FieldTypes::INTEGER:
+                        $indexType = 'integer';
+
+                        break;
+                    case FieldTypes::FLOAT:
+                        $indexType = 'float';
+
+                        break;
+                    case FieldTypes::TIME:
+                        $indexType = 'timestamp';
+
+                        break;
+                    case FieldTypes::BOOLEAN:
+                        // @todo is there a better type?
+                        $indexType = 'integer';
+
+                        break;
+                }
+
+                $options = [];
+                if ($indexType === 'text') {
+                    $options = ['indexed', 'stored'];
+                }
             }
 
-            $fieldType = $specs[$field];
-
-            // this will be the most common
-            $indexType = 'text';
-
-            // @todo configure index to strip HTML
-            switch ($fieldType) {
-                case FieldTypes::FOREIGN_KEY:
-                    // @todo this perhaps needs to be a token
-                    // See https://docs.manticoresearch.com/3.4.0/html/indexing/data_types.html
-
-                    // @todo also how to mark strings for tokenizing?
-                    $indexType = 'bigint';
-
-                    break;
-                case FieldTypes::INTEGER:
-                    $indexType = 'integer';
-
-                    break;
-                case FieldTypes::FLOAT:
-                    $indexType = 'float';
-
-                    break;
-                case FieldTypes::TIME:
-                    $indexType = 'timestamp';
-
-                    break;
-                case FieldTypes::BOOLEAN:
-                    // @todo is there a better type?
-                    $indexType = 'integer';
-
-                    break;
-            }
-
-            $options = [];
-            if ($indexType === 'text') {
-                $options = ['indexed', 'stored'];
-            }
 
             // override for Link, do not index it.  The storing of the Link URL is to save on database hierarchy
             // traversal when rendering search results
-            if ($field === 'Link' || \in_array($field, $storedFields, true)) {
+            //if ($field === 'Link' || \in_array($field, $storedFields, true)) {
+            if ($field === 'Link') {
+                $indexType = 'text';
+                $options = ['stored'];
+            }
+
+            if (\in_array($field, $storedFields, true)) {
                 $options = ['stored'];
             }
             $columns[$field] = ['type' => $indexType, 'options' => $options];
@@ -114,6 +126,9 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
 
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
+
+        error_log('----- payload -----');
+        error_log(print_r($columns, true));
 
         $manticoreIndex->create(
             $columns,
