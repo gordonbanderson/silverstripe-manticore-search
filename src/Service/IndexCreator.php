@@ -40,11 +40,12 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             }
             */
 
+            // this will be the most common
+            $indexType = 'text';
+            $options = [];
+
             if (isset($specs[$field])) {
                 $fieldType = $specs[$field];
-
-                // this will be the most common
-                $indexType = 'text';
 
                 // @todo configure index to strip HTML
                 switch ($fieldType) {
@@ -75,7 +76,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
                         break;
                 }
 
-                $options = [];
                 if ($indexType === 'text') {
                     $options = ['indexed', 'stored'];
                 }
