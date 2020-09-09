@@ -97,4 +97,26 @@ class BulkTest extends SapphireTest implements TestOnly
         $nDocs = $indexer->indexDataObjects();
         $this->assertEquals(0, $nDocs);
     }
+
+
+    public function testAddDocumentWithNullField(): void
+    {
+        $page = new \Page();
+        $page->Title = 'Test Page';
+        $page->Content = null;
+        $page->write();
+        $helper = new BulkIndexingHelper();
+        $nDocs = $helper->bulkIndex('sitetree', true);
+
+        $this->assertEquals(51, $nDocs);
+
+        $searcher = new Searcher();
+        $searcher->setIndexName('sitetree');
+        $results = $searcher->search('Test Page');
+
+        // assert number of results
+        $this->assertEquals(1, $results->getTotaNumberOfResults());
+        $recordsArray = $results->getRecords()->toArray();
+        $this->assertEquals('', $recordsArray[0]->Content);
+    }
 }
