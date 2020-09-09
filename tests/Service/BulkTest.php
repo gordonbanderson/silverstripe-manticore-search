@@ -98,6 +98,7 @@ class BulkTest extends SapphireTest implements TestOnly
         $this->assertEquals(0, $nDocs);
     }
 
+
     public function testAddDocumentWithNullField(): void
     {
         $page = new \Page();
