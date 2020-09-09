@@ -110,6 +110,56 @@ class SearchTest extends SapphireTest
     }
 
 
+    public function testIndexOneDocumentAndNullSearch(): void
+    {
+        $doc = DataObject::get_by_id(\Page::class, self::$pageID);
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndexName('sitetree');
+        $indexer->index($doc);
+
+        $searcher = new Searcher();
+        $searcher->setIndexName('sitetree');
+
+        /** @var \Suilven\FreeTextSearch\Container\SearchResults $result */
+        $result = $searcher->search(null);
+        $records = $result->getRecords();
+        $first = $records->first();
+
+        // null search returns only document in the index
+        $this->assertContains('Webmaster fakes disconnections overdose', $first->Content);
+    }
+
+
+    public function testHighlights(): void
+    {
+        $doc = DataObject::get_by_id(\Page::class, self::$pageID);
+        $factory = new IndexerFactory();
+        $indexer = $factory->getIndexer();
+        $indexer->setIndexName('sitetree');
+        $indexer->index($doc);
+
+        $searcher = new Searcher();
+        $searcher->setIndexName('sitetree');
+
+        /** @var \Suilven\FreeTextSearch\Container\SearchResults $result */
+        $result = $searcher->search('knitted');
+        $this->assertEquals(1, $result->getTotaNumberOfResults());
+
+        $records = $result->getRecords();
+        $first = $records->first();
+
+
+        // null search returns only document in the index
+        $this->assertContains('Webmaster fakes disconnections overdose', $first->Content);
+
+        $this->assertEquals([
+            'Title' => ['Hometown Sandlot <b>Knitted</b> Saddens Days'],
+            'Content' => ['Webmaster fakes disconnections overdose. Windowing preschooler malfunctions dolts statutes.']
+        ], $first->Highlights);
+    }
+
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
