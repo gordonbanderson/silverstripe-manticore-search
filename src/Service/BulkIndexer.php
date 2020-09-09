@@ -67,7 +67,7 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
     }
 
 
-    public function indexDataObjects(): void
+    public function indexDataObjects(): int
     {
         $body = [];
         $nDataObjects = 0;
@@ -84,8 +84,8 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
             $nDataObjects++;
         }
 
-        if ($nDataObjects <= 0) {
-            return;
+        if ($nDataObjects === 0) {
+            return 0;
         }
 
         $coreClient = new Client();
@@ -93,6 +93,8 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
         $payload = ['body' => $body];
         $client->bulk($payload);
         $this->resetBulkIndexData();
+
+        return $nDataObjects;
     }
 
 
