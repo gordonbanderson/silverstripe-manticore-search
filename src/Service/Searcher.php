@@ -52,81 +52,21 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             : $q;
 
         $manticoreResult = $searcher->search($q)->get();
+        $allFields = $this->getAllFields($index);
 
-        $allFields = \array_merge(
-            $index->getFields(),
-            $index->getTokens(),
-            //$index->getHasManyFields(),
-            $index->getHasOneFields(),
-            $index->getStoredFields()
-        );
-
-
-        $hasManyFields = $index->getHasManyFields();
-        foreach (\array_keys($hasManyFields) as $key) {
-            $allFields[] = $key;
-        }
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
             $hit = $manticoreResult->current();
             $source = $hit->getData();
-            //print_r($source);
             $ssDataObject = new DataObject();
 
-            $keys = \array_keys($source);
-
-            foreach ($keys as $key) {
-                $keyname = $key;
-                foreach ($allFields as $field) {
-                    if (\strtolower($field) === $key) {
-                        $keyname = $field;
-
-                        break;
-                    }
-                }
-
-                // @todo This is a hack as $Title is rendering the ID in the template
-                if ($keyname === 'Title') {
-                    $keyname = 'ResultTitle';
-                } elseif ($keyname === 'link') {
-                    $keyname = 'Link';
-                };
-
-                /** @phpstan-ignore-next-line */
-                $ssDataObject->$keyname = $source[$key];
-            }
-
+            $this->populateSearchResult($ssDataObject, $allFields, $source);
 
             // manticore lowercases fields, so as above normalize them back to the SS fieldnames
             $highlights = $hit->getHighlight();
-            $highlightsSS = [];
-
             $fieldsToHighlight = $index->getHighlightedFields();
-
-            $keys = \array_keys($highlights);
-            foreach ($keys as $key) {
-                if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
-                    continue;
-                }
-                $keyname = $key;
-                foreach ($allFields as $field) {
-                    if (\strtolower($field) === $key) {
-                        $keyname = $field;
-
-                        continue;
-                    }
-                }
-
-                if ($key === 'link') {
-                    $keyname = 'Link';
-                }
-
-                $highlightsSS[$keyname] = $highlights[$key];
-            }
-
-            /** @phpstan-ignore-next-line */
-            $ssDataObject->Highlights = $highlightsSS;
+            $this->addHighlights($ssDataObject, $allFields, $highlights, $fieldsToHighlight);
 
             $ssDataObject->ID = $hit->getId();
             $ssResult->push($ssDataObject);
@@ -148,5 +88,111 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setTime($delta);
 
         return $searchResults;
+    }
+
+
+    /** @return array<string> */
+    public function getAllFields(\Suilven\FreeTextSearch\Index $index): array
+    {
+        $allFields = \array_merge(
+            $index->getFields(),
+            $index->getTokens(),
+            //$index->getHasManyFields(),
+            $index->getHasOneFields(),
+            $index->getStoredFields()
+        );
+
+        $hasManyFields = $index->getHasManyFields();
+        foreach (\array_keys($hasManyFields) as $key) {
+            $allFields[] = $key;
+        }
+
+        return $allFields;
+    }
+
+
+    public function refactorKeyName(string $keyname): string
+    {
+        // @todo This is a hack as $Title is rendering the ID in the template
+        if ($keyname === 'Title') {
+            $keyname = 'ResultTitle';
+        } elseif ($keyname === 'link') {
+            $keyname = 'Link';
+        };
+
+        return $keyname;
+    }
+
+
+    /** @param array<string> $allFields */
+    public function matchKey(string $key, array $allFields): string
+    {
+        $keyname = $key;
+        foreach ($allFields as $field) {
+            if (\strtolower($field) === $key) {
+                $keyname = $field;
+
+                break;
+            }
+        }
+
+        return $keyname;
+    }
+
+
+    /**
+     * @param array<string> $allFields
+     * @param array<string, string|int|float|bool> $source
+     */
+    private function populateSearchResult(DataObject &$ssDataObject, array $allFields, array $source): void
+    {
+        $keys = \array_keys($source);
+        foreach ($keys as $key) {
+            /** @var string $keyname */
+            $keyname = $this->matchKey($key, $allFields);
+            $keyname = $this->refactorKeyName($keyname);
+
+            /** @phpstan-ignore-next-line */
+            $ssDataObject->$keyname = $source[$key];
+        }
+    }
+
+
+    /**
+     * @param array<string> $allFields
+     * @param array<array<string>> $highlights
+     * @param array<string> $fieldsToHighlight
+     */
+    private function addHighlights(
+        DataObject &$ssDataObject,
+        array $allFields,
+        array $highlights,
+        array $fieldsToHighlight
+    ): void {
+        $highlightsSS = [];
+
+        $keys = \array_keys($highlights);
+        foreach ($keys as $key) {
+            if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
+                continue;
+            }
+            $keyname = $key;
+            foreach ($allFields as $field) {
+                if (\strtolower($field) === $key) {
+                    $keyname = $field;
+
+                    continue;
+                }
+            }
+
+            if ($key === 'link') {
+                $keyname = 'Link';
+            }
+
+            $highlightsSS[$keyname] = $highlights[$key];
+        }
+
+        /** @phpstan-ignore-next-line */
+        $ssDataObject->Highlights = $highlightsSS;
     }
 }
