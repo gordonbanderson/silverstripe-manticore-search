@@ -52,10 +52,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             : $q;
 
         $manticoreResult = $searcher->search($q)->get();
-
         $allFields = $this->getAllFields($index);
-
-
 
 
         $ssResult = new ArrayList();
