@@ -170,10 +170,14 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         array $fieldsToHighlight
     ): void {
         $highlightsSS = [];
+        $lowercaseFieldsToHighlight = [];
+        foreach($fieldsToHighlight as $fieldname) {
+            $lowercaseFieldsToHighlight[] = strtolower($fieldname);
+        }
 
         $keys = \array_keys($highlights);
         foreach ($keys as $key) {
-            if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
+            if (!isset($highlights[$key]) || !\in_array($key, $lowercaseFieldsToHighlight, true)) {
                 continue;
             }
             $keyname = $key;
