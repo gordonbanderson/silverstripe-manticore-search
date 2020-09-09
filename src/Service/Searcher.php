@@ -59,51 +59,16 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         while ($manticoreResult->valid()) {
             $hit = $manticoreResult->current();
             $source = $hit->getData();
-            //print_r($source);
             $ssDataObject = new DataObject();
 
-            $keys = \array_keys($source);
-
-            foreach ($keys as $key) {
-                /** @var string $keyname */
-                $keyname = $this->matchKey($key, $allFields);
-
-                $keyname = $this->refactorKeyName($keyname);
-
-                /** @phpstan-ignore-next-line */
-                $ssDataObject->$keyname = $source[$key];
-            }
-
+            $this->populateSearchResult($ssDataObject, $allFields, $source);
 
             // manticore lowercases fields, so as above normalize them back to the SS fieldnames
             $highlights = $hit->getHighlight();
-            $highlightsSS = [];
 
             $fieldsToHighlight = $index->getHighlightedFields();
 
-            $keys = \array_keys($highlights);
-            foreach ($keys as $key) {
-                if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
-                    continue;
-                }
-                $keyname = $key;
-                foreach ($allFields as $field) {
-                    if (\strtolower($field) === $key) {
-                        $keyname = $field;
-
-                        continue;
-                    }
-                }
-
-                if ($key === 'link') {
-                    $keyname = 'Link';
-                }
-
-                $highlightsSS[$keyname] = $highlights[$key];
-            }
-
-            /** @phpstan-ignore-next-line */
-            $ssDataObject->Highlights = $highlightsSS;
+            $this->addHighlights($ssDataObject, $allFields, $highlights, $fieldsToHighlight);
 
             $ssDataObject->ID = $hit->getId();
             $ssResult->push($ssDataObject);
@@ -174,5 +139,55 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         }
 
         return $keyname;
+    }
+
+
+    /**
+     * @param $allFields
+     * @param $source
+     * @param $ssDataObject
+     */
+    private function populateSearchResult(&$ssDataObject, $allFields, $source)
+    {
+        $keys = array_keys($source);
+        foreach ($keys as $key) {
+            /** @var string $keyname */
+            $keyname = $this->matchKey($key, $allFields);
+
+            $keyname = $this->refactorKeyName($keyname);
+
+            /** @phpstan-ignore-next-line */
+            $ssDataObject->$keyname = $source[$key];
+        }
+    }
+
+
+    private function addHighlights(&$ssDataObject, $allFields, $highlights, $fieldsToHighlight)
+    {
+        $highlightsSS = [];
+
+        $keys = \array_keys($highlights);
+        foreach ($keys as $key) {
+            if (!isset($highlights[$key]) || !\in_array($key, $fieldsToHighlight, true)) {
+                continue;
+            }
+            $keyname = $key;
+            foreach ($allFields as $field) {
+                if (\strtolower($field) === $key) {
+                    $keyname = $field;
+
+                    continue;
+                }
+            }
+
+            if ($key === 'link') {
+                $keyname = 'Link';
+            }
+
+            $highlightsSS[$keyname] = $highlights[$key];
+        }
+
+        /** @phpstan-ignore-next-line */
+        $ssDataObject->Highlights = $highlightsSS;
     }
 }
