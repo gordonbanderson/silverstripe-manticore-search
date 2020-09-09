@@ -65,9 +65,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
             // manticore lowercases fields, so as above normalize them back to the SS fieldnames
             $highlights = $hit->getHighlight();
-
             $fieldsToHighlight = $index->getHighlightedFields();
-
             $this->addHighlights($ssDataObject, $allFields, $highlights, $fieldsToHighlight);
 
             $ssDataObject->ID = $hit->getId();
@@ -143,17 +141,15 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
 
     /**
-     * @param $allFields
-     * @param $source
-     * @param $ssDataObject
+     * @param array<string> $allFields
+     * @param array<string, string|int|float|bool> $source
      */
-    private function populateSearchResult(&$ssDataObject, $allFields, $source)
+    private function populateSearchResult(DataObject &$ssDataObject, array $allFields, array $source): void
     {
-        $keys = array_keys($source);
+        $keys = \array_keys($source);
         foreach ($keys as $key) {
             /** @var string $keyname */
             $keyname = $this->matchKey($key, $allFields);
-
             $keyname = $this->refactorKeyName($keyname);
 
             /** @phpstan-ignore-next-line */
@@ -162,8 +158,17 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    private function addHighlights(&$ssDataObject, $allFields, $highlights, $fieldsToHighlight)
-    {
+    /**
+     * @param array<string> $allFields
+     * @param array<array<string>> $highlights
+     * @param array<string> $fieldsToHighlight
+     */
+    private function addHighlights(
+        DataObject &$ssDataObject,
+        array $allFields,
+        array $highlights,
+        array $fieldsToHighlight
+    ): void {
         $highlightsSS = [];
 
         $keys = \array_keys($highlights);
