@@ -171,8 +171,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     ): void {
         $highlightsSS = [];
         $lowercaseFieldsToHighlight = [];
-        foreach($fieldsToHighlight as $fieldname) {
-            $lowercaseFieldsToHighlight[] = strtolower($fieldname);
+        foreach ($fieldsToHighlight as $fieldname) {
+            $lowercaseFieldsToHighlight[] = \strtolower($fieldname);
         }
 
         $keys = \array_keys($highlights);

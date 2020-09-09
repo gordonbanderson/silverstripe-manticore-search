@@ -155,7 +155,8 @@ class SearchTest extends SapphireTest
 
         $this->assertEquals([
             'Title' => ['Hometown Sandlot <b>Knitted</b> Saddens Days'],
-            'Content' => ['Webmaster fakes disconnections overdose. Windowing preschooler malfunctions dolts statutes.']
+            'Content' => ['Webmaster fakes disconnections overdose. Windowing preschooler malfunctions dolts' .
+                ' statutes.'],
         ], $first->Highlights);
     }
 
