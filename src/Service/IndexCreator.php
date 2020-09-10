@@ -9,8 +9,11 @@
 
 namespace Suilven\ManticoreSearch\Service;
 
+use Suilven\FreeTextSearch\Exception\UnsupportedException;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\FieldTypes;
+use Suilven\FreeTextSearch\Types\LanguageTypes;
+use Suilven\FreeTextSearch\Types\TokenizerTypes;
 
 // @phpcs:disable Generic.Files.LineLength.TooLong
 // @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -120,6 +123,35 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             'bigram_index' => 'all',
         ];
 
+        $manticoreTokenizer = null;
+
+        // @todo this may need refactored
+        $manticoreLanguage = $index->getLanguage();
+
+        $tokenizer = $index->getTokenizer();
+        if ($tokenizer !== TokenizerTypes::NONE) {
+            switch ($tokenizer) {
+                case TokenizerTypes::PORTER:
+                    $manticoreTokenizer = 'porter';
+                    break;
+                case TokenizerTypes::SNOWBALL:
+                    $manticoreTokenizer = 'snowball';
+                    break;
+                case TokenizerTypes::METAPHONE:
+                    $manticoreTokenizer = 'metaphone';
+                    break;
+                case TokenizerTypes::SOUNDEX:
+                    $manticoreTokenizer = 'soundex';
+                    break;
+                case TokenizerTypes::LEMMATIZER:
+                    $manticoreTokenizer = 'lemmatizer';
+                    $settings['lemmatizer_base'] = '/usr/local/share';
+                    break;
+            }
+
+            $settings['morphology'] = $this->getMorphology($manticoreTokenizer, $manticoreLanguage);
+        }
+
 
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
@@ -135,5 +167,47 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             $settings,
             true
         );
+    }
+
+
+    /**
+     * @TODO Increase range of languages
+     *
+     * @param string $tokenizer
+     * @param string $language
+     * @return string the name of the tokenizer to use at the Manticore config level
+     * @throws UnsupportedException if the combination of tokenizer and language cannot be used
+     */
+    private function getMorphology($tokenizer, $language)
+    {
+        // @TODO add other languages, this is to get things up and rolling
+        if ($language !== LanguageTypes::ENGLISH) {
+            throw new UnsupportedException('Only English is supported for now #WorkInProgress');
+        }
+
+        $result = null;
+
+        switch($tokenizer) {
+            case TokenizerTypes::PORTER:
+                $result = 'stem_en';
+                break;
+            case TokenizerTypes::LEMMATIZER:
+                // @todo make the _all configurable
+                $result = 'lemmatize_en_all';
+                break;
+            case TokenizerTypes::SOUNDEX:
+                $result = 'soundex';
+                break;
+            case TokenizerTypes::METAPHONE:
+                $result = 'metaphone';
+                break;
+        }
+
+        if (is_null($result)) {
+            throw new UnsupportedException('A combination of language ' . $language . ' and tokenizer '
+            . $tokenizer .' is not supported');
+        }
+
+        return $result;
     }
 }
