@@ -17,6 +17,10 @@ Symbiote\QueuedJobs\Services\QueuedJobService:
 Suilven\FreeTextSearch\Indexes:
   indexes:
     - index:
+        name: sitetree
+        tokenizer: porter
+
+    - index:
         name: members
         class: SilverStripe\Security\Member
 

@@ -133,19 +133,24 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             switch ($tokenizer) {
                 case TokenizerTypes::PORTER:
                     $manticoreTokenizer = 'porter';
+
                     break;
                 case TokenizerTypes::SNOWBALL:
                     $manticoreTokenizer = 'snowball';
+
                     break;
                 case TokenizerTypes::METAPHONE:
                     $manticoreTokenizer = 'metaphone';
+
                     break;
                 case TokenizerTypes::SOUNDEX:
                     $manticoreTokenizer = 'soundex';
+
                     break;
                 case TokenizerTypes::LEMMATIZER:
                     $manticoreTokenizer = 'lemmatizer';
                     $settings['lemmatizer_base'] = '/usr/local/share';
+
                     break;
             }
 
@@ -172,40 +177,36 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
     /**
      * @TODO Increase range of languages
-     *
-     * @param string $tokenizer
-     * @param string $language
      * @return string the name of the tokenizer to use at the Manticore config level
-     * @throws UnsupportedException if the combination of tokenizer and language cannot be used
+     * @throws \Suilven\FreeTextSearch\Exception\UnsupportedException if the combination of tokenizer and language cannot be used
      */
-    private function getMorphology($tokenizer, $language)
+    private function getMorphology(?string $tokenizer, string $language): string
     {
         // @TODO add other languages, this is to get things up and rolling
         if ($language !== LanguageTypes::ENGLISH) {
             throw new UnsupportedException('Only English is supported for now #WorkInProgress');
         }
 
-        $result = null;
+        $result = TokenizerTypes::NONE;
 
-        switch($tokenizer) {
+        switch ($tokenizer) {
             case TokenizerTypes::PORTER:
                 $result = 'stem_en';
+
                 break;
             case TokenizerTypes::LEMMATIZER:
                 // @todo make the _all configurable
                 $result = 'lemmatize_en_all';
+
                 break;
             case TokenizerTypes::SOUNDEX:
                 $result = 'soundex';
+
                 break;
             case TokenizerTypes::METAPHONE:
                 $result = 'metaphone';
-                break;
-        }
 
-        if (is_null($result)) {
-            throw new UnsupportedException('A combination of language ' . $language . ' and tokenizer '
-            . $tokenizer .' is not supported');
+                break;
         }
 
         return $result;
