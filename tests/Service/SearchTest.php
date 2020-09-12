@@ -17,6 +17,8 @@ use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
 class SearchTest extends SapphireTest
 {
+    protected static $fixture_file = ['tests/fixtures/sitetree.yml', 'tests/fixtures/flickrphotos.yml'];
+
     protected static $extra_dataobjects = [
         FlickrPhoto::class,
         FlickrTag::class,

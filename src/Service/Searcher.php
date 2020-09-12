@@ -13,6 +13,7 @@ use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\SearchResults;
+use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
 
 class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
@@ -198,5 +199,21 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         /** @phpstan-ignore-next-line */
         $ssDataObject->Highlights = $highlightsSS;
+    }
+
+
+    /** @param \SilverStripe\ORM\DataObject $dataObject a dataObject relevant to the index */
+    public function searchForSimilar(DataObject $dataObject): SearchResults
+    {
+        $helper = new SearchHelper();
+        $indexedTextFields = $helper->getTextFieldPayload($dataObject);
+        $textForCurrentIndex = $indexedTextFields[$this->indexName];
+
+        // @todo Search by multiple fields?
+        $amalgamatedText = '';
+        foreach(array_keys($textForCurrentIndex) as $fieldName) {
+            $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
+        }
+        return $this->search($amalgamatedText);
     }
 }

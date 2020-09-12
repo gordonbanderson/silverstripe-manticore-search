@@ -10,6 +10,8 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use Suilven\FreeTextSearch\Exception\UnsupportedException;
+use Suilven\FreeTextSearch\Helper\IndexingHelper;
+use Suilven\FreeTextSearch\Helper\SpecsHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\FieldTypes;
 use Suilven\FreeTextSearch\Types\LanguageTypes;
@@ -27,9 +29,12 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
      */
     public function createIndex(string $indexName): void
     {
-        $fields = $this->getFields($indexName);
+        $indexingHelper = new IndexingHelper();
+        $fields = $indexingHelper->getFields($indexName);
         $storedFields = $this->getStoredFields($indexName);
-        $specs = $this->getFieldSpecs($indexName);
+
+        $specsHelper = new SpecsHelper();
+        $specs = $specsHelper->getFieldSpecs($indexName);
 
         \error_log('SPECS');
         \print_r($specs);
