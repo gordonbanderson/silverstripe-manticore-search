@@ -15,6 +15,7 @@ use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
+use Suilven\FreeTextSearch\Types\SearchParamTypes;
 
 class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
@@ -27,8 +28,25 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
+    /**
+     * Make a query OR instead of the default AND
+     * @param string $q the search query
+     */
+    private function makeQueryOr($q)
+    {
+        $q = trim($q);
+        $q = preg_split('/\s+/', $q);
+        return implode('|', $q);
+    }
+
     public function search(?string $q): SearchResults
     {
+        $q = \is_null($q)
+            ? ''
+            : $q;
+        if ($this->searchType == SearchParamTypes::OR) {
+            $q = $this->makeQueryOr($q);
+        }
         $startTime = \microtime(true);
         $client = new Client();
         $manticoreClient = $client->getConnection();
@@ -48,9 +66,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
-        $q = \is_null($q)
-            ? ''
-            : $q;
+       // $q = 'sheep';
+        error_log('Q: ' . $q);
 
         $manticoreResult = $searcher->search($q)->get();
         $allFields = $this->getAllFields($index);
@@ -214,6 +231,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         foreach(array_keys($textForCurrentIndex) as $fieldName) {
             $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
         }
+        $this->searchType = SearchParamTypes::OR;
         return $this->search($amalgamatedText);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Suilven\ManticoreSearch\Tests\Service;
 
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
@@ -17,13 +18,8 @@ use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
 class SearchTest extends SapphireTest
 {
-    protected static $fixture_file = ['tests/fixtures/sitetree.yml', 'tests/fixtures/flickrphotos.yml'];
-
-    protected static $extra_dataobjects = [
+      protected static $extra_dataobjects = [
         FlickrPhoto::class,
-        FlickrTag::class,
-        FlickrSet::class,
-        FlickrAuthor::class,
     ];
 
     /** @var int */
@@ -168,8 +164,8 @@ class SearchTest extends SapphireTest
         parent::setUpBeforeClass();
 
         $flickrPhoto = new FlickrPhoto();
-        $flickrPhoto->Title = 'test';
-        $flickrPhoto->Description = 'test';
+        $flickrPhoto->Title = 'This is a photo';
+        $flickrPhoto->Description = 'taken by a camera';
         $flickrPhoto->write();
 
 
