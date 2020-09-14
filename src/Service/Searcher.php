@@ -13,7 +13,9 @@ use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\SearchResults;
+use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
+use Suilven\FreeTextSearch\Types\SearchParamTypes;
 
 class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven\FreeTextSearch\Interfaces\Searcher
 {
@@ -28,6 +30,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     public function search(?string $q): SearchResults
     {
+        $q = \is_null($q)
+            ? ''
+            : $q;
+        if ($this->searchType === SearchParamTypes::OR) {
+            $q = $this->makeQueryOr($q);
+        }
         $startTime = \microtime(true);
         $client = new Client();
         $manticoreClient = $client->getConnection();
@@ -47,9 +55,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
-        $q = \is_null($q)
-            ? ''
-            : $q;
+       // $q = 'sheep';
+        \error_log('Q: ' . $q);
 
         $manticoreResult = $searcher->search($q)->get();
         $allFields = $this->getAllFields($index);
@@ -137,6 +144,40 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         }
 
         return $keyname;
+    }
+
+
+    /** @param \SilverStripe\ORM\DataObject $dataObject a dataObject relevant to the index */
+    public function searchForSimilar(DataObject $dataObject): SearchResults
+    {
+        $helper = new SearchHelper();
+        $indexedTextFields = $helper->getTextFieldPayload($dataObject);
+        $textForCurrentIndex = $indexedTextFields[$this->indexName];
+
+        // @todo Search by multiple fields?
+        $amalgamatedText = '';
+        foreach (\array_keys($textForCurrentIndex) as $fieldName) {
+            $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
+        }
+        $this->searchType = SearchParamTypes::OR;
+
+        return $this->search($amalgamatedText);
+    }
+
+
+    /**
+     * Make a query OR instead of the default AND
+     *
+     * @param string $q the search query
+     * @return string same query for with the terms separated by a | character,to form an OR query
+     */
+    private function makeQueryOr(string $q): string
+    {
+        $q = \trim($q);
+        /** @var array<int, string> $splits */
+        $splits = \preg_split('/\s+/', $q);
+
+        return \implode('|', $splits);
     }
 
 

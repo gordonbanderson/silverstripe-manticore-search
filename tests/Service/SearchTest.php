@@ -10,18 +10,12 @@ use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
-use Suilven\ManticoreSearch\Tests\Models\FlickrAuthor;
 use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
-use Suilven\ManticoreSearch\Tests\Models\FlickrSet;
-use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
 class SearchTest extends SapphireTest
 {
     protected static $extra_dataobjects = [
         FlickrPhoto::class,
-        FlickrTag::class,
-        FlickrSet::class,
-        FlickrAuthor::class,
     ];
 
     /** @var int */
@@ -166,8 +160,8 @@ class SearchTest extends SapphireTest
         parent::setUpBeforeClass();
 
         $flickrPhoto = new FlickrPhoto();
-        $flickrPhoto->Title = 'test';
-        $flickrPhoto->Description = 'test';
+        $flickrPhoto->Title = 'This is a photo';
+        $flickrPhoto->Description = 'taken by a camera';
         $flickrPhoto->write();
 
 
