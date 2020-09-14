@@ -28,23 +28,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    /**
-     * Make a query OR instead of the default AND
-     * @param string $q the search query
-     */
-    private function makeQueryOr($q)
-    {
-        $q = trim($q);
-        $q = preg_split('/\s+/', $q);
-        return implode('|', $q);
-    }
-
     public function search(?string $q): SearchResults
     {
         $q = \is_null($q)
             ? ''
             : $q;
-        if ($this->searchType == SearchParamTypes::OR) {
+        if ($this->searchType === SearchParamTypes::OR) {
             $q = $this->makeQueryOr($q);
         }
         $startTime = \microtime(true);
@@ -67,7 +56,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         );
 
        // $q = 'sheep';
-        error_log('Q: ' . $q);
+        \error_log('Q: ' . $q);
 
         $manticoreResult = $searcher->search($q)->get();
         $allFields = $this->getAllFields($index);
@@ -158,6 +147,40 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
+    /** @param \SilverStripe\ORM\DataObject $dataObject a dataObject relevant to the index */
+    public function searchForSimilar(DataObject $dataObject): SearchResults
+    {
+        $helper = new SearchHelper();
+        $indexedTextFields = $helper->getTextFieldPayload($dataObject);
+        $textForCurrentIndex = $indexedTextFields[$this->indexName];
+
+        // @todo Search by multiple fields?
+        $amalgamatedText = '';
+        foreach (\array_keys($textForCurrentIndex) as $fieldName) {
+            $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
+        }
+        $this->searchType = SearchParamTypes::OR;
+
+        return $this->search($amalgamatedText);
+    }
+
+
+    /**
+     * Make a query OR instead of the default AND
+     *
+     * @param string $q the search query
+     * @return string same query for with the terms separated by a | character,to form an OR query
+     */
+    private function makeQueryOr(string $q): string
+    {
+        $q = \trim($q);
+        /** @var array<int, string> $splits */
+        $splits = \preg_split('/\s+/', $q);
+
+        return \implode('|', $splits);
+    }
+
+
     /**
      * @param array<string> $allFields
      * @param array<string, string|int|float|bool> $source
@@ -216,22 +239,5 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         /** @phpstan-ignore-next-line */
         $ssDataObject->Highlights = $highlightsSS;
-    }
-
-
-    /** @param \SilverStripe\ORM\DataObject $dataObject a dataObject relevant to the index */
-    public function searchForSimilar(DataObject $dataObject): SearchResults
-    {
-        $helper = new SearchHelper();
-        $indexedTextFields = $helper->getTextFieldPayload($dataObject);
-        $textForCurrentIndex = $indexedTextFields[$this->indexName];
-
-        // @todo Search by multiple fields?
-        $amalgamatedText = '';
-        foreach(array_keys($textForCurrentIndex) as $fieldName) {
-            $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
-        }
-        $this->searchType = SearchParamTypes::OR;
-        return $this->search($amalgamatedText);
     }
 }

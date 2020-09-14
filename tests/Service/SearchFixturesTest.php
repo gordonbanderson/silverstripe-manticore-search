@@ -4,16 +4,11 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Member;
-use Suilven\FreeTextSearch\Factory\BulkIndexerFactory;
-use Suilven\FreeTextSearch\Factory\IndexerFactory;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
-use Suilven\ManticoreSearch\Service\Suggester;
 use Suilven\ManticoreSearch\Tests\Models\FlickrAuthor;
 use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 use Suilven\ManticoreSearch\Tests\Models\FlickrSet;
@@ -43,15 +38,14 @@ class SearchFixturesTest extends SapphireTest
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($indexesArray);
 
-        error_log('INDEXING');
+        \error_log('INDEXING');
         $helper = new BulkIndexingHelper();
         $helper->bulkIndex('sitetree');
-        error_log('/INDEXING');
-
+        \error_log('/INDEXING');
     }
 
 
-    public function testSimilar()
+    public function testSimilar(): void
     {
         $page = $this->objFromFixture(SiteTree::class, 'sitetree_49');
         $searcher = new Searcher();
@@ -62,15 +56,15 @@ class SearchFixturesTest extends SapphireTest
         $this->assertEquals(6, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
         $ids = [];
-        foreach($hits as $hit) {
+        foreach ($hits as $hit) {
             $ids[] = $hit->ID;
         }
 
-        $this->assertEquals([49,40,45,21,36,47], $ids);
+        $this->assertEquals([49, 40, 45, 21, 36, 47], $ids);
     }
 
 
-    public function testAndSearch()
+    public function testAndSearch(): void
     {
         $searcher = new Searcher();
         $searcher->setIndexName('sitetree');
@@ -78,14 +72,15 @@ class SearchFixturesTest extends SapphireTest
         $result = $searcher->search('sheep shuttlecock');
         $this->assertEquals(1, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
-        foreach($hits as $hit) {
+        $ids = [];
+        foreach ($hits as $hit) {
             $ids[] = $hit->ID;
         }
         $this->assertEquals([49], $ids);
     }
 
 
-    public function testORSearch()
+    public function testORSearch(): void
     {
         $searcher = new Searcher();
         $searcher->setIndexName('sitetree');
@@ -93,9 +88,10 @@ class SearchFixturesTest extends SapphireTest
         $result = $searcher->search('sheep shuttlecock');
         $this->assertEquals(5, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
-        foreach($hits as $hit) {
+        $ids = [];
+        foreach ($hits as $hit) {
             $ids[] = $hit->ID;
         }
-        $this->assertEquals([49,45,21,36,47], $ids);
+        $this->assertEquals([49, 45, 21, 36, 47], $ids);
     }
 }

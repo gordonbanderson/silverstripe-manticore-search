@@ -2,7 +2,6 @@
 
 namespace Suilven\ManticoreSearch\Tests\Service;
 
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
@@ -11,14 +10,11 @@ use Suilven\FreeTextSearch\Indexes;
 use Suilven\ManticoreSearch\Helper\ReconfigureIndexesHelper;
 use Suilven\ManticoreSearch\Service\Searcher;
 use Suilven\ManticoreSearch\Service\Suggester;
-use Suilven\ManticoreSearch\Tests\Models\FlickrAuthor;
 use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
-use Suilven\ManticoreSearch\Tests\Models\FlickrSet;
-use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
 class SearchTest extends SapphireTest
 {
-      protected static $extra_dataobjects = [
+    protected static $extra_dataobjects = [
         FlickrPhoto::class,
     ];
 
