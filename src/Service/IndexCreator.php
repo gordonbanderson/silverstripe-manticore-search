@@ -123,7 +123,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             'min_infix_len' => 2,
             'html_strip' => 1,
             'bigram_index' => 'all',
-            'stopwords' => 'en'
+            'stopwords' => 'en',
         ];
 
         $manticoreTokenizer = null;
