@@ -159,9 +159,70 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         foreach (\array_keys($textForCurrentIndex) as $fieldName) {
             $amalgamatedText .= $textForCurrentIndex[$fieldName] . ' ';
         }
-        $this->searchType = SearchParamTypes::OR;
 
-        return $this->search($amalgamatedText);
+        $this->searchType = SearchParamTypes::OR;
+        $text = $this->getLeastCommonTerms($amalgamatedText, 10);
+
+        return $this->search($text);
+    }
+
+
+    /**
+     * Find terms suitable for similarity searching
+     *
+     * @todo Rename this method, or separate into a helper?
+     * @param string $text text of a document being searched for
+     */
+    private function getLeastCommonTerms(string $text, int $number = 20): string
+    {
+        $client = new Client();
+        $connection = $client->getConnection();
+        $params = [
+            'index' => $this->indexName,
+            'body' => [
+                'query'=>$text,
+                'options' => [
+                    'stats' =>1,
+                    'fold_lemmas' => 1,
+                ],
+            ],
+        ];
+
+        $keywords = $connection->keywords($params);
+
+        /* @phpstan-ignore-next-line */
+        \usort(
+            $keywords,
+            static function ($a, $b): void {
+
+                ($a["docs"] <= $b["docs"])
+                    ? -1
+                    : +1;
+            }
+        );
+
+        $wordInstances = [];
+        $wordNDocs = [];
+        foreach ($keywords as $entry) {
+            // @todo this or normalized?
+            $word = $entry['tokenized'];
+
+            // if a word is unique to the source document, it is useless for finding other similar documents
+            if ($entry['docs'] > 1) {
+                if (!isset($wordInstances[$word])) {
+                    $wordInstances[$word] = 0;
+                }
+                $wordInstances[$word] += 1;
+            }
+
+            $wordNDocs[$word] = $entry['docs'];
+        }
+
+        $toGlue = \array_keys($wordInstances);
+        $toGlue = \array_slice($toGlue, 0, $number);
+        $text = \implode(' ', $toGlue);
+
+        return $text;
     }
 
 

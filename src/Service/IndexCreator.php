@@ -36,9 +36,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $specsHelper = new SpecsHelper();
         $specs = $specsHelper->getFieldSpecs($indexName);
 
-        \error_log('SPECS');
-        \print_r($specs);
-
         $columns = [];
         foreach ($fields as $field) {
             /*
@@ -126,6 +123,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             'min_infix_len' => 2,
             'html_strip' => 1,
             'bigram_index' => 'all',
+            'stopwords' => 'en',
         ];
 
         $manticoreTokenizer = null;
@@ -162,15 +160,9 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             $settings['morphology'] = $this->getMorphology($manticoreTokenizer, $manticoreLanguage);
         }
 
-
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
-
-
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
-
-        \error_log('----- payload -----');
-        \error_log(\print_r($columns, true));
 
         $manticoreIndex->create(
             $columns,
