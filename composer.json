@@ -21,7 +21,7 @@
     "require": {
         "php": "~7.1",
         "manticoresoftware/manticoresearch-php": "^1",
-        "silverstripe/recipe-cms": "4.x-dev",
+        "silverstripe/cms": "^4",
         "suilven/freetextsearch": "^1"
     },
     "require-dev": {
