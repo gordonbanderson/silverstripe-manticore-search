@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "~7.1",
-        "manticoresoftware/manticoresearch-php": "^1",
+        "manticoresoftware/manticoresearch-php": "dev-master",
         "silverstripe/cms": "^4",
         "suilven/freetextsearch": "^1"
     },
