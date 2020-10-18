@@ -41,6 +41,8 @@ class SearchFixturesTest extends SapphireTest
         \error_log('INDEXING');
         $helper = new BulkIndexingHelper();
         $helper->bulkIndex('sitetree');
+        $helper->bulkIndex('flickrphotos');
+        $helper->bulkIndex('members');
         \error_log('/INDEXING');
     }
 
@@ -93,5 +95,50 @@ class SearchFixturesTest extends SapphireTest
             $ids[] = $hit->ID;
         }
         $this->assertEquals([49, 45, 21, 36, 47], $ids);
+    }
+
+
+    public function testFlickrFacets(): void
+    {
+        $searcher = new Searcher();
+        $searcher->setIndexName('flickrphotos');
+        $searcher->setSearchType(SearchParamTypes::AND);
+        $searcher->setFacettedTokens(['ISO', 'Aperture', 'Orientation']);
+        $result = $searcher->search('*');
+        $this->assertEquals(50, $result->getTotaNumberOfResults());
+        $hits = $result->getRecords();
+        $ids = [];
+        foreach ($hits as $hit) {
+            $ids[] = $hit->ID;
+        }
+        $this->assertEquals([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], $ids);
+
+        $facets = $result->getFacets();
+        $this->assertEquals([
+            1600 => 7,
+            800 => 11,
+            400 => 6,
+            200 => 8,
+            100 => 10,
+            64 => 4,
+            25 => 4,
+        ], $facets[0]->asKeyValueArray());
+
+        $this->assertEquals([
+                32 => 1,
+                27 => 9,
+                22 => 6,
+                16 => 7,
+                11 => 7,
+                8 => 5,
+                5 => 6,
+                4 => 3,
+                2 => 6,
+        ], $facets[1]->asKeyValueArray());
+
+        $this->assertEquals([
+            90 => 20,
+            0 => 30,
+        ], $facets[2]->asKeyValueArray());
     }
 }
