@@ -107,7 +107,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 $searchResults->addFacet($facet);
             }
         }
-        
+
         $endTime = \microtime(true);
         $delta = $endTime - $startTime;
         $delta = \round(1000*$delta)/1000;

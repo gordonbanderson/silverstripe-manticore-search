@@ -4,6 +4,8 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
+use Suilven\FreeTextSearch\Container\Facet;
+use Suilven\FreeTextSearch\Container\FacetCount;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -98,7 +100,7 @@ class SearchFixturesTest extends SapphireTest
     }
 
 
-    public function testFlickrFacets(): void
+    public function testFlickrFacetsEmptySearchTerm(): void
     {
         $searcher = new Searcher();
         $searcher->setIndexName('flickrphotos');
@@ -125,20 +127,89 @@ class SearchFixturesTest extends SapphireTest
         ], $facets[0]->asKeyValueArray());
 
         $this->assertEquals([
-                32 => 1,
-                27 => 9,
-                22 => 6,
-                16 => 7,
-                11 => 7,
-                8 => 5,
-                5 => 6,
-                4 => 3,
-                2 => 6,
+            32 => 1,
+            27 => 9,
+            22 => 6,
+            16 => 7,
+            11 => 7,
+            8 => 5,
+            5 => 6,
+            4 => 3,
+            2 => 6,
         ], $facets[1]->asKeyValueArray());
 
         $this->assertEquals([
             90 => 20,
             0 => 30,
         ], $facets[2]->asKeyValueArray());
+
+        $this->checkSumDocumentCount($facets[0], 50);
+        $this->checkSumDocumentCount($facets[1], 50);
+        $this->checkSumDocumentCount($facets[2], 50);
+    }
+
+
+    public function testFlickrFacetsIncludeSearchTerm(): void
+    {
+        $searcher = new Searcher();
+        $searcher->setIndexName('flickrphotos');
+        $searcher->setSearchType(SearchParamTypes::AND);
+        $searcher->setFacettedTokens(['ISO', 'Aperture', 'Orientation']);
+        $result = $searcher->search('Tom');
+        $this->assertEquals(13, $result->getTotaNumberOfResults());
+        $hits = $result->getRecords();
+        $ids = [];
+        foreach ($hits as $hit) {
+            $ids[] = $hit->ID;
+        }
+
+        $this->assertEquals([5,9,12,16,23,24,29,32,34,43,46,47,48], $ids);
+
+        $facets = $result->getFacets();
+
+        $this->assertEquals([
+            1600 => 2,
+            800 => 3,
+            400 => 1,
+            200 => 2,
+            100 => 2,
+            25 => 3,
+        ], $facets[0]->asKeyValueArray());
+
+        $this->assertEquals([
+            27 => 1,
+            16 => 3,
+            11 => 2,
+            8 => 3,
+            5 => 1,
+            2 => 3,
+        ], $facets[1]->asKeyValueArray());
+
+        $this->assertEquals([
+            90 => 5,
+            0 => 8,
+        ], $facets[2]->asKeyValueArray());
+
+        $this->checkSumDocumentCount($facets[0], 13);
+        $this->checkSumDocumentCount($facets[1], 13);
+        $this->checkSumDocumentCount($facets[2], 13);
+    }
+
+
+    /**
+     * @param Facet $facet
+     * @param int $expectedCount
+     */
+    private function checkSumDocumentCount($facet, $expectedCount)
+    {
+        $sum = 0;
+        $kvArray = $facet->asKeyValueArray();
+
+        /** @var FacetCount $key */
+        foreach(array_keys($kvArray) as $key) {
+            $sum = $sum + $kvArray[$key];
+        }
+
+        $this->assertEquals($expectedCount, $sum);
     }
 }
