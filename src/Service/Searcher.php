@@ -12,6 +12,8 @@ namespace Suilven\ManticoreSearch\Service;
 use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
+use Suilven\FreeTextSearch\Container\Facet;
+use Suilven\FreeTextSearch\Container\FacetCount;
 use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
@@ -55,12 +57,14 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
-       // $q = 'sheep';
-        \error_log('Q: ' . $q);
+        // @todo Deal with subsequent params
+        foreach($this->facettedTokens as $facetName) {
+            // manticore errors out with no error message if the facet name is not lowercases
+            $searcher->facet(strtolower($facetName));
+        }
 
         $manticoreResult = $searcher->search($q)->get();
         $allFields = $this->getAllFields($index);
-
 
         $ssResult = new ArrayList();
         while ($manticoreResult->valid()) {
@@ -89,6 +93,21 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $searchResults->setQuery($q);
         $searchResults->setTotalNumberOfResults($manticoreResult->getTotal());
 
+        // create facet result objects
+        $manticoreFacets = $manticoreResult->getFacets();
+        if (!is_null($manticoreFacets)) {
+            $facetTitles = array_keys($manticoreFacets);
+            foreach($facetTitles as $facetTitle)
+            {
+                $facet = new Facet($facetTitle);
+                foreach($manticoreFacets[$facetTitle]['buckets'] as $count)
+                {
+                    $facet->addFacetCount($count['key'],  $count['doc_count']);
+                }
+                $searchResults->addFacet($facet);
+            }
+        }
+        
         $endTime = \microtime(true);
         $delta = $endTime - $startTime;
         $delta = \round(1000*$delta)/1000;
