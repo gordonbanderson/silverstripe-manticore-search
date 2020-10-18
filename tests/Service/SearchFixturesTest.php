@@ -4,8 +4,6 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
-use Suilven\FreeTextSearch\Container\Facet;
-use Suilven\FreeTextSearch\Container\FacetCount;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -113,7 +111,7 @@ class SearchFixturesTest extends SapphireTest
         foreach ($hits as $hit) {
             $ids[] = $hit->ID;
         }
-        $this->assertEquals([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], $ids);
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], $ids);
 
         $facets = $result->getFacets();
         $this->assertEquals([
@@ -163,9 +161,14 @@ class SearchFixturesTest extends SapphireTest
             $ids[] = $hit->ID;
         }
 
-        $this->assertEquals([5,9,12,16,23,24,29,32,34,43,46,47,48], $ids);
+        $this->assertEquals([5, 9, 12, 16, 23, 24, 29, 32, 34, 43, 46, 47, 48], $ids);
 
         $facets = $result->getFacets();
+
+        $this->assertEquals('ISO', $facets[0]->getName());
+        $this->assertEquals('Aperture', $facets[1]->getName());
+        $this->assertEquals('Orientation', $facets[2]->getName());
+
 
         $this->assertEquals([
             1600 => 2,
@@ -175,6 +178,7 @@ class SearchFixturesTest extends SapphireTest
             100 => 2,
             25 => 3,
         ], $facets[0]->asKeyValueArray());
+
 
         $this->assertEquals([
             27 => 1,
@@ -196,18 +200,15 @@ class SearchFixturesTest extends SapphireTest
     }
 
 
-    /**
-     * @param Facet $facet
-     * @param int $expectedCount
-     */
-    private function checkSumDocumentCount($facet, $expectedCount)
+    /** @param \Suilven\FreeTextSearch\Container\Facet $facet */
+    private function checkSumDocumentCount(Facet $facet, int $expectedCount): void
     {
         $sum = 0;
         $kvArray = $facet->asKeyValueArray();
 
-        /** @var FacetCount $key */
-        foreach(array_keys($kvArray) as $key) {
-            $sum = $sum + $kvArray[$key];
+        /** @var \Suilven\FreeTextSearch\Container\FacetCount $key */
+        foreach (\array_keys($kvArray) as $key) {
+            $sum += $kvArray[$key];
         }
 
         $this->assertEquals($expectedCount, $sum);
