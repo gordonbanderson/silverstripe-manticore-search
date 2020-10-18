@@ -13,7 +13,6 @@ use Manticoresearch\Search;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\Facet;
-use Suilven\FreeTextSearch\Container\FacetCount;
 use Suilven\FreeTextSearch\Container\SearchResults;
 use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
@@ -58,9 +57,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         );
 
         // @todo Deal with subsequent params
-        foreach($this->facettedTokens as $facetName) {
-            // manticore errors out with no error message if the facet name is not lowercases
-            $searcher->facet(strtolower($facetName));
+        foreach ($this->facettedTokens as $facetName) {
+            // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
+            // alias, use the correctly capitalized version of the fact
+            $searcher->facet(\strtolower($facetName), $facetName);
         }
 
         $manticoreResult = $searcher->search($q)->get();
@@ -95,14 +95,15 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         // create facet result objects
         $manticoreFacets = $manticoreResult->getFacets();
-        if (!is_null($manticoreFacets)) {
-            $facetTitles = array_keys($manticoreFacets);
-            foreach($facetTitles as $facetTitle)
-            {
+
+        \error_log(\print_r($manticoreFacets, true));
+
+        if (!\is_null($manticoreFacets)) {
+            $facetTitles = \array_keys($manticoreFacets);
+            foreach ($facetTitles as $facetTitle) {
                 $facet = new Facet($facetTitle);
-                foreach($manticoreFacets[$facetTitle]['buckets'] as $count)
-                {
-                    $facet->addFacetCount($count['key'],  $count['doc_count']);
+                foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
+                    $facet->addFacetCount($count['key'], $count['doc_count']);
                 }
                 $searchResults->addFacet($facet);
             }
