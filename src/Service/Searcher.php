@@ -100,6 +100,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         if (!\is_null($manticoreFacets)) {
             $facetTitles = \array_keys($manticoreFacets);
+
+            /** @var string $facetTitle */
             foreach ($facetTitles as $facetTitle) {
                 $facet = new Facet($facetTitle);
                 foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {

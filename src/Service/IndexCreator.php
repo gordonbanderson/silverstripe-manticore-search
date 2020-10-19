@@ -38,13 +38,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
         $columns = [];
         foreach ($fields as $field) {
-            /*
-            if ($field === 'Link') {
-                error_log('Skipping link field');
-               continue;
-            }
-            */
-
             // this will be the most common
             $indexType = 'text';
             $options = [];
@@ -108,9 +101,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $index = $indexes->getIndex($indexName);
         $mvaFields = $index->getHasManyFields();
 
-        error_log('MVA FIELDS');
-        \error_log(\print_r($mvaFields, true));
-
         foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];
         }
@@ -164,9 +154,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
-
-        error_log(print_r($columns, true));
-
+        
         $manticoreIndex->create(
             $columns,
             $settings,
