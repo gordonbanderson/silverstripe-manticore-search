@@ -4,6 +4,7 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
+use Suilven\FreeTextSearch\Container\Facet;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -38,12 +39,10 @@ class SearchFixturesTest extends SapphireTest
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($indexesArray);
 
-        \error_log('INDEXING');
         $helper = new BulkIndexingHelper();
         $helper->bulkIndex('sitetree');
         $helper->bulkIndex('flickrphotos');
         $helper->bulkIndex('members');
-        \error_log('/INDEXING');
     }
 
 
@@ -163,6 +162,7 @@ class SearchFixturesTest extends SapphireTest
 
         $this->assertEquals([5, 9, 12, 16, 23, 24, 29, 32, 34, 43, 46, 47, 48], $ids);
 
+        /** @var array<\Suilven\FreeTextSearch\Container\Facet> $facets */
         $facets = $result->getFacets();
 
         $this->assertEquals('ISO', $facets[0]->getName());
@@ -200,7 +200,6 @@ class SearchFixturesTest extends SapphireTest
     }
 
 
-    /** @param \Suilven\FreeTextSearch\Container\Facet $facet */
     private function checkSumDocumentCount(Facet $facet, int $expectedCount): void
     {
         $sum = 0;
