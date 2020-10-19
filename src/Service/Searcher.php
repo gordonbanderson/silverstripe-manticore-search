@@ -95,9 +95,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         // create facet result objects
         $manticoreFacets = $manticoreResult->getFacets();
-
-        \error_log(\print_r($manticoreFacets, true));
-
+        
         if (!\is_null($manticoreFacets)) {
             $facetTitles = \array_keys($manticoreFacets);
 

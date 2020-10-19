@@ -154,7 +154,7 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
-        
+
         $manticoreIndex->create(
             $columns,
             $settings,
