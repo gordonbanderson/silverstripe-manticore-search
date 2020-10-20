@@ -4,6 +4,7 @@ namespace Suilven\ManticoreSearch\Tests\Service;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
+use Suilven\FreeTextSearch\Container\Facet;
 use Suilven\FreeTextSearch\Helper\BulkIndexingHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -38,10 +39,10 @@ class SearchFixturesTest extends SapphireTest
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($indexesArray);
 
-        \error_log('INDEXING');
         $helper = new BulkIndexingHelper();
         $helper->bulkIndex('sitetree');
-        \error_log('/INDEXING');
+        $helper->bulkIndex('flickrphotos');
+        $helper->bulkIndex('members');
     }
 
 
@@ -93,5 +94,122 @@ class SearchFixturesTest extends SapphireTest
             $ids[] = $hit->ID;
         }
         $this->assertEquals([49, 45, 21, 36, 47], $ids);
+    }
+
+
+    public function testFlickrFacetsEmptySearchTerm(): void
+    {
+        $searcher = new Searcher();
+        $searcher->setIndexName('flickrphotos');
+        $searcher->setSearchType(SearchParamTypes::AND);
+        $searcher->setFacettedTokens(['ISO', 'Aperture', 'Orientation']);
+        $result = $searcher->search('*');
+        $this->assertEquals(50, $result->getTotaNumberOfResults());
+        $hits = $result->getRecords();
+        $ids = [];
+        foreach ($hits as $hit) {
+            $ids[] = $hit->ID;
+        }
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], $ids);
+
+        $facets = $result->getFacets();
+        $this->assertEquals([
+            1600 => 7,
+            800 => 11,
+            400 => 6,
+            200 => 8,
+            100 => 10,
+            64 => 4,
+            25 => 4,
+        ], $facets[0]->asKeyValueArray());
+
+        $this->assertEquals([
+            32 => 1,
+            27 => 9,
+            22 => 6,
+            16 => 7,
+            11 => 7,
+            8 => 5,
+            5 => 6,
+            4 => 3,
+            2 => 6,
+        ], $facets[1]->asKeyValueArray());
+
+        $this->assertEquals([
+            90 => 20,
+            0 => 30,
+        ], $facets[2]->asKeyValueArray());
+
+        $this->checkSumDocumentCount($facets[0], 50);
+        $this->checkSumDocumentCount($facets[1], 50);
+        $this->checkSumDocumentCount($facets[2], 50);
+    }
+
+
+    public function testFlickrFacetsIncludeSearchTerm(): void
+    {
+        $searcher = new Searcher();
+        $searcher->setIndexName('flickrphotos');
+        $searcher->setSearchType(SearchParamTypes::AND);
+        $searcher->setFacettedTokens(['ISO', 'Aperture', 'Orientation']);
+        $result = $searcher->search('Tom');
+        $this->assertEquals(13, $result->getTotaNumberOfResults());
+        $hits = $result->getRecords();
+        $ids = [];
+        foreach ($hits as $hit) {
+            $ids[] = $hit->ID;
+        }
+
+        $this->assertEquals([5, 9, 12, 16, 23, 24, 29, 32, 34, 43, 46, 47, 48], $ids);
+
+        /** @var array<\Suilven\FreeTextSearch\Container\Facet> $facets */
+        $facets = $result->getFacets();
+
+        $this->assertEquals('ISO', $facets[0]->getName());
+        $this->assertEquals('Aperture', $facets[1]->getName());
+        $this->assertEquals('Orientation', $facets[2]->getName());
+
+
+        $this->assertEquals([
+            1600 => 2,
+            800 => 3,
+            400 => 1,
+            200 => 2,
+            100 => 2,
+            25 => 3,
+        ], $facets[0]->asKeyValueArray());
+
+
+        $this->assertEquals([
+            27 => 1,
+            16 => 3,
+            11 => 2,
+            8 => 3,
+            5 => 1,
+            2 => 3,
+        ], $facets[1]->asKeyValueArray());
+
+        $this->assertEquals([
+            90 => 5,
+            0 => 8,
+        ], $facets[2]->asKeyValueArray());
+
+        $this->checkSumDocumentCount($facets[0], 13);
+        $this->checkSumDocumentCount($facets[1], 13);
+        $this->checkSumDocumentCount($facets[2], 13);
+    }
+
+
+    private function checkSumDocumentCount(Facet $facet, int $expectedCount): void
+    {
+        $sum = 0;
+        $kvArray = $facet->asKeyValueArray();
+
+        /** @var \Suilven\FreeTextSearch\Container\FacetCount $key */
+        foreach (\array_keys($kvArray) as $key) {
+            $sum += $kvArray[$key];
+        }
+
+        $this->assertEquals($expectedCount, $sum);
     }
 }

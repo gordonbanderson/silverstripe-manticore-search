@@ -38,13 +38,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
 
         $columns = [];
         foreach ($fields as $field) {
-            /*
-            if ($field === 'Link') {
-                error_log('Skipping link field');
-               continue;
-            }
-            */
-
             // this will be the most common
             $indexType = 'text';
             $options = [];
@@ -107,8 +100,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $indexes = new Indexes();
         $index = $indexes->getIndex($indexName);
         $mvaFields = $index->getHasManyFields();
-
-        \error_log(\print_r($mvaFields, true));
 
         foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];

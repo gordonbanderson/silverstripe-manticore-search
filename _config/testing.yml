@@ -7,7 +7,7 @@ Only:
 ---
 
 Suilven\ManticoreSearch\Service\Client:
-  host: '127.0.0.1'
+  host: 'manticoresearch-manticore'
 
 # When the tests complete (successfully), if this is not set, the shutdown function is called.  Unfortunately, there
 # is no longer a test database....
@@ -44,6 +44,7 @@ Suilven\FreeTextSearch\Indexes:
           - Aperture
           - ShutterSpeed
           - ISO
+          - Orientation
 
         has_many_many:
           - Suilven\ManticoreSearch\Tests\Models\FlickrSet
@@ -59,6 +60,14 @@ Suilven\FreeTextSearch\Indexes:
             field: RawValue
 
 
+# -- extensions --
+SilverStripe\Security\Member:
+  extensions:
+    - Suilven\FreeTextSearch\Extension\IndexingExtension
+
+Suilven\ManticoreSearch\Tests\Models\FlickrPhoto:
+  extensions:
+    - Suilven\FreeTextSearch\Extension\IndexingExtension
 
       # Facets or filterable
  #     tokens:
