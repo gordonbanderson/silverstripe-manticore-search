@@ -10,6 +10,7 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use Manticoresearch\Search;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\Facet;
@@ -63,7 +64,17 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $searcher->facet(\strtolower($facetName), $facetName);
         }
 
+        // add has many
+        foreach ($this->hasManyTokens as $facetName) {
+            // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
+            // alias, use the correctly capitalized version of the fact
+            $searcher->facet(\strtolower($facetName), $facetName);
+            echo 'Added has many token ' . $facetName . "<br/>\n";
+        }
+
         $manticoreResult = $searcher->search($q)->get();
+
+       // print_r($manticoreResult);
         $allFields = $this->getAllFields($index);
 
         $ssResult = new ArrayList();
@@ -95,16 +106,39 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         // create facet result objects
         $manticoreFacets = $manticoreResult->getFacets();
-        
+
+        $hasManyFields = $index->getHasManyFields();
+
+        print_r($hasManyFields);
+
         if (!\is_null($manticoreFacets)) {
             $facetTitles = \array_keys($manticoreFacets);
 
             /** @var string $facetTitle */
             foreach ($facetTitles as $facetTitle) {
                 $facet = new Facet($facetTitle);
-                foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
-                    $facet->addFacetCount($count['key'], $count['doc_count']);
+                echo 'Facet title: ' . $facetTitle;
+
+                // the BY functionality of facets has not yet been implemented, as such database calls required
+                if (in_array($facetTitle, $this->hasManyTokens)) {
+                    $field = $hasManyFields[$facetTitle]['field'];
+                    $clazz = $hasManyFields[$facetTitle]['class'];
+
+                    /** @var DataObject $singleton */
+                    $singleton = \singleton($clazz);
+
+                    foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
+                        $facetClassInstance = DataObject::get_by_id($clazz, $count['key']);
+                        $facet->addFacetCount($facetClassInstance->$field, $count['doc_count']);
+                    }
+                } else {
+                    // use values as is
+                    foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
+                        $facet->addFacetCount($count['key'], $count['doc_count']);
+                    }
                 }
+
+
                 $searchResults->addFacet($facet);
             }
         }
