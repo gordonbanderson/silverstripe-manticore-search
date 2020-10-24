@@ -15,6 +15,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\Facet;
 use Suilven\FreeTextSearch\Container\SearchResults;
+use Suilven\FreeTextSearch\Helper\FieldHelper;
 use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -57,24 +58,36 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
+        echo '===============================';
+        print_r($this->filters);
+        $fieldHelper = new FieldHelper();
+        foreach($this->filters as $key => $value) {
+            if ($key === 'q') {
+                continue;
+            }
+            $typedValue = $fieldHelper->getFieldValueCorrectlyTyped($index, $key, $value);
+            $searcher->filter($key, 'equals', $typedValue);
+
+            echo '<br/>****   FILTER ' . $key . ' ==> ' . $typedValue;
+        }
+
+       //$searcher->filter('Aperture', 'equals', 6.3);
+
         // @todo Deal with subsequent params
         foreach ($this->facettedTokens as $facetName) {
             // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
             // alias, use the correctly capitalized version of the fact
-            $searcher->facet(\strtolower($facetName), $facetName);
+            $searcher->facet(\strtolower($facetName), $facetName, 1000);
         }
 
         // add has many
         foreach ($this->hasManyTokens as $facetName) {
             // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
             // alias, use the correctly capitalized version of the fact
-            $searcher->facet(\strtolower($facetName), $facetName);
-            echo 'Added has many token ' . $facetName . "<br/>\n";
+            $searcher->facet(\strtolower($facetName), $facetName, 1000);
         }
 
         $manticoreResult = $searcher->search($q)->get();
-
-       // print_r($manticoreResult);
         $allFields = $this->getAllFields($index);
 
         $ssResult = new ArrayList();
@@ -109,15 +122,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $hasManyFields = $index->getHasManyFields();
 
-        print_r($hasManyFields);
-
         if (!\is_null($manticoreFacets)) {
             $facetTitles = \array_keys($manticoreFacets);
 
             /** @var string $facetTitle */
             foreach ($facetTitles as $facetTitle) {
                 $facet = new Facet($facetTitle);
-                echo 'Facet title: ' . $facetTitle;
 
                 // the BY functionality of facets has not yet been implemented, as such database calls required
                 if (in_array($facetTitle, $this->hasManyTokens)) {
