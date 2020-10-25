@@ -62,7 +62,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         print_r($this->filters);
         $fieldHelper = new FieldHelper();
         foreach($this->filters as $key => $value) {
-            if ($key === 'q') {
+            if ($key === 'q' || $key === 'start') {
                 continue;
             }
             $typedValue = $fieldHelper->getFieldValueCorrectlyTyped($index, $key, $value);
