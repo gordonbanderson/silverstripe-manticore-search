@@ -52,6 +52,8 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
+        $hasManyFieldsDetails = $index->getHasManyFields();
+        $hasManyFieldsNames = array_keys($hasManyFieldsDetails);
 
         $searcher->highlight(
             [],
@@ -66,12 +68,19 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 continue;
             }
             $typedValue = $fieldHelper->getFieldValueCorrectlyTyped($index, $key, $value);
-            $searcher->filter($key, 'equals', $typedValue);
 
-            echo '<br/>****   FILTER ' . $key . ' ==> ' . $typedValue;
+            if (in_array($key, $hasManyFieldsNames)) {
+                $searcher->filter($key, 'in', $typedValue);
+            } else {
+                $searcher->filter($key, 'equals', $typedValue);
+            }
+
+
+           // echo '<br/>****   FILTER ' . $key . ' ==> ' . $typedValue;
         }
 
-       //$searcher->filter('Aperture', 'equals', 6.3);
+       //  $searcher->filter('Tags', 'in', 13317);
+
 
         // @todo Deal with subsequent params
         foreach ($this->facettedTokens as $facetName) {
