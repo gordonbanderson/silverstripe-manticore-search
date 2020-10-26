@@ -10,7 +10,6 @@
 namespace Suilven\ManticoreSearch\Service;
 
 use Manticoresearch\Search;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\Facet;
@@ -53,23 +52,21 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
         $hasManyFieldsDetails = $index->getHasManyFields();
-        $hasManyFieldsNames = array_keys($hasManyFieldsDetails);
+        $hasManyFieldsNames = \array_keys($hasManyFieldsDetails);
 
         $searcher->highlight(
             [],
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
-        echo '===============================';
-        print_r($this->filters);
         $fieldHelper = new FieldHelper();
-        foreach($this->filters as $key => $value) {
+        foreach ($this->filters as $key => $value) {
             if ($key === 'q' || $key === 'start') {
                 continue;
             }
             $typedValue = $fieldHelper->getFieldValueCorrectlyTyped($index, $key, $value);
 
-            if (in_array($key, $hasManyFieldsNames)) {
+            if (\in_array($key, $hasManyFieldsNames, true)) {
                 $searcher->filter($key, 'in', $typedValue);
             } else {
                 $searcher->filter($key, 'equals', $typedValue);
@@ -139,15 +136,13 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
                 $facet = new Facet($facetTitle);
 
                 // the BY functionality of facets has not yet been implemented, as such database calls required
-                if (in_array($facetTitle, $this->hasManyTokens)) {
+                if (\in_array($facetTitle, $this->hasManyTokens, true)) {
                     $field = $hasManyFields[$facetTitle]['field'];
                     $clazz = $hasManyFields[$facetTitle]['class'];
 
-                    /** @var DataObject $singleton */
-                    $singleton = \singleton($clazz);
-
                     foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
                         $facetClassInstance = DataObject::get_by_id($clazz, $count['key']);
+                        // @phpstan-ignore-next-line
                         $facet->addFacetCount($facetClassInstance->$field, $count['doc_count']);
                     }
                 } else {
