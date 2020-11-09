@@ -102,9 +102,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $mvaFields = $index->getHasManyFields();
         $hasOneFields = $index->getHasOneFields();
 
-        print_r($mvaFields);
-
-
         foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];
         }
@@ -166,10 +163,6 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
-
-        echo "---- columns ----";
-        print_r($columns);
-
 
         $manticoreIndex->create(
             $columns,

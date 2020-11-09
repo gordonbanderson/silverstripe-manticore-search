@@ -53,11 +53,14 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         $index = $indexes->getIndex($this->indexName);
         $hasManyFieldsDetails = $index->getHasManyFields();
         $hasManyFieldsNames = \array_keys($hasManyFieldsDetails);
+        $hasOneFieldsDetails = $index->getHasOneFields();
+        $hasOneFieldsNames = \array_keys($hasOneFieldsDetails);
 
         $searcher->highlight(
             [],
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
+
 
         $fieldHelper = new FieldHelper();
         foreach ($this->filters as $key => $value) {
@@ -68,7 +71,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
             if (\in_array($key, $hasManyFieldsNames, true)) {
                 $searcher->filter($key, 'in', $typedValue);
-            } else {
+            } else if (\in_array($key, $hasOneFieldsNames, true)) {
+                $searcher->filter($key, 'equals', ($typedValue));
+            }
+            else {
                 $searcher->filter($key, 'equals', $typedValue);
             }
 
