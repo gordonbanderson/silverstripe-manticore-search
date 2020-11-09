@@ -100,10 +100,19 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
         $indexes = new Indexes();
         $index = $indexes->getIndex($indexName);
         $mvaFields = $index->getHasManyFields();
+        $hasOneFields = $index->getHasOneFields();
+
+        print_r($mvaFields);
+
 
         foreach (\array_keys($mvaFields) as $mvaColumnName) {
             $columns[$mvaColumnName] = ['type' => 'multi'];
         }
+
+        foreach (\array_keys($hasOneFields) as $hasOneColumnName) {
+            $columns[$hasOneColumnName] = ['type' => 'bigint'];
+        }
+
 
         $client = new Client();
         $manticoreClient = $client->getConnection();
@@ -151,9 +160,16 @@ class IndexCreator extends \Suilven\FreeTextSearch\Base\IndexCreator implements 
             $settings['morphology'] = $this->getMorphology($manticoreTokenizer, $manticoreLanguage);
         }
 
+
+
+
         // drop index, and updating an existing one does not effect change
         $manticoreClient->indices()->drop(['index' => $indexName, 'body'=>['silent'=>true]]);
         $manticoreIndex = new \Manticoresearch\Index($manticoreClient, $indexName);
+
+        echo "---- columns ----";
+        print_r($columns);
+
 
         $manticoreIndex->create(
             $columns,

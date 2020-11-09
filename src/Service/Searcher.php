@@ -204,8 +204,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     {
         $keyname = $key;
         foreach ($allFields as $field) {
-            if (\strtolower($field) === $key) {
-                $keyname = $field;
+            $cf = is_array($field) ? $field['relationship'] : $field;
+
+            if (\strtolower($cf) === $key) {
+                $keyname = $cf;
 
                 break;
             }
@@ -352,8 +354,10 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             }
             $keyname = $key;
             foreach ($allFields as $field) {
-                if (\strtolower($field) === $key) {
-                    $keyname = $field;
+                $cf = is_array($field) ? $field['relationship'] : $field;
+
+                if (\strtolower($cf) === $key) {
+                    $keyname = $cf;
 
                     continue;
                 }
