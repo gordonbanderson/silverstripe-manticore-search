@@ -49,13 +49,15 @@ Suilven\FreeTextSearch\Indexes:
         has_many_many:
           - Suilven\ManticoreSearch\Tests\Models\FlickrSet
 
-        has_one:
-          - Suilven\ManticoreSearch\Tests\Models\FlickrAuthor
+       # has_one:
+          - name: Photographer
+            relationship: Photographer
+            field: PathAlias
 
         # Multi valued attribute
         has_many:
           -
-            name: tags
+            name: Tags
             relationship: FlickrTags
             field: RawValue
 

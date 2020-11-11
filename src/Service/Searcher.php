@@ -14,6 +14,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use Suilven\FreeTextSearch\Container\Facet;
 use Suilven\FreeTextSearch\Container\SearchResults;
+use Suilven\FreeTextSearch\Helper\FieldHelper;
 use Suilven\FreeTextSearch\Helper\SearchHelper;
 use Suilven\FreeTextSearch\Indexes;
 use Suilven\FreeTextSearch\Types\SearchParamTypes;
@@ -50,17 +51,45 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $indexes = new Indexes();
         $index = $indexes->getIndex($this->indexName);
+        $hasManyFieldsDetails = $index->getHasManyFields();
+        $hasManyFieldsNames = \array_keys($hasManyFieldsDetails);
+        $hasOneFieldsDetails = $index->getHasOneFields();
+        $hasOneFieldsNames = \array_keys($hasOneFieldsDetails);
 
         $searcher->highlight(
             [],
             ['pre_tags' => '<b>', 'post_tags'=>'</b>']
         );
 
+
+        $fieldHelper = new FieldHelper();
+        foreach ($this->filters as $key => $value) {
+            if ($key === 'q' || $key === 'start') {
+                continue;
+            }
+            $typedValue = $fieldHelper->getFieldValueCorrectlyTyped($index, $key, $value);
+
+            if (\in_array($key, $hasManyFieldsNames, true)) {
+                $searcher->filter($key, 'in', $typedValue);
+            } elseif (\in_array($key, $hasOneFieldsNames, true)) {
+                $searcher->filter($key, 'equals', ($typedValue));
+            } else {
+                $searcher->filter($key, 'equals', $typedValue);
+            }
+        }
+
         // @todo Deal with subsequent params
         foreach ($this->facettedTokens as $facetName) {
             // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
             // alias, use the correctly capitalized version of the fact
-            $searcher->facet(\strtolower($facetName), $facetName);
+            $searcher->facet(\strtolower($facetName), $facetName, 1000);
+        }
+
+        // add has many
+        foreach ($this->hasManyTokens as $facetName) {
+            // manticore errors out with no error message if the facet name is not lowercase.  The second param is an
+            // alias, use the correctly capitalized version of the fact
+            $searcher->facet(\strtolower($facetName), $facetName, 1000);
         }
 
         $manticoreResult = $searcher->search($q)->get();
@@ -95,16 +124,34 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         // create facet result objects
         $manticoreFacets = $manticoreResult->getFacets();
-        
+
+        $hasManyFields = $index->getHasManyFields();
+
         if (!\is_null($manticoreFacets)) {
             $facetTitles = \array_keys($manticoreFacets);
 
             /** @var string $facetTitle */
             foreach ($facetTitles as $facetTitle) {
                 $facet = new Facet($facetTitle);
-                foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
-                    $facet->addFacetCount($count['key'], $count['doc_count']);
+
+                // the BY functionality of facets has not yet been implemented, as such database calls required
+                if (\in_array($facetTitle, $this->hasManyTokens, true)) {
+                    $field = $hasManyFields[$facetTitle]['field'];
+                    $clazz = $hasManyFields[$facetTitle]['class'];
+
+                    foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
+                        $facetClassInstance = DataObject::get_by_id($clazz, $count['key']);
+                        // @phpstan-ignore-next-line
+                        $facet->addFacetCount($facetClassInstance->$field, $count['doc_count']);
+                    }
+                } else {
+                    // use values as is
+                    foreach ($manticoreFacets[$facetTitle]['buckets'] as $count) {
+                        $facet->addFacetCount($count['key'], $count['doc_count']);
+                    }
                 }
+
+
                 $searchResults->addFacet($facet);
             }
         }
@@ -118,7 +165,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    /** @return array<string> */
+    /** @return array<array<string, string>|string> */
     public function getAllFields(\Suilven\FreeTextSearch\Index $index): array
     {
         $allFields = \array_merge(
@@ -151,13 +198,17 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    /** @param array<string> $allFields */
+    /** @param array<array<string, string>|string> $allFields */
     public function matchKey(string $key, array $allFields): string
     {
         $keyname = $key;
         foreach ($allFields as $field) {
-            if (\strtolower($field) === $key) {
-                $keyname = $field;
+            $cf = \is_array($field)
+                ? $field['relationship']
+                : $field;
+
+            if (\strtolower($cf) === $key) {
+                $keyname = $cf;
 
                 break;
             }
@@ -264,6 +315,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     /**
      * @param array<string> $allFields
+     * @param array<array<string, string>|string> $allFields
      * @param array<string, string|int|float|bool> $source
      */
     private function populateSearchResult(DataObject &$ssDataObject, array $allFields, array $source): void
@@ -281,7 +333,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
 
     /**
-     * @param array<string> $allFields
+     * @param array<array<string, string>|string> $allFields
      * @param array<array<string>> $highlights
      * @param array<string> $fieldsToHighlight
      */
@@ -304,8 +356,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             }
             $keyname = $key;
             foreach ($allFields as $field) {
-                if (\strtolower($field) === $key) {
-                    $keyname = $field;
+                $cf = \is_array($field)
+                    ? $field['relationship']
+                    : $field;
+
+                if (\strtolower($cf) === $key) {
+                    $keyname = $cf;
 
                     continue;
                 }

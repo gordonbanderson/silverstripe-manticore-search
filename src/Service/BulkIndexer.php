@@ -57,7 +57,6 @@ class BulkIndexer implements \Suilven\FreeTextSearch\Interfaces\BulkIndexer
                 continue;
             }
 
-
             $toIndex[$key] = '';
         }
 

@@ -53,4 +53,9 @@ class FlickrPhoto extends DataObject implements TestOnly
     private static $many_many = array(
         'FlickrTags' => FlickrTag::class
     );
+
+    /** @var array<string,string> */
+    private static $has_one = [
+        'Photographer' => FlickrAuthor::class,
+    ];
 }
