@@ -16,12 +16,14 @@ class FlickrAuthor extends DataObject implements TestOnly
 {
     private static $table_name = 'FlickrAuthor';
 
+    /** @var array<string,string> */
     private static $db = [
-        'Value' => 'Varchar',
+        'PathAlias' => 'Varchar',
+        'DisplayName' => 'Varchar',
         'FlickrID' => 'Varchar',
-        'RawValue' => 'HTMLText',
     ];
 
+    /** @var array<string,string> */
     private static $belongs_many_many = array(
         'FlickrPhotos' => FlickrPhoto::class
     );

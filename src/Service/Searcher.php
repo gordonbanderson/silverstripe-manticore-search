@@ -71,19 +71,12 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
             if (\in_array($key, $hasManyFieldsNames, true)) {
                 $searcher->filter($key, 'in', $typedValue);
-            } else if (\in_array($key, $hasOneFieldsNames, true)) {
+            } elseif (\in_array($key, $hasOneFieldsNames, true)) {
                 $searcher->filter($key, 'equals', ($typedValue));
-            }
-            else {
+            } else {
                 $searcher->filter($key, 'equals', $typedValue);
             }
-
-
-           // echo '<br/>****   FILTER ' . $key . ' ==> ' . $typedValue;
         }
-
-       //  $searcher->filter('Tags', 'in', 13317);
-
 
         // @todo Deal with subsequent params
         foreach ($this->facettedTokens as $facetName) {
@@ -172,7 +165,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    /** @return array<string> */
+    /** @return array<array<string, string>|string> */
     public function getAllFields(\Suilven\FreeTextSearch\Index $index): array
     {
         $allFields = \array_merge(
@@ -205,12 +198,14 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
     }
 
 
-    /** @param array<string> $allFields */
+    /** @param array<array<string, string>|string> $allFields */
     public function matchKey(string $key, array $allFields): string
     {
         $keyname = $key;
         foreach ($allFields as $field) {
-            $cf = is_array($field) ? $field['relationship'] : $field;
+            $cf = \is_array($field)
+                ? $field['relationship']
+                : $field;
 
             if (\strtolower($cf) === $key) {
                 $keyname = $cf;
@@ -320,6 +315,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
     /**
      * @param array<string> $allFields
+     * @param array<array<string, string>|string> $allFields
      * @param array<string, string|int|float|bool> $source
      */
     private function populateSearchResult(DataObject &$ssDataObject, array $allFields, array $source): void
@@ -337,7 +333,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
 
     /**
-     * @param array<string> $allFields
+     * @param array<array<string, string>|string> $allFields
      * @param array<array<string>> $highlights
      * @param array<string> $fieldsToHighlight
      */
@@ -360,7 +356,9 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             }
             $keyname = $key;
             foreach ($allFields as $field) {
-                $cf = is_array($field) ? $field['relationship'] : $field;
+                $cf = \is_array($field)
+                    ? $field['relationship']
+                    : $field;
 
                 if (\strtolower($cf) === $key) {
                     $keyname = $cf;
