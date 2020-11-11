@@ -18,8 +18,7 @@ RUN echo 'PS1=$PS1A' >> ~/.bashrc
 RUN echo 'figlet -w 120 SilverStripe Manticore Search' >> ~/.bashrc
 
 # install composer - see https://medium.com/@c.harrison/speedy-composer-installs-in-docker-builds-41eea6d0172b
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
-    composer global require hirak/prestissimo --no-plugins --no-scripts
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 RUN echo "alias prime-module-for-testing='composer require --prefer-source --no-update silverstripe/recipe-cms:4.x-dev && composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile'" >> ~/.bashrc
 RUN echo "alias generate-html-coverage='phpdbg -qrr vendor/bin/phpunit -d memory_limit=4G --coverage-html report   tests/'" >> ~/.bashrc
