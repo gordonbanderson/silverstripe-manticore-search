@@ -30,6 +30,7 @@ jobs:
     steps:
     - name: Run tests
       run: |
+        ls -al
         cat .env
         vendor/bin/phpunit tests
 
