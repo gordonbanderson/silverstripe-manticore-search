@@ -20,7 +20,9 @@ jobs:
 
     - name: Check OS
       id: checkos
-      run: echo "::set-output name=mix-test::$(cat /etc/issue)"
+      run: |
+        cat /etc/issue
+        php --version
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
