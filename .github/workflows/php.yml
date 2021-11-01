@@ -32,7 +32,7 @@ jobs:
       run: |
         ls -al
         cat .env
-        vendor/bin/phpunit tests
+        #vendor/bin/phpunit tests
 
 
 
