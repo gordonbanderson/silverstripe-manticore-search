@@ -17,8 +17,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Check OS
-      echo "::set-output name=mix-test::$(cat /etc/issue)"
-      run: cat /etc/issue
+      run: echo "::set-output name=mix-test::$(cat /etc/issue)"
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
