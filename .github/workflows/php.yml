@@ -30,9 +30,10 @@ jobs:
     steps:
     - name: Run tests
       run: |
+        wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
         ls -al
         cat .env
-        #vendor/bin/phpunit tests
+        vendor/bin/phpunit tests
 
 
 
