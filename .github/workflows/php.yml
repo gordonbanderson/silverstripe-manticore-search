@@ -13,16 +13,24 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.3, 7.4]
+        php-version: [7.3, 7.4]
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Setup PHP ${{ matrix.php-version }} with PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: intl
 
     - name: Check OS
       id: checkos
       run: |
         cat /etc/issue
         php --version
+
+
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
