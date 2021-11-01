@@ -11,10 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    id: builder
+
     steps:
     - uses: actions/checkout@v2
 
     - name: Check OS
+      echo "::set-output name=mix-test::$(cat /etc/issue)"
       run: cat /etc/issue
 
     - name: Validate composer.json and composer.lock
