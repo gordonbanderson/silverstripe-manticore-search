@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         php-version: [ 7.3, 7.4 ]
-        fail-fast: false
+      fail-fast: false
 
     steps:
     - name: Run tests
