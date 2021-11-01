@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Check OS
+      run: cat /etc/issue
+
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
