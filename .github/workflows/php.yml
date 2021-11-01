@@ -29,7 +29,9 @@ jobs:
 
     steps:
     - name: Run tests
-      run: vendor/bin/phpunit tests
+      run: |
+        cat .env
+        vendor/bin/phpunit tests
 
 
 
