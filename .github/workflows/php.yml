@@ -7,8 +7,34 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  testing:
+    runs-on: ubuntu-latest
+    needs: build
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: SS_mysite
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    strategy:
+      matrix:
+        php-version: [ 7.3, 7.4 ]
+        fail-fast: false
+
+    steps:
+    - name: Run tests
+      run: vendor/bin/phpunit tests
+
+
+
+  # Install PHP, checkout code, validate composer
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,7 +48,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
-  #      extensions: intl
+        extensions: curl, dom, gd, intl, json, ldap, mbstring, mysql, tidy, zip
 
     - name: Check OS
       id: checkos
