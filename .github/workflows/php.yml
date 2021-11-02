@@ -87,4 +87,5 @@ jobs:
         composer info | grep phpunit
         ls -lh vendor/bin
         find . | grep phpunit
+        find /home/work/runner
 
