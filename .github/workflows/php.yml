@@ -37,6 +37,8 @@ jobs:
         pwd
         echo "Dir listing"
         ls -lh
+        echo "FIND"
+        find .
         echo "Run tests"
         ./vendor/bin/phpunit tests
 
