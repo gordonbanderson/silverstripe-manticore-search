@@ -38,7 +38,7 @@ jobs:
         echo "Dir listing"
         ls -lh
         echo "FIND"
-        find /
+        find /home/runner/work
         echo "Run tests"
         ./vendor/bin/phpunit tests
 
