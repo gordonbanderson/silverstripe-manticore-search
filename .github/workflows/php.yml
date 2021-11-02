@@ -32,7 +32,13 @@ jobs:
       run: wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
 
     - name: Run tests
-      run: vendor/bin/phpunit tests
+      run: |
+        echo "PWD"
+        pwd
+        echo "Dir listing"
+        ls -lh
+        echo "Run tests"
+        ./vendor/bin/phpunit tests
 
 
 
