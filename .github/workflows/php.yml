@@ -33,12 +33,12 @@ jobs:
 
     - name: Run tests
       run: |
-        echo "PWD"
+        echo "PWD of tests"
         pwd
         echo "Dir listing"
         ls -lh
         echo "FIND"
-        find /home/runner/work
+        find / | grep phpunit
         echo "Run tests"
         ./vendor/bin/phpunit tests
 
@@ -86,6 +86,8 @@ jobs:
       run: |
         composer info | grep phpunit
         ls -lh vendor/bin
-        find . | grep phpunit
-        find /home/work/runner
+        echo "Trying to find phpunit"
+        find / grep phpunit
+        echo "Dir of build"
+        pwd
 
