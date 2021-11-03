@@ -52,7 +52,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - usesL ./.github/actions/install
+    - uses: ./.github/actions/install
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
