@@ -46,8 +46,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
+      manticore:
+        image: manticoresearch/manticore
+        ports:
+          - 9306:9306
+          - 9308:9308
+
       mysql:
-        image: mysql:5.7
+        image: mysql:latest
         env:
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: root
