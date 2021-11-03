@@ -37,8 +37,6 @@ jobs:
         pwd
         echo "Dir listing"
         ls -lh
-        echo "FIND"
-        find / | grep phpunit
         echo "Run tests"
         ./vendor/bin/phpunit tests
 
@@ -54,6 +52,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - usesL ./.github/actions/install
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
@@ -86,8 +85,6 @@ jobs:
       run: |
         composer info | grep phpunit
         ls -lh vendor/bin
-        echo "Trying to find phpunit"
-        find / | grep phpunit
         echo "Dir of build"
         pwd
 
