@@ -1,18 +1,45 @@
-name: PHP Composer
+name: SilverStripe Manticore Search
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, CI2 ]
   pull_request:
     branches: [ master ]
 
 jobs:
+  # Install PHP, checkout code, validate composer
   build:
-
     runs-on: ubuntu-latest
+    services:
+      manticore:
+        image: manticoresearch/manticore
+        ports:
+          - 9306:9306
+          - 9308:9308
+
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: SS_mysite
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    strategy:
+      matrix:
+        php-version: [7.3, 7.4]
 
     steps:
     - uses: actions/checkout@v2
+    # - uses: ./.github/actions/install
+
+    - name: Setup PHP ${{ matrix.php-version }} with PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: curl, dom, gd, intl, json, ldap, mbstring, mysql, tidy, zip
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -29,8 +56,9 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: Set up .env file
+      run: wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
 
-    # - name: Run test suite
-    #   run: composer run-script test
+    - name: Run tests
+      run: |
+        vendor/bin/phpunit tests
