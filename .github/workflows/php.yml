@@ -87,7 +87,7 @@ jobs:
         composer info | grep phpunit
         ls -lh vendor/bin
         echo "Trying to find phpunit"
-        find / grep phpunit
+        find / | grep phpunit
         echo "Dir of build"
         pwd
 
