@@ -1,27 +1,16 @@
+# action.yml
 name: 'Hello World'
-description: 'Hello world action for the FF'
+description: 'Greet someone and record the time'
 inputs:
-  action-type: # id of input
-    description: 'Type of the action'
+  who-to-greet:  # id of input
+    description: 'Who to greet'
     required: true
-    default: 'GET-FEATURE-FLAGS'
-  project-id:
-    description: 'Id of the feature flag'
-    required: true
-    default: ''
-  feature-flag-name:
-    description: 'Name of the feature flag'
-    required: false
-    default: ''
-  feature-flag-condition:
-    description: 'Condition of the feature flag'
-    required: false
-    default: ''
+    default: 'World'
 outputs:
-  featureFlags: # id of output
-    description: 'List of feature flags'
-branding:
-  color: 'green' # optional, decorates the entry in the GitHub Marketplace
+  time: # id of output
+    description: 'The time we greeted you'
 runs:
-  using: 'node12'
-  main: 'lib/hello-world.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
