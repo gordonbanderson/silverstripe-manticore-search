@@ -59,13 +59,13 @@ class BulkTest extends SapphireTest implements TestOnly
         // @todo Why is ->title returning #34 here?
         $this->assertContains('Sodium', $recordsArray[0]->MenuTitle);
 
-        $this->assertEquals(17, $recordsArray[1]->ID);
+        $this->assertEquals(22, $recordsArray[1]->ID);
         $this->assertContains('sodium', $recordsArray[1]->Content);
 
-        $this->assertEquals(20, $recordsArray[2]->ID);
+        $this->assertEquals(17, $recordsArray[2]->ID);
         $this->assertContains('sodium', $recordsArray[2]->Content);
 
-        $this->assertEquals(22, $recordsArray[3]->ID);
+        $this->assertEquals(20, $recordsArray[3]->ID);
         $this->assertContains('sodium', $recordsArray[3]->Content);
 
 
