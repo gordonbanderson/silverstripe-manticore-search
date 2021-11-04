@@ -2,7 +2,7 @@ name: SilverStripe Manticore Search
 
 on:
   push:
-    branches: [ master, CI2 ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -61,4 +61,5 @@ jobs:
 
     - name: Run tests
       run: |
+        export UNIT_TESTING_CONFIG_ENABLED=1
         vendor/bin/phpunit tests

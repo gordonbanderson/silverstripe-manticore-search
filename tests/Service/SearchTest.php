@@ -28,6 +28,9 @@ class SearchTest extends SapphireTest
         /** @var \Suilven\FreeTextSearch\Indexes $indexesService */
         $indexesService = new Indexes();
         $indexesArray = $indexesService->getIndexes();
+
+       // error_log('++++ INDEXES ARRAY ++++');
+      //  error_log(print_r($indexesArray, true));
         $helper = new ReconfigureIndexesHelper();
         $helper->reconfigureIndexes($indexesArray);
     }
