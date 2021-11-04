@@ -108,7 +108,7 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
             $fieldsToHighlight = $index->getHighlightedFields();
             $this->addHighlights($ssDataObject, $allFields, $highlights, $fieldsToHighlight);
 
-            $ssDataObject->ID = $hit->getId();
+            $ssDataObject->ID = (int)($hit->getId());
             $ssResult->push($ssDataObject);
             $manticoreResult->next();
         }
