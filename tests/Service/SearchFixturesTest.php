@@ -114,6 +114,7 @@ class SearchFixturesTest extends SapphireTest
         // TODO What is the default search order - this was 1 to 15 consecutively
         $this->assertEquals([10, 49, 7, 33, 18, 37, 27, 29, 31, 6, 14, 35, 48, 22, 25], $ids);
 
+
         $facets = $result->getFacets();
         $this->assertEquals([
             1600 => 7,
