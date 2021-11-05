@@ -37,8 +37,7 @@ jobs:
 
     - name: Check file
       run: |
-        ls -al
-        echo `cat time.txt`
+        cat time.txt | grep echo
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
