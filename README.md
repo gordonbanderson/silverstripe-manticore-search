@@ -1,5 +1,5 @@
 # Manticore Search
-[![Build Status](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search.svg?branch=main)](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search)
+![example workflow](https://github.com/gordonbanderson/silverstripe-manticore-search/actions/workflows/php.yml/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/?branch=main)
 [![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/coverage.svg?branch=main)](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search?branch=main)
 
