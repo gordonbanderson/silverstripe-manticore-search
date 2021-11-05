@@ -265,7 +265,6 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
         \usort(
             $keywords,
             static function ($a, $b): int {
-
                 return ($a["docs"] <= $b["docs"])
                     ? -1
                     : +1;
