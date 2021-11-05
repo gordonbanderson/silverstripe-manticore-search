@@ -18,8 +18,6 @@
 [![GitHub Activity](https://img.shields.io/github/commit-activity/m/gordonbanderson/silverstripe-manticore-search)](https://github.com/gordonbanderson/silverstripe-manticore-search)
 [![GitHub Issues](https://img.shields.io/github/issues/gordonbanderson/silverstripe-manticore-search)](https://github.com/gordonbanderson/silverstripe-manticore-search/issues)
 
-![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=main)
-
 Search content in SilverStripe using manticoresearch as the free text search engine. 
 
 ## Install
