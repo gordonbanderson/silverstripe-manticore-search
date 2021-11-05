@@ -35,9 +35,10 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install
 
-    name: Check file
-      - ls -al
-      - cat time.txt
+    - name: Check file
+      run: |
+        ls -al
+        cat time.txt
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
