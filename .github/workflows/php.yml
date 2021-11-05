@@ -39,7 +39,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: ./.github/actions/install
+
+    # Not sure why this happening
+    - name: Ensure npm cache dir exists
+      run: mkdir /home/runner/.npm
+
     - uses: actions/setup-node@v2
       with:
         node-version: '16'
