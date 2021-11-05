@@ -1,7 +1,7 @@
 # Manticore Search
-[![Build Status](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search.svg?branch=master)](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/?branch=master)
-[![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/coverage.svg?branch=master)](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search?branch=master)
+[![Build Status](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search.svg?branch=main)](https://travis-ci.org/gordonbanderson/silverstripe-manticore-search)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/gordonbanderson/silverstripe-manticore-search/?branch=main)
+[![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/coverage.svg?branch=main)](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search?branch=main)
 
 
 [![Latest Stable Version](https://poser.pugx.org/suilven/silverstripe-manticore-search/version)](https://packagist.org/packages/suilven/silverstripe-manticore-search)
@@ -18,7 +18,7 @@
 [![GitHub Activity](https://img.shields.io/github/commit-activity/m/gordonbanderson/silverstripe-manticore-search)](https://github.com/gordonbanderson/silverstripe-manticore-search)
 [![GitHub Issues](https://img.shields.io/github/issues/gordonbanderson/silverstripe-manticore-search)](https://github.com/gordonbanderson/silverstripe-manticore-search/issues)
 
-![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=master)
+![codecov.io](https://codecov.io/github/gordonbanderson/silverstripe-manticore-search/branch.svg?branch=main)
 
 Search content in SilverStripe using manticoresearch as the free text search engine. 
 
@@ -93,7 +93,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/suilven/silverstripe-manticore-search.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/suilven/silverstripe-manticore-search/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/suilven/silverstripe-manticore-search/main.svg?style=flat-square
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/suilven/silverstripe-manticore-search.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/suilven/silverstripe-manticore-search.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/suilven/silverstripe-manticore-search.svg?style=flat-square
