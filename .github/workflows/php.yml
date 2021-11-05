@@ -29,16 +29,16 @@ jobs:
 
     strategy:
       matrix:
-        php-version: [7.3, 7.4]
-        task: ['lint_check', 'duplicate_code_check']
+        #php-version: [7.3, 7.4]
+        php-version: [7.4]
+        task: ['lint_check', 'duplicate_code_check', 'phpcs_test']
 
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install
 
     - name: Check Task
-      run: |
-        echo ${{ matrix.run }} 
+      run: echo ${{ matrix.run }}
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
@@ -63,6 +63,9 @@ jobs:
 
     - name: Set up .env file
       run: wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
+
+    - name: Run PHPCS
+      run: vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 
     - name: Run tests
       run: |
