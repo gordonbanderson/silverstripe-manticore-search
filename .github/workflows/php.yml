@@ -34,7 +34,8 @@ jobs:
       matrix:
         #php-version: [7.3, 7.4]
         php-version: [7.4]
-        task: ['lint_check', 'duplicate_code_check', 'phpcs_test', 'phpunit', 'phpstan']
+        task: ['lint_check', 'duplicate_code_check', 'phpcs_test', 'phpunit', 'phpstan', 'coverage']
+        #'todo', 'duplicate'
 
     steps:
     - uses: actions/checkout@v2
@@ -78,6 +79,12 @@ jobs:
       if: ${{ matrix.task == 'lint_check' }}
       run: |
         vendor/bin/parallel-lint src/ tests/
+
+    - name: PHP Unit Coverage
+      if: ${{ matrix.task == 'coverage' }}
+      run: |
+        phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml
+        bash <(curl -s https://codecov.io/bash) -f coverage.xml
 
     - name: PHPStan
       if: ${{ matrix.task == 'phpstan' }}
