@@ -30,14 +30,15 @@ jobs:
     strategy:
       matrix:
         php-version: [7.3, 7.4]
+        task: ['lint_check', 'duplicate_code_check']
 
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install
 
-    - name: Check file
+    - name: Check Task
       run: |
-        cat time.txt
+        echo ${{ matrix.run }} 
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
