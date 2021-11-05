@@ -83,6 +83,7 @@ jobs:
     - name: PHP Unit Coverage
       if: ${{ matrix.task == 'coverage' }}
       run: |
+        export UNIT_TESTING_CONFIG_ENABLED=1
         phpdbg -qrr vendor/bin/phpunit tests --coverage-clover=coverage.xml
         bash <(curl -s https://codecov.io/bash) -f coverage.xml
 
