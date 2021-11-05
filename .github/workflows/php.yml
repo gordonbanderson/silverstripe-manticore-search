@@ -2,9 +2,9 @@ name: SilverStripe Manticore Search
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   # Install PHP, checkout code, validate composer
