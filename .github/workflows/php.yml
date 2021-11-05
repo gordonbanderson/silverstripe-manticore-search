@@ -8,7 +8,7 @@ on:
 
 jobs:
   # Install PHP, checkout code, validate composer
-  build:
+  CI:
     runs-on: ubuntu-latest
     services:
       manticore:
@@ -30,18 +30,15 @@ jobs:
     strategy:
       # Ensure all jobs run
       fail-fast: false
-      
+
       matrix:
         #php-version: [7.3, 7.4]
         php-version: [7.4]
-        task: ['lint_check', 'duplicate_code_check', 'phpcs_test']
+        task: ['lint_check', 'duplicate_code_check', 'phpcs_test', 'phpunit', 'phpstan']
 
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install
-
-    - name: Check Task
-      run: echo ${{ matrix.run }}
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
@@ -64,7 +61,7 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Set up .env file
+    - name: Set up .env file for database
       run: wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
 
     - name: Run PHPCS
@@ -72,6 +69,17 @@ jobs:
       run: vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 
     - name: Run tests
+      if: ${{ matrix.task == 'phpunit' }}
       run: |
         export UNIT_TESTING_CONFIG_ENABLED=1
         vendor/bin/phpunit tests
+
+    - name: Lint Check
+        if: ${{ matrix.task == 'lint_check' }}
+        run: |
+          vendor/bin/parallel-lint src/ tests/
+
+    - name: PHPStan
+        if: ${{ matrix.task == 'phpstan' }}
+        run: |
+          vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/
