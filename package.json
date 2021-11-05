@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jscpd": "^3.3.26",
+    "leasot": "^12.0.0"
+  }
+}

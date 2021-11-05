@@ -261,12 +261,11 @@ class Searcher extends \Suilven\FreeTextSearch\Base\Searcher implements \Suilven
 
         $keywords = $connection->keywords($params);
 
-        /* @phpstan-ignore-next-line */
+
         \usort(
             $keywords,
-            static function ($a, $b): void {
-
-                ($a["docs"] <= $b["docs"])
+            static function ($a, $b): int {
+                return ($a["docs"] <= $b["docs"])
                     ? -1
                     : +1;
             }
