@@ -34,12 +34,16 @@ jobs:
       matrix:
         #php-version: [7.3, 7.4]
         php-version: [7.4]
-        task: ['lint_check', 'duplicate_code_check', 'phpcs_test', 'phpunit', 'phpstan', 'coverage']
+        task: ['lint', 'todo', 'duplicate_code', 'phpcs_test', 'phpunit', 'phpstan', 'coverage']
         #'todo', 'duplicate'
 
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/install
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache: 'npm'
 
     - name: Setup PHP ${{ matrix.php-version }} with PECL extension
       uses: shivammathur/setup-php@v2
@@ -76,9 +80,8 @@ jobs:
         vendor/bin/phpunit tests
 
     - name: Lint Check
-      if: ${{ matrix.task == 'lint_check' }}
-      run: |
-        vendor/bin/parallel-lint src/ tests/
+      if: ${{ matrix.task == 'lint' }}
+      run: vendor/bin/parallel-lint src/ tests/
 
     - name: PHP Unit Coverage
       if: ${{ matrix.task == 'coverage' }}
@@ -89,5 +92,17 @@ jobs:
 
     - name: PHPStan
       if: ${{ matrix.task == 'phpstan' }}
+      run: vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/
+
+    - name: TODO
+      if: ${{ matrix.task == 'todo' }}
       run: |
-        vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/
+        npm install leasot
+        node_modules/leasot/bin/leasot -x tests --ignore **/*.neon
+
+    - name: Duplication
+      if: ${{ matrix.task == 'duplicate_code' }}
+      run: |
+        npm install jscpd
+        node_modules/jscpd/bin/jscpd src
+        node_modules/jscpd/bin/jscpd tests
