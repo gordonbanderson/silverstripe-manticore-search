@@ -29,6 +29,8 @@ jobs:
 
     strategy:
       matrix:
+        # Ensure all jobs run
+        fail-fast: false
         #php-version: [7.3, 7.4]
         php-version: [7.4]
         task: ['lint_check', 'duplicate_code_check', 'phpcs_test']
@@ -65,6 +67,7 @@ jobs:
       run: wget "https://raw.githubusercontent.com/silverstripe/github-actions-ci-cd/main/.github/things/.env"
 
     - name: Run PHPCS
+      if: ${{ matrix.task == 'phpcs_test' }}
       run: vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 
     - name: Run tests
