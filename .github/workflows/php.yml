@@ -2,7 +2,7 @@ name: SilverStripe Manticore Search
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, CI4 ]
   pull_request:
     branches: [ master ]
 
