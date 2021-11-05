@@ -75,11 +75,11 @@ jobs:
         vendor/bin/phpunit tests
 
     - name: Lint Check
-        if: ${{ matrix.task == 'lint_check' }}
-        run: |
-          vendor/bin/parallel-lint src/ tests/
+      if: ${{ matrix.task == 'lint_check' }}
+      run: |
+        vendor/bin/parallel-lint src/ tests/
 
     - name: PHPStan
-        if: ${{ matrix.task == 'phpstan' }}
-        run: |
-          vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/
+      if: ${{ matrix.task == 'phpstan' }}
+      run: |
+        vendor/bin/phpstan analyse --level=8 -c tests/phpstan.neon src/
