@@ -112,7 +112,6 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
-	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
