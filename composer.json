@@ -19,20 +19,20 @@
         }
     ],
     "require": {
-        "php": "~7.1",
+        "php": "^7",
         "manticoresoftware/manticoresearch-php": "dev-master",
         "silverstripe/cms": "^4",
         "suilven/freetextsearch": "^1"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.5",
+        "ergebnis/composer-normalize": "^2",
         "php-parallel-lint/php-console-highlighter": "^0.5.0",
-        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "php-parallel-lint/php-parallel-lint": "^1",
         "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.25",
-        "phpstan/phpstan-strict-rules": "^0.12.2",
+        "phpstan/phpstan": "^1",
+        "phpstan/phpstan-strict-rules": "^1",
         "phpunit/phpunit": "^5.7",
-        "slevomat/coding-standard": "^6.3"
+        "slevomat/coding-standard": "^7"
     },
     "config": {
         "sort-packages": true
