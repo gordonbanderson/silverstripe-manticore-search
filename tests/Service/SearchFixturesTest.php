@@ -92,13 +92,21 @@ class SearchFixturesTest extends SapphireTest
         $result = $searcher->search('sheep shuttlecock');
         $this->assertEquals(5, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
-        $ids = [];
+        $titles = [];
+        var_export($hits);
         foreach ($hits as $hit) {
-            $ids[] = $hit->ID;
+            $titles[] = $hit->ResultTitle;
         }
 
-        sort($ids);
-        $this->assertEquals([21, 36, 45, 47, 49], $ids);
+        var_export($titles);
+        $this->assertEquals([
+                'Timbres Mussy Crests Dubs Essence Wrinkled Shuttlecock Rowdies Tics Annoy Governable',
+                'Putted Thrifts Trifectas Heartier Skimped Charged Hurdle Unrolled',
+                'Proximity Consonance Sulphide Addends Objectors Stringently Fouled Becalms Raconteurs Gouger Unacknowledged',
+                'Pacifier Loon Profiled Entanglement Elfin Menageries Egregious Stoney',
+                'Asserts Ratcheted Trenches Ambiances Sackcloth Bluest Lounging',
+            ]
+            , $titles);
     }
 
 
