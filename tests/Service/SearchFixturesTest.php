@@ -74,7 +74,7 @@ class SearchFixturesTest extends SapphireTest
     }
 
 
-    public function testAndSearch(): void
+    public function testANDSearch(): void
     {
         $searcher = new Searcher();
         $searcher->setIndexName('sitetree');
@@ -82,11 +82,12 @@ class SearchFixturesTest extends SapphireTest
         $result = $searcher->search('sheep shuttlecock');
         $this->assertEquals(1, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
-        $ids = [];
+        $titles = [];
         foreach ($hits as $hit) {
-            $ids[] = $hit->ID;
+            $titles[] = $hit->ResultTitle;
         }
-        $this->assertEquals([49], $ids);
+
+        $this->assertEquals(['Timbres Mussy Crests Dubs Essence Wrinkled Shuttlecock Rowdies Tics Annoy Governable'], $titles);
     }
 
 
@@ -131,23 +132,23 @@ class SearchFixturesTest extends SapphireTest
         }
 
         $this->assertEquals(
-            array (
-                0 => 'The Story Is Colour Aqua',
-                1 => 'The Late Kept Hangin[verb_ing] About Just At The Inn Offer, Summering Round The Compare Like A So Marking For A Let',
-                2 => 'Were It Not For The Breads, The Home Out Would Not Be Land',
-                3 => 'Shut In, However, By Story, It Was Slow To Floor His Each, Which We Had Observed With The Subject Trouble',
-                4 => 'Shut In, However, By God, It Was Orange To Care His Hour, Which We Had Observed With The Go Tram',
-                5 => 'This Is A Random String From 1 To 4 [one',
-                6 => 'Colouring At Night Is More Fun Than Squareing During The Day',
-                7 => 'Shut In, However, By Aunt, It Was Just To Hear His Bridge, Which We Had Observed With The Glad North',
-                8 => 'He Was Past Of Eat That Support About The Condition Of Bitch, And Scoffed At The Much Place Of Its Blowing Falls Who Were Renting Us',
-                9 => 'Among These Were A Couple Of Sizes, A Neighbouring Ball I Employed Usually, A Heaven Shorting A Wine, Gregg The Butcher And His Little Boy, And Two Or Three Loafers And Golf Caddies Who Were Accustomed To Hang About The Railway Station',
-                10 => 'The Still Kept Hangin[verb_ing] About Just Home The Inn Hard, Partying Round The Not Like A Good Discovering For A Ice',
-                11 => 'Wintering At Night Is More Fun Than Bettering During The Day',
-                12 => 'The Came Kept Hangin[verb_ing] About Just In The Inn On, Laughing Round The Dress Like A Group Branching For A Bleed',
-                13 => 'For A Laugh Where Cooks Are Scared Of Branchs Why Don’t They Have Good Clock',
-                14 => 'For A Story Where Ones Are Scared Of Sends Why Don’t They Have Juice Rubber',
-            ),
+            [
+                'The Story Is Colour Aqua',
+                'The Late Kept Hangin[verb_ing] About Just At The Inn Offer, Summering Round The Compare Like A So Marking For A Let',
+                'Were It Not For The Breads, The Home Out Would Not Be Land',
+                'Shut In, However, By Story, It Was Slow To Floor His Each, Which We Had Observed With The Subject Trouble',
+                'Shut In, However, By God, It Was Orange To Care His Hour, Which We Had Observed With The Go Tram',
+                'This Is A Random String From 1 To 4 [one',
+                'Colouring At Night Is More Fun Than Squareing During The Day',
+                 'Shut In, However, By Aunt, It Was Just To Hear His Bridge, Which We Had Observed With The Glad North',
+                'He Was Past Of Eat That Support About The Condition Of Bitch, And Scoffed At The Much Place Of Its Blowing Falls Who Were Renting Us',
+                'Among These Were A Couple Of Sizes, A Neighbouring Ball I Employed Usually, A Heaven Shorting A Wine, Gregg The Butcher And His Little Boy, And Two Or Three Loafers And Golf Caddies Who Were Accustomed To Hang About The Railway Station',
+                'The Still Kept Hangin[verb_ing] About Just Home The Inn Hard, Partying Round The Not Like A Good Discovering For A Ice',
+                'Wintering At Night Is More Fun Than Bettering During The Day',
+                'The Came Kept Hangin[verb_ing] About Just In The Inn On, Laughing Round The Dress Like A Group Branching For A Bleed',
+                'For A Laugh Where Cooks Are Scared Of Branchs Why Don’t They Have Good Clock',
+                'For A Story Where Ones Are Scared Of Sends Why Don’t They Have Juice Rubber',
+            ],
             $titles
         );
 
@@ -215,8 +216,9 @@ class SearchFixturesTest extends SapphireTest
                 'He Is Now Much Recovered From His Science And Is Continually On The Come, Apparently Nameing For The Possible That Preceded His Own',
                 'Shut In, However, By Comb, It Was Choice To Piece His Bit, Which We Had Observed With The Cut Rise',
                 'How Slowly The That Passes Here, Encompassed As I Am By Sword And Gold',
-            )
-            , $titles);
+            ),
+            $titles
+        );
 
         /** @var array<\Suilven\FreeTextSearch\Container\Facet> $facets */
         $facets = $result->getFacets();
