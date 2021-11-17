@@ -62,7 +62,9 @@ class SearchFixturesTest extends SapphireTest
         foreach ($hits as $hit) {
             $ids[] = $hit->ID;
         }
-        $this->assertEquals([49, 45, 40, 47, 21, 36], $ids);
+
+        sort($ids);
+        $this->assertEquals([21, 36, 40, 45, 47, 49], $ids);
     }
 
 
@@ -95,7 +97,8 @@ class SearchFixturesTest extends SapphireTest
             $ids[] = $hit->ID;
         }
 
-        $this->assertEquals([49, 45, 47, 21, 36], $ids);
+        sort($ids);
+        $this->assertEquals([21, 36, 45, 47, 49], $ids);
     }
 
 
@@ -114,7 +117,8 @@ class SearchFixturesTest extends SapphireTest
         }
 
         // TODO What is the default search order - this was 1 to 15 consecutively
-        $this->assertEquals([10, 49, 7, 33, 18, 37, 27, 29, 31, 6, 14, 35, 48, 22, 25], $ids);
+        sort($ids);
+        $this->assertEquals([6, 7, 10, 14, 18, 22, 25, 27, 29, 31, 33, 35, 37, 48, 49], $ids);
 
 
         $facets = $result->getFacets();
