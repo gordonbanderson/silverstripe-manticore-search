@@ -58,13 +58,19 @@ class SearchFixturesTest extends SapphireTest
         // 1 is the original doc, 3 others contain sheep, 1 contains mussy an 1 contains shuttlecock
         $this->assertEquals(6, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
-        $ids = [];
+        $titles = [];
         foreach ($hits as $hit) {
-            $ids[] = $hit->ID;
+            $titles[] = $hit->ResultTitle;
         }
 
-        \sort($ids);
-        $this->assertEquals([21, 36, 40, 45, 47, 49], $ids);
+        $this->assertEquals([
+            'Timbres Mussy Crests Dubs Essence Wrinkled Shuttlecock Rowdies Tics Annoy Governable',
+            'Putted Thrifts Trifectas Heartier Skimped Charged Hurdle Unrolled',
+            'Cockscomb Snowfalls Buzzword Zones Litigation Pouncing',
+            'Proximity Consonance Sulphide Addends Objectors Stringently Fouled Becalms Raconteurs Gouger Unacknowledged',
+            'Pacifier Loon Profiled Entanglement Elfin Menageries Egregious Stoney',
+            'Asserts Ratcheted Trenches Ambiances Sackcloth Bluest Lounging',
+        ], $titles);
     }
 
 
@@ -93,12 +99,10 @@ class SearchFixturesTest extends SapphireTest
         $this->assertEquals(5, $result->getTotaNumberOfResults());
         $hits = $result->getRecords();
         $titles = [];
-        \var_export($hits);
         foreach ($hits as $hit) {
             $titles[] = $hit->ResultTitle;
         }
 
-        \var_export($titles);
         $this->assertEquals(
             [
                 'Timbres Mussy Crests Dubs Essence Wrinkled Shuttlecock Rowdies Tics Annoy Governable',
