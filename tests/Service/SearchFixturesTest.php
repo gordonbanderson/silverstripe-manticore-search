@@ -17,6 +17,9 @@ use Suilven\ManticoreSearch\Tests\Models\FlickrPhoto;
 use Suilven\ManticoreSearch\Tests\Models\FlickrSet;
 use Suilven\ManticoreSearch\Tests\Models\FlickrTag;
 
+// @phpcs:disable Generic.Files.LineLength.TooLong
+// @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+
 class SearchFixturesTest extends SapphireTest
 {
     protected static $fixture_file = ['tests/fixtures/sitetree.yml', 'tests/fixtures/flickrphotos.yml'];
