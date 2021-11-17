@@ -19,6 +19,7 @@ jobs:
     with:
       test-config-flag: UNIT_TESTING_CONFIG_ENABLED
       database: postgresql
+      search-engine: manticoresearch
 
   #  UNIT-TESTS-74-MARIADB:
   #    uses: gordonbanderson/actions/.github/workflows/silverstripemodule.yml@main
@@ -34,24 +35,28 @@ jobs:
       # Only wish to phpdbg with coverage enabled, no need to run tests without also
       run-php-unit: false
       test-config-flag: UNIT_TESTING_CONFIG_ENABLED
+      search-engine: manticoresearch
 
   UNIT-TESTS-73:
     uses: gordonbanderson/actions/.github/workflows/silverstripemodule.yml@main
     with:
       php-version: 7.3
       test-config-flag: UNIT_TESTING_CONFIG_ENABLED
+      search-engine: manticoresearch
 
   UNIT-TESTS-SS47:
     uses: gordonbanderson/actions/.github/workflows/silverstripemodule.yml@main
     with:
       silverstripe-version: 4.7
       test-config-flag: UNIT_TESTING_CONFIG_ENABLED
+      search-engine: manticoresearch
 
   UNIT-TESTS-SS48:
     uses: gordonbanderson/actions/.github/workflows/silverstripemodule.yml@main
     with:
       silverstripe-version: 4.8
       test-config-flag: UNIT_TESTING_CONFIG_ENABLED
+      search-engine: manticoresearch
 
   LINTING:
     uses: gordonbanderson/actions/.github/workflows/silverstripemodule.yml@main
